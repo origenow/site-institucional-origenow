@@ -1,0 +1,196 @@
+/* =============================================================
+   Origenow Design System — Colors & Type tokens
+   ============================================================= */
+
+/* Webfonts: Quicksand (display) + Source Sans 3 (body)
+   These are the families used across Origenow client/internal apps.
+   They are loaded via Google Fonts CDN here for portability; if you
+   need them offline, drop the .woff2 files in /fonts and swap @font-face. */
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Bebas+Neue&family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap");
+
+:root {
+  /* -----------------------------------------------------------
+     COLORS — Brand
+     -----------------------------------------------------------
+     Origenow brand is a confident, friendly purple paired with a
+     hot pink/magenta accent (the smile + dot on the "i" + arrow tip
+     on the "w" in the logotype). White is the primary neutral. */
+
+  --brand-purple:        #6730be;   /* Primary — buttons, headers, brand fields */
+  --brand-purple-700:    #5527a4;   /* Hover / pressed */
+  --brand-purple-800:    #44208a;   /* Deep purple — body bg on dark slides */
+  --brand-purple-900:    #2c1559;   /* Darkest — gradient anchor */
+  --brand-purple-300:    #b69ce0;   /* Soft / disabled */
+  --brand-purple-100:    #ede6f8;   /* Tint — soft fills, tag bg */
+  --brand-purple-50:     #f7f3fc;   /* Whisper — section bg */
+
+  --brand-magenta:       #e62c7c;   /* Accent — smile, highlights, CTAs */
+  --brand-magenta-600:   #c91f6a;   /* Hover */
+  --brand-magenta-100:   #fde3ee;   /* Tint */
+
+  /* -----------------------------------------------------------
+     CLIENT THEME — overridable per-deck
+     -----------------------------------------------------------
+     For client-branded presentations (YUP, Allabard, Ponto da Porcelana, etc.)
+     swap --client-* to the client's brand color. Layout/typography stays
+     identical; only chromatic surfaces flip. Default = Origenow purple. */
+  --client-primary:      var(--brand-purple);
+  --client-primary-700:  var(--brand-purple-700);
+  --client-primary-900:  var(--brand-purple-900);
+  --client-accent:       var(--brand-magenta);
+  --client-on-primary:   #ffffff;
+
+  /* Supporting accents (used sparingly: timeline pins, status dots) */
+  --brand-amber:         #f5b22e;
+  --brand-mint:          #2ecf9a;
+  --brand-sky:           #2ea7f5;
+
+  /* -----------------------------------------------------------
+     COLORS — Neutrals (warm-cool, slightly off-white)
+     ----------------------------------------------------------- */
+  --white:        #ffffff;
+  --gray-50:      #faf9fb;
+  --gray-100:     #f3f1f6;
+  --gray-200:     #e6e2ec;
+  --gray-300:     #cfc8d8;
+  --gray-400:     #a39ab2;
+  --gray-500:     #756c85;
+  --gray-600:     #56506a;
+  --gray-700:     #3d3850;
+  --gray-800:     #28243a;
+  --gray-900:     #14111e;
+
+  /* -----------------------------------------------------------
+     SEMANTIC roles
+     ----------------------------------------------------------- */
+  --bg-page:        var(--white);
+  --bg-soft:        var(--brand-purple-50);
+  --bg-elevated:    var(--white);
+  --bg-deep:        var(--brand-purple);   /* slide / hero background */
+  --bg-deepest:     var(--brand-purple-900);
+
+  --fg-1:           var(--gray-900);   /* primary text on light */
+  --fg-2:           var(--gray-600);   /* secondary text */
+  --fg-3:           var(--gray-400);   /* tertiary / hints */
+  --fg-on-dark-1:   var(--white);
+  --fg-on-dark-2:   #d8ccef;           /* secondary on purple */
+  --fg-on-dark-3:   #a892d6;
+
+  --border-1:       var(--gray-200);
+  --border-2:       var(--gray-300);
+  --border-on-dark: rgba(255,255,255,.16);
+
+  --accent:         var(--brand-magenta);
+  --accent-soft:    var(--brand-magenta-100);
+
+  --success:        #1aaf6c;
+  --warning:        #f5a524;
+  --danger:         #e5484d;
+  --info:           var(--brand-sky);
+
+  /* -----------------------------------------------------------
+     RADII, SHADOWS, SPACING, MOTION
+     ----------------------------------------------------------- */
+  --radius-xs:    4px;
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    16px;
+  --radius-xl:    24px;
+  --radius-pill:  999px;
+
+  --shadow-xs:  0 1px 2px rgba(20,17,30,.06);
+  --shadow-sm:  0 2px 6px rgba(20,17,30,.08);
+  --shadow-md:  0 8px 24px -8px rgba(103,48,190,.18), 0 2px 6px rgba(20,17,30,.06);
+  --shadow-lg:  0 24px 48px -12px rgba(103,48,190,.28), 0 6px 12px rgba(20,17,30,.06);
+  --shadow-glow: 0 0 0 4px rgba(103,48,190,.18);
+  --shadow-magenta-glow: 0 0 0 4px rgba(230,44,124,.22);
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  --ease-out:    cubic-bezier(.2,.7,.2,1);  /* @kind other */
+  --ease-in-out: cubic-bezier(.6,.05,.3,1); /* @kind other */
+  --dur-fast:    140ms;                     /* @kind other */
+  --dur-base:    220ms;                     /* @kind other */
+  --dur-slow:    420ms;                     /* @kind other */
+
+  /* -----------------------------------------------------------
+     TYPE — base
+     ----------------------------------------------------------- */
+  /* Display = Quicksand (default brand). Bebas Neue for big poster-style numbers / stat cards. */
+  --font-display:  "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-poster:   "Bebas Neue", "Quicksand", Impact, sans-serif;
+  /* Body = Inter (primary), Roboto + Source Sans 3 supported as alternates. */
+  --font-body:     "Inter", "Roboto", "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-roboto:   "Roboto", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:     ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Scale (1.250 — Major Third), with display sizes for slides */
+  --fz-12:  12px;   --lh-12:  16px;
+  --fz-14:  14px;   --lh-14:  20px;
+  --fz-16:  16px;   --lh-16:  24px;
+  --fz-18:  18px;   --lh-18:  28px;
+  --fz-20:  20px;   --lh-20:  30px;
+  --fz-24:  24px;   --lh-24:  32px;
+  --fz-28:  28px;   --lh-28:  36px;
+  --fz-32:  32px;   --lh-32:  40px;
+  --fz-40:  40px;   --lh-40:  48px;
+  --fz-48:  48px;   --lh-48:  56px;
+  --fz-64:  64px;   --lh-64:  72px;
+  --fz-80:  80px;   --lh-80:  88px;
+  --fz-96:  96px;   --lh-96:  100px;
+
+  --tracking-tight:    -0.02em;
+  --tracking-normal:    0;
+  --tracking-wide:      0.04em;
+  --tracking-uppercase: 0.12em;
+}
+
+/* =============================================================
+   SEMANTIC type — apply with classes, not raw selectors
+   ============================================================= */
+.type-display-xl { font: 700 var(--fz-96)/var(--lh-96) var(--font-display); letter-spacing: var(--tracking-tight); }
+.type-display-lg { font: 700 var(--fz-80)/var(--lh-80) var(--font-display); letter-spacing: var(--tracking-tight); }
+.type-display-md { font: 700 var(--fz-64)/var(--lh-64) var(--font-display); letter-spacing: var(--tracking-tight); }
+.type-display-sm { font: 700 var(--fz-48)/var(--lh-48) var(--font-display); letter-spacing: var(--tracking-tight); }
+
+.type-h1   { font: 700 var(--fz-40)/var(--lh-40) var(--font-display); letter-spacing: var(--tracking-tight); }
+.type-h2   { font: 700 var(--fz-32)/var(--lh-32) var(--font-display); letter-spacing: var(--tracking-tight); }
+.type-h3   { font: 600 var(--fz-24)/var(--lh-24) var(--font-display); }
+.type-h4   { font: 600 var(--fz-20)/var(--lh-20) var(--font-display); }
+
+.type-eyebrow {
+  font: 700 var(--fz-12)/var(--lh-12) var(--font-display);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+}
+
+.type-lead    { font: 400 var(--fz-20)/var(--lh-20) var(--font-body); }
+.type-body    { font: 400 var(--fz-16)/var(--lh-16) var(--font-body); }
+.type-body-md { font: 500 var(--fz-16)/var(--lh-16) var(--font-body); }
+.type-small   { font: 400 var(--fz-14)/var(--lh-14) var(--font-body); color: var(--fg-2); }
+.type-caption { font: 500 var(--fz-12)/var(--lh-12) var(--font-body); color: var(--fg-2); letter-spacing: var(--tracking-wide); }
+.type-mono    { font: 500 var(--fz-14)/var(--lh-14) var(--font-mono); }
+
+/* Plain element defaults — opt-in via .prose */
+.prose h1 { font: 700 var(--fz-40)/var(--lh-40) var(--font-display); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); }
+.prose h2 { font: 700 var(--fz-32)/var(--lh-32) var(--font-display); letter-spacing: var(--tracking-tight); margin: var(--space-8) 0 var(--space-3); }
+.prose h3 { font: 600 var(--fz-24)/var(--lh-24) var(--font-display); margin: var(--space-6) 0 var(--space-2); }
+.prose p,
+.prose li { font: 400 var(--fz-16)/var(--lh-16) var(--font-body); color: var(--fg-1); }
+.prose a  { color: var(--brand-purple); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Light/dark surface helpers */
+.surface-light { background: var(--bg-page); color: var(--fg-1); }
+.surface-soft  { background: var(--bg-soft);  color: var(--fg-1); }
+.surface-deep  { background: var(--bg-deep);  color: var(--fg-on-dark-1); }

@@ -1,0 +1,42 @@
+/* ============================================================
+   slide-base.css — minimal shared base for Origenow decks.
+   Each deck's <style> block overrides everything else (chrome,
+   typography, cards, etc). Restored after deletion so existing
+   decks (cirurgica-saude, riffel-gws, riffel-mix-3p, ts2,
+   nativas-br, zelot, etc.) render without warnings.
+   ============================================================ */
+
+/* Avoid first-slide flash before <deck-stage> registers */
+deck-stage:not(:defined) { visibility: hidden; }
+
+/* Base slide surface — author overrides bg/color per slide */
+.slide {
+  font-family: var(--font-body, "Inter", "Source Sans 3", system-ui, sans-serif);
+  color: #14111e;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Default slide-title baseline; decks override font/weight/size */
+.slide-title {
+  font-family: var(--font-display, "Quicksand", "Inter", sans-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Default eyebrow baseline */
+.eyebrow {
+  font: 600 12px/1 var(--font-body, "Inter", sans-serif);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-3, #6b6878);
+}
+
+/* Print: one slide per page, no margins. deck-stage.js also
+   injects an @page rule from its width/height attributes. */
+@media print {
+  html, body { margin: 0 !important; padding: 0 !important; }
+  .slide { page-break-after: always; break-after: page; }
+}

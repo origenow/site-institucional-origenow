@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+body{margin:0;background:#0d0b14;color:#e6e2ec;font:13px/1.4 Manrope,ui-sans-serif,sans-serif;padding:18px 20px 40px}
+h1{font-size:15px;margin:0 0 4px;letter-spacing:-.01em}
+p.sub{margin:0 0 14px;color:#8b839e;font-size:12px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tabs button{background:#241f3a;color:#cfc8d8;border:1px solid #3a3450;padding:6px 11px;font:600 11px/1 Manrope,sans-serif;cursor:pointer;border-radius:2px}
+.tabs button[data-on]{background:#6730be;color:#fff;border-color:#6730be}
+.grid{display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 20px}
+.col{flex:none}
+.cap{display:flex;align-items:baseline;gap:7px;margin-bottom:7px}
+.cap b{font-size:12px;color:#fff}.cap span{font-size:11px;color:#6b6480}
+.vp{position:relative;overflow:hidden;background:#fff;border:1px solid #3a3450}
+.vp iframe{border:0;transform-origin:0 0;display:block}
+</style></head><body>
+<h1>Fase 2 — reflow por breakpoint</h1>
+<p class="sub">Mesma página em quatro larguras reais (iframe = viewport próprio). Larguras escolhidas fora dos boundaries (991/767 dariam falso-positivo). Procurar: grade estourando, texto apertado, sobreposição, nav mobile.</p>
+<div class="tabs" id="tabs"></div>
+<div class="grid" id="grid"></div>
+<script>
+const PAGES=['Origenow Site','Origenow Servicos','Origenow Servico Logistica','Origenow Grupo','Origenow Case 01','Origenow Contato'];
+const VPS=[[980,'tablet'],[768,'iPad portrait'],[740,'mobile landscape'],[390,'mobile portrait']];
+const H=2500, S=0.45;
+const tabs=document.getElementById('tabs'), grid=document.getElementById('grid');
+let cur=PAGES[0];
+function draw(){
+  tabs.innerHTML=PAGES.map(p=>'<button data-p="'+p+'"'+(p===cur?' data-on="1"':'')+'>'+p.replace('Origenow ','')+'</button>').join('');
+  tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{cur=b.dataset.p;draw();});
+  grid.innerHTML=VPS.map(([w,label])=>
+    '<div class="col"><div class="cap"><b>'+w+'px</b><span>'+label+'</span></div>'+
+    '<div class="vp" style="width:'+Math.round(w*S)+'px;height:'+Math.round(H*S)+'px">'+
+    '<iframe src="'+encodeURIComponent(cur)+'.dc.html" style="width:'+w+'px;height:'+H+'px;transform:scale('+S+')"></iframe>'+
+    '</div></div>').join('');
+}
+draw();
+</script></body></html>

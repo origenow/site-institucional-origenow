@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Insights · Origenow</title>
+<meta name="description" content="Insights da Origenow sobre Curva ABC, precificação por canal, logística e operação em marketplaces.">
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Origenow">
+<meta property="og:title" content="Insights · Origenow">
+<meta property="og:description" content="Insights da Origenow sobre Curva ABC, precificação por canal, logística e operação em marketplaces.">
+<meta property="og:image" content="assets/logo-origenow-white.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_ds/apresenta-es-e-relat-rios-com-a-padr-o-d-019deffd-8797-7636-84f6-c3bea9f94a67/colors_and_type.css">
+<script src="_ds/apresenta-es-e-relat-rios-com-a-padr-o-d-019deffd-8797-7636-84f6-c3bea9f94a67/_ds_bundle.js"></script>
+<style>body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}</style>
+</helmet>
+<div id="om-site" style="width:var(--size-container);margin:0 auto;background:#ffffff;font-family:Manrope,sans-serif">
+<dc-import name="Header" active="blog" style="position:sticky;top:0;z-index:40" hint-size="100%,84px"></dc-import>
+
+<div data-screen-label="Artigo hero" style="position:relative;overflow:hidden;margin-top:-5.125rem;background:#14111e;padding:9rem 5rem 4rem">
+<span style="position:absolute;right:-6%;top:-30%;width:44rem;height:44rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.42),rgba(103,48,190,0) 66%);filter:blur(2.5rem);z-index:0;pointer-events:none;display:block"></span>
+<div style="position:relative;z-index:1;max-width:52rem">
+<a href="Origenow%20Insights.dc.html" style-hover="color:#ffffff" style="display:inline-flex;align-items:center;gap:0.5rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#b69ce0;margin-bottom:2rem">← Insights</a>
+<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.5rem">{{ catDate }}</div>
+<h1 data-om-fz="d2" style="margin:0;max-width:48rem;font:700 3.25rem/1.08 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">{{ title }}</h1>
+</div>
+</div>
+
+<div data-om-pad="1" style="padding:0 5rem;margin-top:-3.5rem;position:relative;z-index:2">
+<img src="{{ cover }}" alt="" style="display:block;width:100%;max-height:26rem;object-fit:cover;border-radius:2px;box-shadow:0 1.5rem 3rem -1rem rgba(20,17,30,.35)">
+</div>
+
+<div data-om-pad="1" style="padding:3.5rem 5rem 0"><div style="max-width:44rem;margin:0 auto">
+<p style="margin:0 0 1.75rem;font:500 1.375rem/1.55 Manrope,sans-serif;letter-spacing:-.02em;color:#14111e;text-wrap:pretty">{{ intro }}</p>
+<sc-for list="{{ paras }}" as="para" hint-placeholder-count="3">
+<p style="margin:0 0 1.5rem;font:400 1.0625rem/1.75 Manrope,sans-serif;color:#3a3450;text-wrap:pretty">{{ para }}</p>
+</sc-for>
+<div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid #e6e2ec;display:flex;align-items:center;gap:0.75rem"><span style="width:1.625rem;height:1px;background:#e62c7c;display:block"></span><span style="font:600 0.875rem/1 Manrope,sans-serif;color:#6b6480">Origenow · Consultoria data-driven para marketplaces</span></div>
+</div></div>
+
+<div data-om-pad="1" data-om-pv="6rem-6rem" style="position:relative;overflow:hidden;background:#14111e;padding:6rem 5rem;margin-top:5.5rem">
+<span style="position:absolute;right:-6%;top:-40%;width:35rem;height:35rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.6),rgba(103,48,190,0) 68%);filter:blur(3rem);z-index:0;pointer-events:none;display:block"></span>
+<div style="position:relative;z-index:1;max-width:51.25rem;margin:0 auto;text-align:center">
+<h2 data-om-fz="d2" style="margin:0;font:700 3.5rem/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">Conte conosco em seu ecommerce<span style="color:#e62c7c">.</span></h2>
+<p style="margin:1.375rem auto 0;max-width:35rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.66)">Uma reunião de 45 minutos, o número na mesa e um plano de 90 dias por escrito. Sem custo e sem obrigação de contratar.</p>
+<div data-om-flex="row" style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:2.5rem">
+<a href="Origenow%20Contato.dc.html" style-hover="background:#e6e2ec" style="transition:background .2s ease;display:inline-flex;align-items:center;gap:0.75rem;background:#ffffff;color:#6730be;font:700 1rem/1 Manrope,sans-serif;padding:1.4375rem 2.375rem;border-radius:2px;text-decoration:none">Quero meu diagnóstico<span style="font:400 1.125rem/1 Manrope,sans-serif">→</span></a>
+<a href="Origenow%20Insights.dc.html" style-hover="border-color:rgba(255,255,255,.72)" style="transition:border-color .2s ease;display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.36);color:#ffffff;font:500 1rem/1 Manrope,sans-serif;padding:1.4375rem 2rem;border-radius:2px;text-decoration:none">Ver outros insights</a>
+</div>
+</div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,430px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const A = [
+      { cat:'Mercado Livre', date:'12/06/2026', cover:'assets/insight-cover-1.png', title:'Como a Curva ABC muda a sua verba de Ads no Mercado Livre',
+        intro:'A Curva ABC não é um relatório bonito: é o mapa de onde a sua verba de Ads deve estar.',
+        paras:['Na maioria das contas, o orçamento de Ads é distribuído por intuição, um pouco em cada anúncio. O resultado é verba parada em SKU que não gira e falta de investimento onde a demanda existe.','Ao classificar o catálogo por giro e margem (A, B, C), fica claro que uma fração pequena dos SKUs responde pela maior parte da receita. É neles que o ACOS alvo precisa ser mais agressivo.','Na prática, revisamos a curva toda semana: entra o SKU que aqueceu, sai o que esfriou. A verba segue a curva, não o contrário.'] },
+      { cat:'Curva ABC', date:'03/06/2026', cover:'assets/insight-cover-2.png', title:'Mix enxuto vende mais: o corte de 38% que dobrou a margem',
+        intro:'Cortar catálogo assusta, mas quase sempre é o caminho mais rápido para a margem subir.',
+        paras:['Um mix inchado esconde custo: capital parado em estoque, anúncios competindo entre si e a atenção do time diluída em produtos que não pagam a operação.','Ao aplicar a Curva ABC numa operação real, cortamos 38% dos SKUs, os de giro baixo e margem negativa. A receita não caiu; a margem dobrou.','Menos SKU, mais foco: o que fica recebe preço, conteúdo e verba melhores. É o oposto de "quanto mais anúncio, melhor".'] },
+      { cat:'Operação', date:'28/05/2026', cover:'assets/insight-cover-3.png', title:'Full ou frete próprio? O cálculo que quase ninguém faz',
+        intro:'Full ou frete próprio não é questão de preferência: é conta.',
+        paras:['O Full reduz o custo de envio percebido pelo comprador e melhora a posição no anúncio, mas cobra tarifa de armazenagem e exige cobertura de estoque.','O frete próprio dá controle e pode custar menos por envio, mas perde o selo e a velocidade que o algoritmo premia.','A decisão certa varia por SKU: giro, peso, margem e região. Fazemos a conta item a item antes de mover o estoque.'] },
+      { cat:'Amazon', date:'19/05/2026', cover:'assets/insight-cover-4.png', title:'Entrar na Amazon sem canibalizar o seu Mercado Livre',
+        intro:'Abrir a Amazon não precisa roubar as vendas do seu Mercado Livre.',
+        paras:['O erro comum é replicar preço e mix idênticos e deixar os dois canais competirem pelo mesmo comprador, corroendo margem nos dois.','Com tabela de preço por canal e um recorte de sortimento, cada marketplace atende uma demanda, e a operação soma em vez de dividir.','Entramos de forma escalonada: primeiro os SKUs com viabilidade clara na Amazon, depois o restante, sempre com a conta aberta.'] },
+      { cat:'Precificação', date:'07/05/2026', cover:'assets/insight-cover-5.png', title:'Tabela de preço por canal: o erro que come a sua margem',
+        intro:'Um preço único para todos os canais é o erro que come a sua margem em silêncio.',
+        paras:['Comissão, frete, imposto e Ads variam de canal para canal. O mesmo preço rende margens completamente diferentes em cada um.','A tabela de preço por canal desconta cada taxa venda por venda e define o preço a partir da margem alvo, não do concorrente.','É trabalhoso de montar, mas depois roda sozinho: cada canal com o seu preço, cada venda com a margem no lugar.'] },
+      { cat:'Time', date:'25/04/2026', cover:'assets/insight-cover-6.png', title:'Quem cuida do canal: estrutura mínima de uma operação',
+        intro:'Não é preciso um time grande para operar bem: é preciso as funções certas.',
+        paras:['Toda operação de marketplace precisa cobrir quatro frentes: dados, catálogo e conteúdo, Ads e atendimento. Elas podem estar em poucas pessoas, mas não podem faltar.','O erro é concentrar tudo numa pessoa que "toca o e-commerce" e vira gargalo. O segundo erro é terceirizar sem ninguém dono da conta do lado de dentro.','A estrutura mínima é um dono da operação mais apoio especializado por frente. É exatamente o que a Assessoria e o Full Service entregam.'] }
+    ];
+    let i = 0;
+    try { const q = parseInt(new URLSearchParams(location.search).get('a') || '1', 10); if (q >= 1 && q <= 6) i = q - 1; } catch (e) {}
+    const a = A[i];
+    return { catDate: a.cat + ' · ' + a.date, title: a.title, cover: a.cover, intro: a.intro, paras: a.paras };
+  }
+}
+</script>
+</body>
+</html>

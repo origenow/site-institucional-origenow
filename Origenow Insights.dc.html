@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Insights · Origenow</title>
+<meta name="description" content="Insights da Origenow sobre Curva ABC, precificação por canal, logística e operação em marketplaces.">
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Origenow">
+<meta property="og:title" content="Insights · Origenow">
+<meta property="og:description" content="Insights da Origenow sobre Curva ABC, precificação por canal, logística e operação em marketplaces.">
+<meta property="og:image" content="assets/logo-origenow-white.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_ds/apresenta-es-e-relat-rios-com-a-padr-o-d-019deffd-8797-7636-84f6-c3bea9f94a67/colors_and_type.css">
+<script src="_ds/apresenta-es-e-relat-rios-com-a-padr-o-d-019deffd-8797-7636-84f6-c3bea9f94a67/_ds_bundle.js"></script>
+<style>:root{--size-unit:16;--size-container-ideal:1440;--size-container-min:1280px;--size-container-max:1920px;--size-container:clamp(var(--size-container-min),100vw,var(--size-container-max));--size-font:calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)))}html{font-size:var(--size-font)}
+@media (max-width:1279px){html{font-size:16px}#om-site{width:100%!important;max-width:none!important}}
+@media (max-width:991px){
+[data-om-pad]{padding-left:2.5rem!important;padding-right:2.5rem!important}
+[data-om-mar]{margin-left:2.5rem!important;margin-right:2.5rem!important}
+[data-om-pv="10.75rem-9rem"]{padding-top:7rem!important;padding-bottom:5.75rem!important}
+[data-om-pv="3rem-0"]{padding-top:2rem!important;padding-bottom:0!important}
+[data-om-pv="3rem-2.5rem"]{padding-top:2rem!important;padding-bottom:1.75rem!important}
+[data-om-pv="3rem-4rem"]{padding-top:2rem!important;padding-bottom:2.5rem!important}
+[data-om-pv="4.5rem-4.5rem"]{padding-top:3rem!important;padding-bottom:3rem!important}
+[data-om-pv="4rem-2rem"]{padding-top:2.5rem!important;padding-bottom:1.25rem!important}
+[data-om-pv="6rem-0"]{padding-top:4rem!important;padding-bottom:0!important}
+[data-om-pv="6rem-6rem"]{padding-top:4rem!important;padding-bottom:4rem!important}
+[data-om-pv="9rem-0"]{padding-top:5.75rem!important;padding-bottom:0!important}
+[data-om-pv="9rem-6rem"]{padding-top:5.75rem!important;padding-bottom:4rem!important}
+[data-om-mv="3.5rem-0"]{margin-top:2.25rem!important;margin-bottom:0!important}
+[data-om-mv="5.5rem-0"]{margin-top:3.5rem!important;margin-bottom:0!important}
+[data-om-row="sb"],[data-om-flex="row"]{flex-wrap:wrap!important;min-width:0!important;flex-shrink:1!important}
+[data-om-grid="multi"]{grid-template-columns:repeat(2,1fr)!important}
+[data-om-grid]>*{min-width:0!important}
+[data-om-grid="rows"]{grid-template-columns:8.125rem 1fr!important}
+[data-om-fz="d1"]{font-size:3rem!important}
+[data-om-fz="d2"]{font-size:2.625rem!important}
+[data-om-fz="d3"]{font-size:2.25rem!important}
+[data-om-nav="desktop"],[data-om-hide-sm]{display:none!important}
+[data-om-burger]{display:flex!important}
+}
+@media (max-width:767px){
+[data-om-pad]{padding-left:1.75rem!important;padding-right:1.75rem!important}
+[data-om-mar]{margin-left:1.75rem!important;margin-right:1.75rem!important}
+[data-om-pv="10.75rem-9rem"]{padding-top:5.5rem!important;padding-bottom:4.5rem!important}
+[data-om-pv="3rem-0"]{padding-top:1.5rem!important;padding-bottom:0!important}
+[data-om-pv="3rem-2.5rem"]{padding-top:1.5rem!important;padding-bottom:1.25rem!important}
+[data-om-pv="3rem-4rem"]{padding-top:1.5rem!important;padding-bottom:2rem!important}
+[data-om-pv="4.5rem-4.5rem"]{padding-top:2.25rem!important;padding-bottom:2.25rem!important}
+[data-om-pv="4rem-2rem"]{padding-top:2rem!important;padding-bottom:1rem!important}
+[data-om-pv="6rem-0"]{padding-top:3rem!important;padding-bottom:0!important}
+[data-om-pv="6rem-6rem"]{padding-top:3rem!important;padding-bottom:3rem!important}
+[data-om-pv="9rem-0"]{padding-top:4.5rem!important;padding-bottom:0!important}
+[data-om-pv="9rem-6rem"]{padding-top:4.5rem!important;padding-bottom:3rem!important}
+[data-om-mv="3.5rem-0"]{margin-top:1.75rem!important;margin-bottom:0!important}
+[data-om-mv="5.5rem-0"]{margin-top:2.75rem!important;margin-bottom:0!important}
+[data-om-pull]{margin-top:0!important}
+[data-om-band]{flex-wrap:wrap!important;gap:1.25rem!important}
+[data-om-logos]{flex:1 1 100%!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:1.25rem 1.875rem!important}
+[data-om-grid="multi"],[data-om-grid="pair"],[data-om-grid="rows"]{grid-template-columns:1fr!important}
+[data-om-grid]>*{grid-column:auto!important}
+[data-om-cmp]{grid-template-columns:1fr 1fr!important}
+[data-om-cmp]>span:first-child{grid-column:1/-1!important;padding-bottom:0!important}
+[data-om-flex="row"]>*{min-width:0!important}
+[data-om-fz="d1"]{font-size:2.375rem!important}
+[data-om-fz="d2"]{font-size:2.125rem!important}
+[data-om-fz="d3"]{font-size:1.875rem!important}
+[data-om-fz="d4"]{font-size:1.75rem!important}
+}
+@media (max-width:479px){
+[data-om-pad]{padding-left:1.25rem!important;padding-right:1.25rem!important}
+[data-om-mar]{margin-left:1.25rem!important;margin-right:1.25rem!important}
+[data-om-pv="10.75rem-9rem"]{padding-top:4.5rem!important;padding-bottom:3.75rem!important}
+[data-om-pv="3rem-0"]{padding-top:1.25rem!important;padding-bottom:0!important}
+[data-om-pv="3rem-2.5rem"]{padding-top:1.25rem!important;padding-bottom:1rem!important}
+[data-om-pv="3rem-4rem"]{padding-top:1.25rem!important;padding-bottom:1.75rem!important}
+[data-om-pv="4.5rem-4.5rem"]{padding-top:2rem!important;padding-bottom:2rem!important}
+[data-om-pv="4rem-2rem"]{padding-top:1.75rem!important;padding-bottom:0.75rem!important}
+[data-om-pv="6rem-0"]{padding-top:2.5rem!important;padding-bottom:0!important}
+[data-om-pv="6rem-6rem"]{padding-top:2.5rem!important;padding-bottom:2.5rem!important}
+[data-om-pv="9rem-0"]{padding-top:3.75rem!important;padding-bottom:0!important}
+[data-om-pv="9rem-6rem"]{padding-top:3.75rem!important;padding-bottom:2.5rem!important}
+[data-om-mv="3.5rem-0"]{margin-top:1.5rem!important;margin-bottom:0!important}
+[data-om-mv="5.5rem-0"]{margin-top:2.25rem!important;margin-bottom:0!important}
+[data-om-cta]{flex-direction:column!important;align-items:stretch!important;gap:0.75rem!important}
+[data-om-cta]>a{width:100%!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
+[data-om-logos]{gap:1rem 1.5rem!important}
+[data-om-gridkeep]{grid-template-columns:1fr!important}
+[data-om-gridkeep]>*{grid-column:auto!important;min-width:0!important}
+[data-om-fz="d1"]{font-size:2rem!important}
+[data-om-fz="d2"]{font-size:1.875rem!important}
+[data-om-fz="d3"]{font-size:1.625rem!important}
+}body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}@keyframes om-dot{0%,75%,100%{opacity:.28;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}@keyframes om-caret{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes om-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style>
+<script src="./image-slot.js"></script>
+<script src="./om-motion.js" defer></script>
+</helmet>
+<div id="om-site" style="width:var(--size-container);margin:0 auto;background:#ffffff;font-family:Manrope,sans-serif">
+<dc-import name="Header" active="blog" style="position:sticky;top:0;z-index:40" hint-size="100%,84px"></dc-import>
+<div data-om-motion="off" data-om-pad="1" data-om-pv="9rem-6rem" data-om-pull="1" style="margin-top:-5.125rem;background:#14111e;padding:9rem 5rem 6rem">
+<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.5rem">Insights</div>
+<h1 data-om-fz="d1" style="margin:0;max-width:56.25rem;font:700 4rem/1.04 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">O que estamos estudando</h1>
+<p style="margin:1.625rem 0 0;max-width:32.5rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64)">Leituras de mercado, planilhas e nossas teses mais recentes.</p>
+</div>
+<div data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0">
+<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Artigos</div><h2 data-om-fz="d3" style="margin:0;max-width:40rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e" id="conteudos">Publicações recentes</h2>
+<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem"><a href="Origenow%20Artigo.dc.html?a=1" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-1.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Mercado Livre</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>12/06/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Como a Curva ABC muda a sua verba de Ads no Mercado Livre</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a><a href="Origenow%20Artigo.dc.html?a=2" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-2.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Curva ABC</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>03/06/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Mix enxuto vende mais: o corte de 38% que dobrou a margem</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a><a href="Origenow%20Artigo.dc.html?a=3" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-3.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Operação</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>28/05/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Full ou frete próprio? O cálculo que quase ninguém faz</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a><a href="Origenow%20Artigo.dc.html?a=4" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-4.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Amazon</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>19/05/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Entrar na Amazon sem canibalizar o seu Mercado Livre</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a><a href="Origenow%20Artigo.dc.html?a=5" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-5.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Precificação</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>07/05/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Tabela de preço por canal: o erro que come a sua margem</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a><a href="Origenow%20Artigo.dc.html?a=6" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="display:block;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec"><img src="assets/insight-cover-6.png" alt="" style="display:block;width:100%;height:12.25rem;object-fit:cover"><div style="padding:1.5rem 1.625rem 1.625rem"><div data-om-flex="row" style="display:flex;align-items:center;gap:0.625rem;font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480"><span style="color:#6730be">Time</span><span style="width:0.25rem;height:0.25rem;background:#e6e2ec;display:block"></span>25/04/2026</div><h3 style="margin:1rem 0 0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Quem cuida do canal: estrutura mínima de uma operação</h3><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ler artigo →</div></div></a></div>
+</div>
+<div data-om-pad="1" data-om-flex="row" data-om-pv="4.5rem-4.5rem" style="margin-top:6rem;background:#14111e;padding:4.5rem 5rem;display:flex;align-items:center;justify-content:space-between;gap:3.5rem">
+<div><h2 data-om-fz="d3" style="margin:0;max-width:32.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">Um e-mail por mês, só com o que muda a operação</h2><p style="margin:1rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.6)">Planilhas, cupons de Ads e leituras de mercado. Sem spam.</p></div>
+<div data-om-flex="row" style="flex:none;display:flex;gap:0.625rem"><span data-om-flex="row" style="display:flex;align-items:center;width:18.75rem;padding:1.0625rem 1.125rem;border:1px solid rgba(255,255,255,.24);font:400 0.875rem/1 Manrope,sans-serif;color:rgba(255,255,255,.45)">seu@email.com.br</span><span style-hover="background:#c91f6a" style="transition:background .18s ease;background:#e62c7c;color:#ffffff;font:600 0.875rem/1 Manrope,sans-serif;padding:1.0625rem 1.625rem;cursor:pointer">Assinar</span></div>
+</div>
+<dc-import name="Footer" hint-size="100%,430px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { this.reveal(); }
+
+  reveal() {
+    const root = document.getElementById('om-site');
+    if (!root) return;
+    const ease = 'opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1)';
+    const vh = () => window.innerHeight || document.documentElement.clientHeight || 800;
+    const show = (el) => { el.style.opacity = '1'; el.style.transform = 'none'; };
+    let pending = Array.from(root.children).filter((el) => {
+      if (el.tagName === 'HEADER' || el.tagName === 'DC-IMPORT') return false;
+      if (el.getBoundingClientRect().top < vh() * 0.85) return false;
+      el.style.transition = ease;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      return true;
+    });
+    if (!pending.length) return;
+    const check = () => {
+      pending = pending.filter((el) => {
+        if (el.getBoundingClientRect().top >= vh() * 0.92) return true;
+        show(el);
+        return false;
+      });
+      return pending.length === 0;
+    };
+    let last = 0;
+    const tick = (ts) => {
+      if (ts - last > 90) { last = ts; if (check()) return; }
+      this._revealRaf = requestAnimationFrame(tick);
+    };
+    this._revealRaf = requestAnimationFrame(tick);
+    this._onScroll = () => check();
+    window.addEventListener('scroll', this._onScroll, { passive: true, capture: true });
+    setTimeout(() => { if (pending.length) { pending.forEach(show); pending = []; } }, 2600);
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this._revealRaf);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll, { capture: true });
+  }
+}
+</script>
+</body>
+</html>
