@@ -1,7 +1,8 @@
 import { chromium } from 'playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, cp } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { TODAS } from './pages.js';
 
 const RAIZ = resolve(import.meta.dirname, '..');
 
@@ -43,3 +44,32 @@ export async function medirFlash(browser, arquivoGerado) {
   const zerouDepois = amostras.some((h, i) => h === 0 && amostras.slice(0, i).some((a) => a > 0));
   return { primeiraAltura, zerouDepois, amostras };
 }
+
+export async function buildAll() {
+  const browser = await chromium.launch();
+  const falhas = [];
+
+  for (const { entrada, saida, query } of TODAS) {
+    try {
+      const { bytes } = await prerenderPage(browser, entrada, saida, query ?? '');
+      console.log(`ok  ${saida}  (${bytes} bytes)`);
+    } catch (erro) {
+      falhas.push({ saida, erro: erro.message });
+      console.error(`FALHA  ${saida}: ${erro.message}`);
+    }
+  }
+
+  // Ativos referenciados pelo HTML gerado.
+  for (const pasta of ['assets', '_ds']) {
+    await cp(resolve(RAIZ, pasta), resolve(RAIZ, 'dist', pasta), { recursive: true });
+  }
+  for (const arquivo of ['support.js', 'image-slot.js', 'om-motion.js']) {
+    await cp(resolve(RAIZ, arquivo), resolve(RAIZ, 'dist', arquivo));
+  }
+
+  await browser.close();
+  if (falhas.length) { console.error(`${falhas.length} página(s) falharam.`); process.exit(1); }
+  console.log(`${TODAS.length} páginas geradas.`);
+}
+
+if (import.meta.filename === process.argv[1]) await buildAll();
