@@ -182,6 +182,20 @@ const EMPRESAS = [
 class Component extends DCLogic {
   state = { tip: false, menu: null, lang: 'PT-BR', langOpen: false, mob: false };
 
+  // O idioma vem do prefixo da URL (/en, /es, /zh); a raiz é o português.
+  static PREFIXOS = { en: 'EN', es: 'ES', zh: 'CN' };
+
+  idiomaAtual() {
+    const m = /^\/(en|es|zh)(?=\/|$)/.exec(location.pathname);
+    return m ? Component.PREFIXOS[m[1]] : 'PT-BR';
+  }
+
+  // Troca de idioma preservando a página em que o visitante está.
+  irParaIdioma(prefixo) {
+    const semIdioma = location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, '');
+    location.href = (prefixo + (semIdioma || '/')) || '/';
+  }
+
   componentDidMount() {
     const header = document.querySelector('header[data-om-header]');
     this._key = (e) => { if (e.key === 'Escape') this.setState({ menu: null, mob: false }); };
@@ -312,14 +326,14 @@ class Component extends DCLogic {
       toggleServicos: () => this.setState((s) => ({ menu: s.menu === 'servicos' ? null : 'servicos' })),
       toggleEmpresas: () => this.setState((s) => ({ menu: s.menu === 'empresas' ? null : 'empresas' })),
       closeMenu: () => this.setState({ menu: null }),
-      lang: this.state.lang,
+      lang: this.idiomaAtual(),
       langOpen: this.state.langOpen,
       chevLang: this.state.langOpen ? 'rotate(-135deg) translateY(1px)' : 'rotate(45deg) translateY(-2px)',
       toggleLang: () => this.setState((s) => ({ langOpen: !s.langOpen, menu: null })),
-      setPt: () => this.setState({ lang: 'PT-BR', langOpen: false }),
-      setEn: () => this.setState({ lang: 'EN', langOpen: false }),
-      setEs: () => this.setState({ lang: 'ES', langOpen: false }),
-      setCn: () => this.setState({ lang: 'CN', langOpen: false }),
+      setPt: () => this.irParaIdioma(''),
+      setEn: () => this.irParaIdioma('/en'),
+      setEs: () => this.irParaIdioma('/es'),
+      setCn: () => this.irParaIdioma('/zh'),
       menuTitle: menu === 'empresas' ? 'Empresas' : 'Serviços',
       menuLinks: list,
       promoEyebrow: menu === 'empresas' ? 'Cultura do grupo' : 'Comece por aqui',

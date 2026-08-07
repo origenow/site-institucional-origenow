@@ -13,6 +13,8 @@ import { mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { TODAS, IMPORTS, PASTAS, ARQUIVOS, mapaDeLinks } from './pages.js';
 import { jsonLd, llmsTxt, tipoDaPagina } from './structured-data.js';
+import { IDIOMAS, traduzir, tagsHreflang } from './i18n.js';
+import { existsSync } from 'node:fs';
 
 const RAIZ = resolve(import.meta.dirname, '..');
 const DIST = resolve(RAIZ, 'dist');
@@ -126,36 +128,71 @@ export async function buildAll() {
   const urls = [];
   const fichas = [];
 
-  for (const p of TODAS) {
-    const fonte = await readFile(resolve(RAIZ, p.src), 'utf8');
-    const urlAbs = `${SITE_URL}${p.url}`;
-
-    let seo = extrairHeadSeo(fonte);
-    if (p.title || p.desc) seo = aplicarTituloEDescricao(seo, p.title, p.desc);
-    seo = seoAbsoluto(seo, urlAbs);
-
-    // Variante: o runtime lê a chave deste global (cai no ?param= se ausente),
-    // para a mesma fonte servir cada case/artigo na sua própria URL.
-    const varScript = p.param
-      ? `<script>window.__OM_VAR__={${p.param}:${JSON.stringify(p.valor)}};</script>`
-      : '';
-
-    const titulo = p.title || /<title>([\s\S]*?)<\/title>/i.exec(seo)?.[1] || '';
-    const descricao = p.desc || /name="description"\s+content="([^"]*)"/i.exec(seo)?.[1] || '';
-    const ld = jsonLd({ site: SITE_URL, url: p.url, titulo, descricao, tipo: tipoDaPagina(p.url) });
-
-    const html = adiarPreloadDeBinding(injetarHead(reescreverLinks(fonte, mapa), seo, `${ld}${varScript}`));
-    await gravar(arquivoDaUrl(p.url), html);
-    urls.push(urlAbs);
-    fichas.push({ url: p.url, titulo, descricao });
-    console.log(`ok  ${p.url}`);
+  // Dicionário por idioma. Ausente ou incompleto, o texto cai no português —
+  // a tradução pode entrar em partes sem nunca quebrar a página.
+  const dicts = {};
+  for (const idioma of IDIOMAS) {
+    const arq = resolve(RAIZ, 'i18n', `${idioma.code}.json`);
+    dicts[idioma.code] = !idioma.padrao && existsSync(arq)
+      ? JSON.parse(await readFile(arq, 'utf8'))
+      : null;
   }
 
-  // Header/Footer verbatim (buscados crus pelo dc-import em runtime), com os
-  // links já reescritos para as URLs limpas.
+  for (const idioma of IDIOMAS) {
+    const dict = dicts[idioma.code];
+    if (!idioma.padrao && !dict) { console.log(`--  ${idioma.code}: sem dicionário, pulando`); continue; }
+
+    for (const p of TODAS) {
+      const bruto = await readFile(resolve(RAIZ, p.src), 'utf8');
+      const fonte = idioma.padrao ? bruto : traduzir(bruto, dict);
+      const urlLocal = `${idioma.prefixo}${p.url}`;
+      const urlAbs = `${SITE_URL}${urlLocal}`;
+
+      let seo = extrairHeadSeo(fonte);
+      if (p.title || p.desc) {
+        // Nas variantes o título vem do mapa (português); traduz se houver.
+        seo = aplicarTituloEDescricao(seo, dict?.[p.title] || p.title, dict?.[p.desc] || p.desc);
+      }
+      seo = seoAbsoluto(seo, urlAbs);
+      seo += `\n${tagsHreflang(SITE_URL, p.url)}`;
+
+      const varScript = p.param
+        ? `<script>window.__OM_VAR__={${p.param}:${JSON.stringify(p.valor)}};</script>`
+        : '';
+
+      const titulo = /<title>([\s\S]*?)<\/title>/i.exec(seo)?.[1] || '';
+      const descricao = /name="description"\s+content="([^"]*)"/i.exec(seo)?.[1] || '';
+      const ld = jsonLd({ site: SITE_URL, url: urlLocal, titulo, descricao, tipo: tipoDaPagina(p.url) });
+
+      // O prefixo de idioma entra ANTES do <base href="/"> ser injetado —
+      // senão a própria tag <base> vira /en/ e os ativos passam a ser
+      // procurados dentro do idioma, quebrando a página inteira.
+      let corpo = reescreverLinks(fonte, mapa);
+      if (idioma.prefixo) corpo = corpo.replace(/href="\//g, `href="${idioma.prefixo}/`);
+      let html = adiarPreloadDeBinding(injetarHead(corpo, seo, `${ld}${varScript}`));
+      // Cada idioma tem o seu Header/Footer; os ativos seguem na raiz por causa
+      // do <base href="/">, então o import é que muda de nome.
+      if (idioma.prefixo) html = html.replace(/(<dc-import\s+name=")(Header|Footer)(")/g, `$1$2-${idioma.code}$3`);
+      html = html.replace(/<html(?![^>]*\slang=)/i, `<html lang="${idioma.hreflang}"`);
+
+      await gravar(arquivoDaUrl(urlLocal), html);
+      urls.push(urlAbs);
+      if (idioma.padrao) fichas.push({ url: p.url, titulo, descricao });
+    }
+    console.log(`ok  ${idioma.code}: ${TODAS.length} páginas`);
+  }
+
+  // Header/Footer: um por idioma, na raiz (o <base href="/"> resolve os ativos).
   for (const imp of IMPORTS) {
-    const fonte = await readFile(resolve(RAIZ, imp), 'utf8');
-    await gravar(imp, reescreverLinks(fonte, mapa));
+    const bruto = await readFile(resolve(RAIZ, imp), 'utf8');
+    for (const idioma of IDIOMAS) {
+      const dict = dicts[idioma.code];
+      if (!idioma.padrao && !dict) continue;
+      let saida = reescreverLinks(idioma.padrao ? bruto : traduzir(bruto, dict), mapa);
+      if (idioma.prefixo) saida = saida.replace(/href="\//g, `href="${idioma.prefixo}/`);
+      const nome = idioma.padrao ? imp : imp.replace('.dc.html', `-${idioma.code}.dc.html`);
+      await gravar(nome, saida);
+    }
   }
   for (const pasta of PASTAS) await cp(resolve(RAIZ, pasta), resolve(DIST, pasta), { recursive: true });
   for (const arq of ARQUIVOS) await cp(resolve(RAIZ, arq), resolve(DIST, arq));
