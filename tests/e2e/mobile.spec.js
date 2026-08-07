@@ -2,15 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.skip(({ isMobile }) => !isMobile, 'só roda no projeto mobile');
 
-const ROTAS = [
-  '/',
-  '/Origenow%20Servicos.dc.html',
-  '/Origenow%20Cases.dc.html',
-  '/Origenow%20Grupo.dc.html',
-  '/Origenow%20Sobre.dc.html',
-  '/Origenow%20Insights.dc.html',
-  '/Origenow%20Contato.dc.html',
-];
+const ROTAS = ['/', '/servicos', '/cases', '/grupo', '/sobre', '/insights', '/contato'];
 
 for (const rota of ROTAS) {
   test(`${rota} nao rola na horizontal`, async ({ page }) => {
@@ -25,7 +17,7 @@ for (const rota of ROTAS) {
 // do texto seguem a altura da linha e não são alvo de toque isolado — incluí-los
 // só geraria ruído.
 test('controles principais tem ao menos 44px de altura', async ({ page }) => {
-  await page.goto('/Origenow%20Contato.dc.html');
+  await page.goto('/contato');
   const pequenos = await page.evaluate(() =>
     [...document.querySelectorAll('header a, header [data-om-burger], #lead-form input, #lead-form textarea, #lead-form [onclick], footer a')]
       .filter((el) => el.id !== 'lead-website')

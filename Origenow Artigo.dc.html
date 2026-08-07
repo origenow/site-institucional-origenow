@@ -87,7 +87,9 @@ class Component extends DCLogic {
         paras:['Toda operação de marketplace precisa cobrir quatro frentes: dados, catálogo e conteúdo, Ads e atendimento. Elas podem estar em poucas pessoas, mas não podem faltar.','O erro é concentrar tudo numa pessoa que "toca o e-commerce" e vira gargalo. O segundo erro é terceirizar sem ninguém dono da conta do lado de dentro.','A estrutura mínima é um dono da operação mais apoio especializado por frente. É exatamente o que a Assessoria e o Full Service entregam.'] }
     ];
     let i = 0;
-    try { const q = parseInt(new URLSearchParams(location.search).get('a') || '1', 10); if (q >= 1 && q <= 6) i = q - 1; } catch (e) {}
+    // A variante vem do global injetado no build (cada artigo tem a sua URL
+    // limpa) e cai no ?a= quando ausente, mantendo os links antigos válidos.
+    try { const bruto = (window.__OM_VAR__ && window.__OM_VAR__.a) || new URLSearchParams(location.search).get('a') || '1'; const q = parseInt(bruto, 10); if (q >= 1 && q <= 6) i = q - 1; } catch (e) {}
     const a = A[i];
     return { catDate: a.cat + ' · ' + a.date, title: a.title, cover: a.cover, intro: a.intro, paras: a.paras };
   }

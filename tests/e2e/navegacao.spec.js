@@ -1,27 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 const ROTAS = [
-  '/',
-  '/Origenow%20Servicos.dc.html',
-  '/Origenow%20Servico%20Assessoria.dc.html',
-  '/Origenow%20Servico%20Consultoria.dc.html',
-  '/Origenow%20Servico%20Full%20Service.dc.html',
-  '/Origenow%20Servico%20Inteligencia%20Comercial.dc.html',
-  '/Origenow%20Servico%20Logistica.dc.html',
-  '/Origenow%20Servico%20Representacao.dc.html',
-  '/Origenow%20Cases.dc.html',
-  '/Origenow%20Case%2001.dc.html',
-  '/Origenow%20Case%2002.dc.html',
-  '/Origenow%20Case%2003.dc.html',
-  '/Origenow%20Case%2004.dc.html',
-  '/Origenow%20Case%2005.dc.html',
-  '/Origenow%20Case%20Novo.dc.html?c=1',
-  '/Origenow%20Case%20Novo.dc.html?c=amazon',
-  '/Origenow%20Grupo.dc.html',
-  '/Origenow%20Sobre.dc.html',
-  '/Origenow%20Insights.dc.html',
-  '/Origenow%20Artigo.dc.html',
-  '/Origenow%20Contato.dc.html',
+  '/', '/servicos', '/servicos/assessoria', '/servicos/consultoria',
+  '/servicos/full-service', '/servicos/inteligencia-comercial',
+  '/servicos/logistica', '/servicos/representacao',
+  '/cases', '/cases/camicado', '/cases/mimo-cricut', '/cases/tiktok-shop',
+  '/cases/riffel', '/cases/calpen', '/cases/cafe-dupan', '/cases/amazon-brasil',
+  '/grupo', '/sobre', '/insights', '/insights/mix-enxuto-vende-mais', '/contato',
 ];
 
 for (const rota of ROTAS) {

@@ -114,7 +114,9 @@ class Component extends DCLogic {
       11:{sector:'Eletrônicos · beleza & casa',model:'Gestão de marketplaces',channels:'Multicanal',svc:'Assessoria + Logística',title:'Paylight: expansão com logística sob controle',intro:'Empresa de eletrônicos com nicho de itens para beleza e casa. Usou a metodologia Origenow para expansão e treinamento, com foco em reduzir reclamações, devoluções e problemas de frete. Habilitamos scripts de acompanhamento e demos treinamento ao time logístico para prevenir esses gargalos na raiz.',desafio:'Expansão travada por reclamações, devoluções e problemas de frete. O gargalo estava na operação logística, não na demanda.',scope:['Expansão de operação','Treinamento do time logístico','Scripts de acompanhamento','Redução de reclamações & devoluções','Controle de problemas de frete'],results:[['Menos','reclamações, devoluções e falhas de frete'],['Time','equipe logística capacitada na metodologia'],['Scripts','acompanhamento para prevenir gargalos']],frentes:['Logística e fulfillment','Assessoria','Consultoria']}
     };
   }
-  pick() { let k='1'; try{ k=new URLSearchParams(location.search).get('c')||'1'; }catch(e){} const d=this.data(); return d[k]?k:'1'; }
+  // A variante vem do global injetado no build (cada case tem a sua URL limpa)
+  // e cai no ?c= quando ausente, mantendo os links antigos funcionando.
+  pick() { let k='1'; try{ k=(window.__OM_VAR__&&window.__OM_VAR__.c)||new URLSearchParams(location.search).get('c')||'1'; }catch(e){} const d=this.data(); return d[k]?k:'1'; }
   renderVals() {
     const k=this.pick(); const d=this.data()[k];
     const nums={amazon:'Parceria em destaque',1:'Case 06',2:'Case 07',3:'Case 08',4:'Case 09',5:'Case 10',6:'Case 11',7:'Case 12',8:'Case 13',9:'Case 14',10:'Case 15',11:'Case 16'};

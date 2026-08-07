@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => { await page.goto('/Origenow%20Contato.dc.html'); });
+test.beforeEach(async ({ page }) => { await page.goto('/contato'); });
 
 test('bloqueia envio com e-mail invalido', async ({ page }) => {
   await page.fill('#lead-nome', 'Maria Souza');
