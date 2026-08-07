@@ -119,19 +119,25 @@
 <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1rem;margin-top:2.25rem;min-height:21.25rem;justify-content:center">
 <span style="width:3.5rem;height:3.5rem;background:#2ecf9a;color:#ffffff;font:700 1.3125rem/3.5rem Manrope,sans-serif;text-align:center;border-radius:50%;display:block">✓</span>
 <span style="display:block;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Recebido</span>
-<span style="display:block;max-width:26.25rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Você recebe a confirmação por e-mail em até 2 horas com o nome de quem vai conduzir a conversa.</span>
+<span style="display:block;max-width:26.25rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Nossa equipe responde em até 2 dias úteis.</span>
 </div>
 </sc-if>
 <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+<form id="lead-form" novalidate style="display:contents">
 <div data-om-grid="pair" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.25rem">
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Nome</div><input type="text" placeholder="Como te chamamos?" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Empresa</div><input type="text" placeholder="Razão social ou marca" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">E-mail</div><input type="email" placeholder="nome@empresa.com.br" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">WhatsApp</div><input type="tel" placeholder="(00) 00000-0000" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Canais em que já vende</div><input type="text" placeholder="Mercado Livre, Amazon, loja própria…" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">O que você precisa</div><textarea placeholder="Escreva em duas linhas o seu momento e o seu objetivo." rows="3" style="width:100%;box-sizing:border-box;appearance:none;resize:vertical;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1.5 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></textarea></div>
+<input type="text" id="lead-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Nome</div><input type="text" id="lead-nome" name="nome" required placeholder="Como te chamamos?" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Empresa</div><input type="text" id="lead-empresa" name="empresa" placeholder="Razão social ou marca" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">E-mail</div><input type="email" id="lead-email" name="email" required placeholder="nome@empresa.com.br" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">WhatsApp</div><input type="tel" id="lead-whatsapp" name="whatsapp" placeholder="(00) 00000-0000" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Canais em que já vende</div><input type="text" id="lead-canais" name="canais" placeholder="Mercado Livre, Amazon, loja própria…" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">O que você precisa</div><textarea id="lead-mensagem" name="mensagem" placeholder="Escreva em duas linhas o seu momento e o seu objetivo." rows="3" style="width:100%;box-sizing:border-box;appearance:none;resize:vertical;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1.5 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></textarea></div>
 </div>
-<div data-om-flex="row" style="display:flex;align-items:center;gap:1.25rem;margin-top:2rem"><span onClick="{{ submitContato }}" style-hover="background:#5527a4;transform:translateY(-1px)" style="transition:background .18s ease,transform .18s cubic-bezier(.2,.7,.2,1);background:#6730be;color:#ffffff;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 2rem;cursor:pointer">Enviar e agendar</span><span style="font:400 0.8125rem/1.5 Manrope,sans-serif;color:#6b6480">Respondemos em até 2 dias úteis.</span></div>
+<div data-om-flex="row" style="display:flex;align-items:center;gap:1.25rem;margin-top:2rem"><span onClick="{{ submitContato }}" style-hover="background:#5527a4;transform:translateY(-1px)" style="transition:background .18s ease,transform .18s cubic-bezier(.2,.7,.2,1);background:#6730be;color:#ffffff;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 2rem;cursor:pointer">{{ rotuloBotao }}</span><span style="font:400 0.8125rem/1.5 Manrope,sans-serif;color:#6b6480">Respondemos em até 2 dias úteis.</span></div>
+<sc-if value="{{ erro }}">
+<div style="margin-top:1rem;border:1px solid #e0574f;background:#fdf2f1;padding:1rem 1.125rem;font:400 0.9375rem/1.5 Manrope,sans-serif;color:#a3322b">{{ erro }}</div>
+</sc-if>
+</form>
 </sc-if>
 </div>
 <div style="display:flex;flex-direction:column;gap:1.25rem">
@@ -223,16 +229,64 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { sent: false };
+  state = { sent: false, enviando: false, erro: '' };
 
-  componentDidMount() { this.reveal(); }
+  componentDidMount() {
+    this.reveal();
+    // O botão é um <span onClick>, então o submit nativo (tecla Enter) precisa
+    // ser interceptado à parte, senão a página recarrega e o lead se perde.
+    this._form = document.getElementById('lead-form');
+    if (this._form) {
+      this._onSubmit = (e) => { e.preventDefault(); this.enviar(); };
+      this._form.addEventListener('submit', this._onSubmit);
+    }
+  }
 
   renderVals() {
     return {
       sent: this.state.sent,
       notSent: !this.state.sent,
-      submitContato: () => this.setState({ sent: true })
+      erro: this.state.erro,
+      rotuloBotao: this.state.enviando ? 'Enviando…' : 'Enviar e agendar',
+      submitContato: () => this.enviar(),
     };
+  }
+
+  lerCampos() {
+    const ler = (id) => (document.getElementById(id)?.value ?? '').trim();
+    return {
+      nome: ler('lead-nome'), empresa: ler('lead-empresa'), email: ler('lead-email'),
+      whatsapp: ler('lead-whatsapp'), canais: ler('lead-canais'),
+      mensagem: ler('lead-mensagem'), website: ler('lead-website'),
+    };
+  }
+
+  async enviar() {
+    if (this.state.enviando) return;
+
+    const lead = this.lerCampos();
+    if (!lead.nome)  return this.setState({ erro: 'Informe seu nome.' });
+    if (!lead.email) return this.setState({ erro: 'Informe seu e-mail.' });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
+      return this.setState({ erro: 'E-mail inválido.' });
+    }
+
+    this.setState({ enviando: true, erro: '' });
+    try {
+      const resposta = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(lead),
+      });
+      if (!resposta.ok) {
+        const corpo = await resposta.json().catch(() => ({}));
+        throw new Error(corpo.erro || 'Não conseguimos enviar. Tente novamente.');
+      }
+      // Só troca de tela em caso de sucesso — os campos ficam preenchidos se falhar.
+      this.setState({ sent: true, enviando: false });
+    } catch (e) {
+      this.setState({ enviando: false, erro: e.message });
+    }
   }
 
   reveal() {
@@ -270,6 +324,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    if (this._form && this._onSubmit) this._form.removeEventListener('submit', this._onSubmit);
     cancelAnimationFrame(this._revealRaf);
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll, { capture: true });
   }
