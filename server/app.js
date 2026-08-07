@@ -22,6 +22,16 @@ export function criarApp() {
     hsts: { maxAge: 15552000, includeSubDomains: false },
   }));
 
+  // Só o domínio oficial deve ser indexado. A URL *.up.railway.app serve o mesmo
+  // conteúdo e, sem isto, competiria com o domínio como conteúdo duplicado.
+  const HOST_CANONICO = (process.env.SITE_URL || 'https://www.origenow.com.br')
+    .replace(/^https?:\/\//, '').replace(/\/$/, '').toLowerCase();
+  app.use((req, res, next) => {
+    const host = (req.hostname || '').toLowerCase();
+    if (host && host !== HOST_CANONICO) res.set('X-Robots-Tag', 'noindex, nofollow');
+    next();
+  });
+
   app.use(express.json({ limit: '32kb' }));
 
   // Rate limit só na captação de lead: barra flood no #comercial e no e-mail.

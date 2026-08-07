@@ -15,6 +15,27 @@ import { dirname, resolve } from 'node:path';
 const RAIZ = resolve(import.meta.dirname, '..');
 const DIST = resolve(RAIZ, 'dist');
 
+// Domínio canônico de produção. Usado para canonical, og:url e para tornar
+// absoluto o og:image — crawlers de WhatsApp/LinkedIn/Facebook ignoram imagem
+// em caminho relativo, então sem isto o preview de link sai sem imagem.
+export const SITE_URL = (process.env.SITE_URL || 'https://www.origenow.com.br').replace(/\/$/, '');
+
+/** URL pública de uma página, a partir do nome do arquivo fonte. */
+export function urlDaPagina(src, home) {
+  return home ? `${SITE_URL}/` : `${SITE_URL}/${encodeURIComponent(src)}`;
+}
+
+/** Acrescenta canonical + og:url e torna absolutos og:image / twitter:image. */
+export function seoAbsoluto(seo, urlPagina) {
+  let out = seo.replace(
+    /(<meta\s+(?:property|name)="(?:og:image|twitter:image)"\s+content=")([^"]+)(")/gi,
+    (m, a, valor, z) => (/^https?:\/\//i.test(valor) ? m : `${a}${SITE_URL}/${valor.replace(/^\.?\//, '')}${z}`),
+  );
+  if (!/rel="canonical"/i.test(out)) out += `\n<link rel="canonical" href="${urlPagina}">`;
+  if (!/property="og:url"/i.test(out)) out += `\n<meta property="og:url" content="${urlPagina}">`;
+  return out;
+}
+
 /** Extrai do <helmet> as tags que um crawler precisa ver sem executar JS. */
 export function extrairHeadSeo(html) {
   const helmet = /<helmet>([\s\S]*?)<\/helmet>/i.exec(html)?.[1] ?? html;
@@ -81,15 +102,28 @@ export async function buildAll() {
   await mkdir(DIST, { recursive: true });
 
   const semTitulo = [];
+  const urls = [];
   for (const { src, home } of PAGINAS) {
     const html = await readFile(resolve(RAIZ, src), 'utf8');
-    const seo = extrairHeadSeo(html);
-    if (!/<title>/i.test(seo)) semTitulo.push(src);
+    if (!/<title>/i.test(extrairHeadSeo(html))) semTitulo.push(src);
+    const url = urlDaPagina(src, home);
+    const seo = seoAbsoluto(extrairHeadSeo(html), url);
     const saidaHtml = adiarPreloadDeBinding(injetarHead(html, seo));
     await gravar(src, saidaHtml);
     if (home) await gravar('index.html', saidaHtml);
+    urls.push(url);
     console.log(`ok  dist/${src}`);
   }
+
+  // robots.txt + sitemap.xml — sem eles o Google não tem mapa de rastreio.
+  await gravar('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+  await gravar(
+    'sitemap.xml',
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n') +
+      `\n</urlset>\n`,
+  );
+  console.log(`ok  dist/robots.txt e dist/sitemap.xml (${urls.length} URLs)`);
 
   // Header/Footer verbatim — buscados crus pelo dc-import em runtime.
   for (const imp of IMPORTS) await cp(resolve(RAIZ, imp), resolve(DIST, imp));
