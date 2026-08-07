@@ -7,7 +7,17 @@ const LEAD = {
   whatsapp: '(31) 99999-0000', canais: 'Mercado Livre', mensagem: 'Quero escalar.',
 };
 
+function limparEnv() {
+  delete process.env.SLACK_WEBHOOK_URL;
+  delete process.env.SLACK_BOT_TOKEN;
+  delete process.env.SLACK_CHANNEL_ID;
+  delete process.env.SLACK_CHANNEL;
+}
+
+// --- Caminho 1: Incoming Webhook ---
+
 test('posta o lead no webhook', async () => {
+  limparEnv();
   process.env.SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/TESTE';
   const chamadas = [];
   mock.method(globalThis, 'fetch', async (url, opcoes) => {
@@ -25,6 +35,7 @@ test('posta o lead no webhook', async () => {
 });
 
 test('lanca quando o webhook recusa', async () => {
+  limparEnv();
   process.env.SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/TESTE';
   mock.method(globalThis, 'fetch', async () => new Response('invalid_token', { status: 403 }));
 
@@ -32,7 +43,39 @@ test('lanca quando o webhook recusa', async () => {
   mock.restoreAll();
 });
 
-test('lanca quando a variavel nao esta configurada', async () => {
-  delete process.env.SLACK_WEBHOOK_URL;
-  await assert.rejects(() => enviarSlack(LEAD), /SLACK_WEBHOOK_URL/);
+// --- Caminho 2: Bot token (chat.postMessage) ---
+
+test('posta via bot token quando nao ha webhook', async () => {
+  limparEnv();
+  process.env.SLACK_BOT_TOKEN = 'xoxb-teste';
+  process.env.SLACK_CHANNEL_ID = 'C089RSN323C';
+  const chamadas = [];
+  mock.method(globalThis, 'fetch', async (url, opcoes) => {
+    chamadas.push({ url, auth: opcoes.headers.authorization, corpo: JSON.parse(opcoes.body) });
+    return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  });
+
+  await enviarSlack(LEAD);
+  mock.restoreAll();
+
+  assert.equal(chamadas[0].url, 'https://slack.com/api/chat.postMessage');
+  assert.equal(chamadas[0].auth, 'Bearer xoxb-teste');
+  assert.equal(chamadas[0].corpo.channel, 'C089RSN323C');
+  assert.match(chamadas[0].corpo.text, /Maria Souza/);
+});
+
+test('lanca quando o bot token falha logicamente (ok:false)', async () => {
+  limparEnv();
+  process.env.SLACK_BOT_TOKEN = 'xoxb-teste';
+  process.env.SLACK_CHANNEL_ID = 'C089RSN323C';
+  mock.method(globalThis, 'fetch', async () =>
+    new Response(JSON.stringify({ ok: false, error: 'not_in_channel' }), { status: 200 }));
+
+  await assert.rejects(() => enviarSlack(LEAD), /not_in_channel/);
+  mock.restoreAll();
+});
+
+test('lanca quando nenhuma variavel esta configurada', async () => {
+  limparEnv();
+  await assert.rejects(() => enviarSlack(LEAD), /SLACK_WEBHOOK_URL ou SLACK_BOT_TOKEN/);
 });
