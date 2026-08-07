@@ -8,15 +8,21 @@
 //      param em silêncio. Só use um token estático se a rotação estiver
 //      desligada para esse app.
 
+// Escapa os caracteres de controle do Slack para que dados do lead não injetem
+// menções (<!channel>), links (<url|texto>) ou formatação.
+function esc(v) {
+  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function formatar(lead) {
   return [
     '*Novo lead pelo site*',
-    `*Nome:* ${lead.nome}`,
-    `*E-mail:* ${lead.email}`,
-    lead.empresa  ? `*Empresa:* ${lead.empresa}`     : null,
-    lead.whatsapp ? `*WhatsApp:* ${lead.whatsapp}`   : null,
-    lead.canais   ? `*Canais:* ${lead.canais}`       : null,
-    lead.mensagem ? `*Precisa de:* ${lead.mensagem}` : null,
+    `*Nome:* ${esc(lead.nome)}`,
+    `*E-mail:* ${esc(lead.email)}`,
+    lead.empresa  ? `*Empresa:* ${esc(lead.empresa)}`     : null,
+    lead.whatsapp ? `*WhatsApp:* ${esc(lead.whatsapp)}`   : null,
+    lead.canais   ? `*Canais:* ${esc(lead.canais)}`       : null,
+    lead.mensagem ? `*Precisa de:* ${esc(lead.mensagem)}` : null,
   ].filter(Boolean).join('\n');
 }
 

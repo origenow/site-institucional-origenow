@@ -39,6 +39,27 @@ test('serve os componentes importados (Header/Footer) para o dc-import', async (
   assert.equal(header.status, 200);
 });
 
+test('rate limit bloqueia flood no /api/lead', async () => {
+  const { servidor, base } = subir();
+  let ultimo;
+  for (let i = 0; i < 7; i++) {
+    ultimo = await fetch(`${base}/api/lead`, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ nome: 'x', email: 'a@b.co' }),
+    });
+  }
+  servidor.close();
+  assert.equal(ultimo.status, 429); // após 5/min, bloqueia
+});
+
+test('nao expoe o header X-Powered-By', async () => {
+  const { servidor, base } = subir();
+  const r = await fetch(`${base}/`);
+  servidor.close();
+  assert.equal(r.headers.get('x-powered-by'), null);
+  assert.ok(r.headers.get('x-content-type-options')); // helmet ativo
+});
+
 test('responde 404 em rota inexistente', async () => {
   const { servidor, base } = subir();
   const resposta = await fetch(`${base}/nao-existe`);

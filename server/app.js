@@ -1,4 +1,6 @@
 import express from 'express';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { resolve } from 'node:path';
 import { criarRotaLead } from './lead-route.js';
 import { enviarSlack } from './notify-slack.js';
@@ -8,12 +10,31 @@ const DIST = resolve(import.meta.dirname, '..', 'dist');
 
 export function criarApp() {
   const app = express();
+  app.disable('x-powered-by');            // sem fingerprint do Express
+  app.set('trust proxy', 1);              // atrás do proxy da Railway (X-Forwarded-For)
+
+  // Headers de segurança (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy…).
+  // CSP desligada de propósito: as páginas .dc.html usam script/estilo inline e o runtime
+  // React; uma CSP estrita quebraria o site. HSTS sem includeSubDomains para não forçar
+  // HTTPS nos outros subdomínios de origenow.com.br.
+  app.use(helmet({
+    contentSecurityPolicy: false,
+    hsts: { maxAge: 15552000, includeSubDomains: false },
+  }));
+
   app.use(express.json({ limit: '32kb' }));
-  app.post('/api/lead', criarRotaLead({ enviarSlack, enviarEmail }));
+
+  // Rate limit só na captação de lead: barra flood no #comercial e no e-mail.
+  const limiteLead = rateLimit({
+    windowMs: 60_000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { erro: 'Muitas tentativas. Aguarde um minuto e tente novamente.' },
+  });
+  app.post('/api/lead', limiteLead, criarRotaLead({ enviarSlack, enviarEmail }));
+
   // Serve as páginas .dc.html (fonte interativa + <head> de SEO) e os ativos.
-  // A home responde em "/" via dist/index.html. dotfiles:'allow' porque o
-  // image-slot.js busca o sidecar .image-slots.state.json; dist/ é saída de
-  // build e não contém segredos (.env fica fora, no ambiente da Railway).
   app.use(express.static(DIST, { dotfiles: 'allow' }));
   return app;
 }
