@@ -12,6 +12,7 @@
 import { mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { TODAS, IMPORTS, PASTAS, ARQUIVOS, mapaDeLinks } from './pages.js';
+import { jsonLd, llmsTxt, tipoDaPagina } from './structured-data.js';
 
 const RAIZ = resolve(import.meta.dirname, '..');
 const DIST = resolve(RAIZ, 'dist');
@@ -123,6 +124,7 @@ export async function buildAll() {
 
   const mapa = mapaDeLinks();
   const urls = [];
+  const fichas = [];
 
   for (const p of TODAS) {
     const fonte = await readFile(resolve(RAIZ, p.src), 'utf8');
@@ -134,13 +136,18 @@ export async function buildAll() {
 
     // Variante: o runtime lê a chave deste global (cai no ?param= se ausente),
     // para a mesma fonte servir cada case/artigo na sua própria URL.
-    const extra = p.param
+    const varScript = p.param
       ? `<script>window.__OM_VAR__={${p.param}:${JSON.stringify(p.valor)}};</script>`
       : '';
 
-    const html = adiarPreloadDeBinding(injetarHead(reescreverLinks(fonte, mapa), seo, extra));
+    const titulo = p.title || /<title>([\s\S]*?)<\/title>/i.exec(seo)?.[1] || '';
+    const descricao = p.desc || /name="description"\s+content="([^"]*)"/i.exec(seo)?.[1] || '';
+    const ld = jsonLd({ site: SITE_URL, url: p.url, titulo, descricao, tipo: tipoDaPagina(p.url) });
+
+    const html = adiarPreloadDeBinding(injetarHead(reescreverLinks(fonte, mapa), seo, `${ld}${varScript}`));
     await gravar(arquivoDaUrl(p.url), html);
     urls.push(urlAbs);
+    fichas.push({ url: p.url, titulo, descricao });
     console.log(`ok  ${p.url}`);
   }
 
@@ -159,6 +166,7 @@ export async function buildAll() {
   for (const [chave, destino] of mapa) redirects[`/${chave}`] = destino;
   await gravar('_rotas.json', JSON.stringify(redirects, null, 2));
 
+  await gravar('llms.txt', llmsTxt(SITE_URL, fichas));
   await gravar('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
   await gravar(
     'sitemap.xml',
