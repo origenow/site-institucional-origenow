@@ -40,12 +40,32 @@ export function extrairHeadSeo(html) {
   return tags.join('\n');
 }
 
-/** Injeta as tags de SEO no <head> estático, logo após o viewport. */
+// Alvos de toque >= 44px no mobile (item 5 da demanda). Vai no <head> estático,
+// junto do SEO, para valer antes do runtime. Inline styles das próprias tags só
+// definem cor/transição, então min-height aqui vence sem conflito.
+const CSS_MOBILE = `<style id="om-tap">@media (max-width:767px){` +
+  `header a{min-height:44px}` +
+  `footer a{min-height:44px;display:flex;align-items:center}` +
+  `#lead-form input,#lead-form textarea{min-height:44px;box-sizing:border-box}` +
+  `}</style>`;
+
+/** Injeta as tags de SEO e o CSS de toque no <head> estático, após o viewport. */
 export function injetarHead(html, seo) {
-  if (!seo) return html;
+  const bloco = `${seo}\n${CSS_MOBILE}`;
   const alvo = /(<meta\s+name="viewport"[^>]*>)/i;
-  if (alvo.test(html)) return html.replace(alvo, `$1\n${seo}`);
-  return html.replace(/(<head[^>]*>)/i, `$1\n${seo}`); // fallback
+  if (alvo.test(html)) return html.replace(alvo, `$1\n${bloco}`);
+  return html.replace(/(<head[^>]*>)/i, `$1\n${bloco}`); // fallback
+}
+
+// Imagens do template com src de binding ({{ ... }}) são pré-carregadas pelo
+// navegador com a URL literal antes do runtime resolver, gerando 404. Marcá-las
+// como lazy impede o fetch enquanto ficam no <x-dc> (display:none); ao render, a
+// imagem real entra no viewport e carrega normalmente.
+export function adiarPreloadDeBinding(html) {
+  return html.replace(
+    /<img\b(?![^>]*\sloading=)([^>]*\ssrc="\{\{[^"]*"[^>]*)>/gi,
+    '<img loading="lazy"$1>',
+  );
 }
 
 async function gravar(saidaRel, conteudo) {
@@ -65,7 +85,7 @@ export async function buildAll() {
     const html = await readFile(resolve(RAIZ, src), 'utf8');
     const seo = extrairHeadSeo(html);
     if (!/<title>/i.test(seo)) semTitulo.push(src);
-    const saidaHtml = injetarHead(html, seo);
+    const saidaHtml = adiarPreloadDeBinding(injetarHead(html, seo));
     await gravar(src, saidaHtml);
     if (home) await gravar('index.html', saidaHtml);
     console.log(`ok  dist/${src}`);
