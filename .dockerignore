@@ -1,8 +1,10 @@
 node_modules
 dist
 .git
+.env
 test-results
 playwright-report
+tests
 docs
 scraps
 uploads

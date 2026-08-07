@@ -1,13 +1,11 @@
-# O Playwright só é necessário no build (pré-render). Ele roda num estágio
-# separado para a imagem final ficar enxuta. A tag DEVE bater com a versão do
-# playwright no package.json (npm ls playwright) — hoje 1.62.1.
-FROM mcr.microsoft.com/playwright:v1.62.1-jammy AS build
+# Estágio de build: gera dist/ (fonte .dc.html + <head> de SEO + ativos).
+# O build é puro Node (fs/path), sem dependências nem navegador.
+FROM node:20-slim AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
 COPY . .
-RUN npm run build
+RUN node build/build.js
 
+# Imagem final: só o servidor e as dependências de produção.
 FROM node:20-slim
 WORKDIR /app
 COPY package*.json ./
