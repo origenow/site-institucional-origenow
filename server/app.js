@@ -24,12 +24,19 @@ export function criarApp() {
   const HOST_CANONICO = (process.env.SITE_URL || 'https://www.origenow.com.br')
     .replace(/^https?:\/\//, '').replace(/\/$/, '').toLowerCase();
 
-  // Só o domínio oficial deve ser indexado; a URL *.up.railway.app serve o
-  // mesmo conteúdo e competiria como conteúdo duplicado.
+  // O apex (origenow.com.br) redireciona para o domínio canônico. Servir o
+  // mesmo conteúdo nos dois endereços dividiria sinal de SEO; o 301 concentra
+  // tudo no www e ainda faz o endereço sem www funcionar para o visitante.
+  const APEX = HOST_CANONICO.replace(/^www\./, '');
   app.use((req, res, next) => {
     const host = (req.hostname || '').toLowerCase();
+    if (host === APEX && APEX !== HOST_CANONICO) {
+      return res.redirect(301, `https://${HOST_CANONICO}${req.originalUrl}`);
+    }
+    // Só o domínio oficial deve ser indexado; a URL *.up.railway.app serve o
+    // mesmo conteúdo e competiria como conteúdo duplicado.
     if (host && host !== HOST_CANONICO) res.set('X-Robots-Tag', 'noindex, nofollow');
-    next();
+    return next();
   });
 
   app.use(helmet({
