@@ -7,8 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build/prerender.js"
+    "test": "node --test server/__tests__/*.test.js",
+    "build": "node build/prerender.js",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
   },
   "devDependencies": {
     "playwright": "^1.62.1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
