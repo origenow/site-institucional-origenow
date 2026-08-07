@@ -30,6 +30,7 @@
     "playwright": "^1.62.1"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "nodemailer": "^9.0.5"
   }
 }
