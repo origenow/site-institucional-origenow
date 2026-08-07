@@ -13,3 +13,10 @@ npm-debug.log*
 # Temp
 *.log
 scraps/
+
+# Build
+dist/
+node_modules/
+.env
+test-results/
+playwright-report/

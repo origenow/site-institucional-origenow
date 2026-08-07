@@ -1,0 +1,30 @@
+{
+  "name": "origenow-site",
+  "version": "1.0.0",
+  "description": "Site institucional da **Origenow** — consultoria especialista em e-commerce e marketplaces.",
+  "main": "image-slot.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/origenow/origenow_landing_page_final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/origenow/origenow_landing_page_final/issues"
+  },
+  "homepage": "https://github.com/origenow/origenow_landing_page_final#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
