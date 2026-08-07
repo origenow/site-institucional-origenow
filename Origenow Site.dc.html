@@ -409,7 +409,7 @@
 <span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.125rem;min-height:26.25rem;text-align:center">
 <span style="width:3.5rem;height:3.5rem;background:#2ecf9a;color:#ffffff;font:700 1.3125rem/3.5rem Manrope,sans-serif;text-align:center;border-radius:50%;display:block">✓</span>
 <span style="display:block;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Recebido</span>
-<span style="display:block;max-width:21.25rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Você recebe a confirmação por e-mail em até 2 horas com o nome de quem vai conduzir a conversa.</span>
+<span style="display:block;max-width:21.25rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Nossa equipe responde em até 2 dias úteis.</span>
 </span>
 </sc-if>
 <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
@@ -417,15 +417,19 @@
 <span style="display:block;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Compartilhe somente o essencial</span>
 <span style="display:block;margin-top:0.5rem;font:400 0.875rem/1.6 Manrope,sans-serif;color:#6b6480">O restante será discutido durante nossa reunião.</span>
 <span data-om-grid="pair" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.625rem">
-<input type="text" placeholder="Seu nome" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
-<input type="text" placeholder="Empresa" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
-<input type="email" placeholder="E-mail corporativo" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease;grid-column:1 / 3">
+<input type="text" id="modal-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+<input type="text" id="modal-nome" name="nome" required placeholder="Seu nome" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
+<input type="text" id="modal-empresa" name="empresa" placeholder="Empresa" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
+<input type="email" id="modal-email" name="email" required placeholder="E-mail corporativo" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease;grid-column:1 / 3">
 </span>
 <span style="display:block;margin-top:1.375rem;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Onde você já vende</span>
 <span data-om-flex="row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.875rem">
 <span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">Mercado Livre</span><span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">Amazon</span><span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">Shopee</span><span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">Magalu</span><span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">TikTok Shop</span><span data-chip="1" onClick="{{ chipToggle }}" style="border:1px solid #e6e2ec;border-radius:62.4375rem;padding:0.625rem 1rem;font:500 0.8125rem/1 Manrope,sans-serif;color:#56506a;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease">Ainda nenhum</span>
 </span>
-<span onClick="{{ submit }}" style-hover="background:#5527a4;transform:translateY(-1px)" style="display:block;margin-top:1.75rem;background:#6730be;color:#ffffff;font:700 1rem/1 Manrope,sans-serif;padding:1.1875rem;text-align:center;border-radius:2px;cursor:pointer;transition:background .2s ease,transform .2s cubic-bezier(.2,.7,.2,1);box-shadow:0 0.875rem 1.875rem -0.75rem rgba(103,48,190,.5)">Solicitar diagnóstico</span>
+<span onClick="{{ submit }}" style-hover="background:#5527a4;transform:translateY(-1px)" style="display:block;margin-top:1.75rem;background:#6730be;color:#ffffff;font:700 1rem/1 Manrope,sans-serif;padding:1.1875rem;text-align:center;border-radius:2px;cursor:pointer;transition:background .2s ease,transform .2s cubic-bezier(.2,.7,.2,1);box-shadow:0 0.875rem 1.875rem -0.75rem rgba(103,48,190,.5)">{{ rotuloModal }}</span>
+<sc-if value="{{ erroModal }}">
+<span style="display:block;margin-top:0.875rem;border:1px solid #e0574f;background:#fdf2f1;border-radius:2px;padding:0.875rem 1rem;font:400 0.875rem/1.5 Manrope,sans-serif;color:#a3322b">{{ erroModal }}</span>
+</sc-if>
 <span style="display:block;margin-top:1rem;font:400 0.8125rem/1.5 Manrope,sans-serif;color:#6b6480;text-align:center">Seus dados ficam com a nossa equipe. Sem mailing ou spam.</span>
 </span>
 </sc-if>
@@ -438,7 +442,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { modal: false, sent: false };
+  state = { modal: false, sent: false, enviando: false, erro: '' };
 
   componentDidMount() {
     this.pick(0);
@@ -448,7 +452,34 @@ class Component extends DCLogic {
     window.addEventListener('keydown', this._esc);
   }
 
-  close() { document.body.style.overflow = ''; this.setState({ modal: false, sent: false }); }
+  close() { document.body.style.overflow = ''; this.setState({ modal: false, sent: false, enviando: false, erro: '' }); }
+
+  lerCamposModal() {
+    const val = (id) => (document.getElementById(id)?.value ?? '').trim();
+    const canais = Array.from(document.querySelectorAll('[data-chip][data-on="1"]'))
+      .map((c) => c.textContent.trim()).join(', ');
+    return {
+      nome: val('modal-nome'), empresa: val('modal-empresa'), email: val('modal-email'),
+      canais, website: val('modal-website'),
+    };
+  }
+
+  async enviarModal() {
+    if (this.state.enviando) return;
+    const lead = this.lerCamposModal();
+    if (!lead.nome)  return this.setState({ erro: 'Informe seu nome.' });
+    if (!lead.email) return this.setState({ erro: 'Informe seu e-mail.' });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) return this.setState({ erro: 'E-mail inválido.' });
+
+    this.setState({ enviando: true, erro: '' });
+    try {
+      const r = await fetch('/api/lead', {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(lead),
+      });
+      if (!r.ok) { const b = await r.json().catch(() => ({})); throw new Error(b.erro || 'Não conseguimos enviar. Tente novamente.'); }
+      this.setState({ sent: true, enviando: false });
+    } catch (e) { this.setState({ enviando: false, erro: e.message }); }
+  }
 
   renderVals() {
     return {
@@ -461,10 +492,12 @@ class Component extends DCLogic {
       modalOpen: this.state.modal,
       sent: this.state.sent,
       notSent: !this.state.sent,
-      openModal: () => { document.body.style.overflow = 'hidden'; this.setState({ modal: true, sent: false }); },
+      erroModal: this.state.erro,
+      rotuloModal: this.state.enviando ? 'Enviando…' : 'Solicitar diagnóstico',
+      openModal: () => { document.body.style.overflow = 'hidden'; this.setState({ modal: true, sent: false, enviando: false, erro: '' }); },
       closeModal: () => this.close(),
       stop: (e) => e.stopPropagation(),
-      submit: () => this.setState({ sent: true }),
+      submit: () => this.enviarModal(),
       chipToggle: (e) => {
         const el = e.currentTarget;
         const on = el.dataset.on === '1';
