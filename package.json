@@ -8,8 +8,9 @@
   },
   "scripts": {
     "test": "node --test server/__tests__/*.test.js",
-    "build": "node build/prerender.js",
-    "start": "node server/index.js"
+    "build": "node build/build.js",
+    "start": "node server/index.js",
+    "test:e2e": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "playwright": "^1.62.1"
   },
   "dependencies": {
