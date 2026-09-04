@@ -13,7 +13,7 @@ import { mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { TODAS, IMPORTS, PASTAS, ARQUIVOS, mapaDeLinks } from './pages.js';
 import { jsonLd, llmsTxt, tipoDaPagina } from './structured-data.js';
-import { IDIOMAS, traduzir, tagsHreflang } from './i18n.js';
+import { IDIOMAS_PUBLICADOS, traduzir, tagsHreflang } from './i18n.js';
 import { existsSync } from 'node:fs';
 
 const RAIZ = resolve(import.meta.dirname, '..');
@@ -131,14 +131,14 @@ export async function buildAll() {
   // Dicionário por idioma. Ausente ou incompleto, o texto cai no português —
   // a tradução pode entrar em partes sem nunca quebrar a página.
   const dicts = {};
-  for (const idioma of IDIOMAS) {
+  for (const idioma of IDIOMAS_PUBLICADOS) {
     const arq = resolve(RAIZ, 'i18n', `${idioma.code}.json`);
     dicts[idioma.code] = !idioma.padrao && existsSync(arq)
       ? JSON.parse(await readFile(arq, 'utf8'))
       : null;
   }
 
-  for (const idioma of IDIOMAS) {
+  for (const idioma of IDIOMAS_PUBLICADOS) {
     const dict = dicts[idioma.code];
     if (!idioma.padrao && !dict) { console.log(`--  ${idioma.code}: sem dicionário, pulando`); continue; }
 
@@ -185,7 +185,7 @@ export async function buildAll() {
   // Header/Footer: um por idioma, na raiz (o <base href="/"> resolve os ativos).
   for (const imp of IMPORTS) {
     const bruto = await readFile(resolve(RAIZ, imp), 'utf8');
-    for (const idioma of IDIOMAS) {
+    for (const idioma of IDIOMAS_PUBLICADOS) {
       const dict = dicts[idioma.code];
       if (!idioma.padrao && !dict) continue;
       let saida = reescreverLinks(idioma.padrao ? bruto : traduzir(bruto, dict), mapa);
