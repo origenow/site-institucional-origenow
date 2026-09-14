@@ -56,6 +56,7 @@ test('monta as conversoes do Ads so com rotulo, com valor apenas no WhatsApp', (
 
 test('os IDs versionados de producao sao validos', () => {
   const cfg = lerConfig({});
+  assert.equal(cfg.ga4, 'G-THYDSTFRER');
   assert.equal(cfg.gtm, 'GTM-K6D5X6B');
   assert.equal(cfg.ads, 'AW-470660303');
 });

@@ -25,7 +25,7 @@
 import { PADRAO_BOT, EXCECOES_BOT } from '../server/bots.js';
 
 const PADRAO = {
-  ga4: '',                            // GA4 direto — G-XXXXXXXXXX (vazio: GA4, se houver, vive no GTM)
+  ga4: 'G-THYDSTFRER',                // GA4 direto (não criar tag de GA4 no GTM: contaria em dobro)
   ads: 'AW-470660303',                // Google Ads · tag da conta 891-070-6499
   adsLead: '9KRZCJL-__ccEM_ptuAB',    // conversão "Enviar formulário de lead"
   adsContato: 'kAVzCJX-__ccEM_ptuAB', // conversão "Assistente de IA - WhatsApp"
