@@ -79,6 +79,31 @@ const CSS_MOBILE = `<style id="om-tap">@media (max-width:767px){` +
   `}</style>`;
 
 /**
+ * Regras responsivas do site (data-om-* e #om-site abaixo de 1280px). Vivem no
+ * <style> do Header, que chega por dc-import depois do primeiro render: páginas
+ * que não as repetem inline (template de case, artigo, política) apareciam por
+ * um instante no layout de desktop e vazavam na horizontal no celular.
+ * Copiadas para o <head>, valem desde o primeiro quadro.
+ */
+export function extrairCssResponsivo(html) {
+  const blocos = [];
+  let i = 0;
+  while ((i = html.indexOf('@media', i)) !== -1) {
+    const abre = html.indexOf('{', i);
+    let prof = 0;
+    let j = abre;
+    for (; j < html.length; j++) {
+      if (html[j] === '{') prof++;
+      else if (html[j] === '}' && --prof === 0) break;
+    }
+    const bloco = html.slice(i, j + 1);
+    if (/data-om-|#om-site/.test(bloco)) blocos.push(bloco);
+    i = j + 1;
+  }
+  return blocos.join('');
+}
+
+/**
  * Injeta <base href="/">, o SEO e o CSS de toque no <head> estático.
  * O <base> é o que permite servir a mesma fonte em caminhos aninhados
  * (/servicos/consultoria) sem quebrar os ativos relativos (assets/…).
@@ -127,6 +152,9 @@ export async function buildAll() {
   const idsGoogle = lerConfig();
   const tracking = headTracking(idsGoogle, new URL(SITE_URL).hostname);
   const antibot = headAntibot();
+  const cssResponsivo = extrairCssResponsivo(await readFile(resolve(RAIZ, 'Header.dc.html'), 'utf8'));
+  if (!cssResponsivo.includes('[data-om-grid')) throw new Error('Regras responsivas não encontradas no Header.dc.html');
+  const estiloResponsivo = `<style id="om-responsivo">${cssResponsivo}</style>`;
   console.log(`tracking: ${resumoConfig(idsGoogle)}`);
 
   await rm(DIST, { recursive: true, force: true });
@@ -146,6 +174,8 @@ export async function buildAll() {
       : null;
   }
 
+  const publicados = IDIOMAS.filter((i) => i.padrao || dicts[i.code]);
+
   for (const idioma of IDIOMAS) {
     const dict = dicts[idioma.code];
     if (!idioma.padrao && !dict) { console.log(`--  ${idioma.code}: sem dicionário, pulando`); continue; }
@@ -162,7 +192,7 @@ export async function buildAll() {
         seo = aplicarTituloEDescricao(seo, dict?.[p.title] || p.title, dict?.[p.desc] || p.desc);
       }
       seo = seoAbsoluto(seo, urlAbs);
-      seo += `\n${tagsHreflang(SITE_URL, p.url)}`;
+      seo += `\n${tagsHreflang(SITE_URL, p.url, publicados)}`;
 
       const varScript = p.param
         ? `<script>window.__OM_VAR__={${p.param}:${JSON.stringify(p.valor)}};</script>`
@@ -177,7 +207,7 @@ export async function buildAll() {
       // procurados dentro do idioma, quebrando a página inteira.
       let corpo = reescreverLinks(fonte, mapa);
       if (idioma.prefixo) corpo = corpo.replace(/href="\//g, `href="${idioma.prefixo}/`);
-      let html = adiarPreloadDeBinding(injetarHead(corpo, seo, `${tracking}\n${antibot}\n${ld}${varScript}`));
+      let html = adiarPreloadDeBinding(injetarHead(corpo, seo, `${estiloResponsivo}\n${tracking}\n${antibot}\n${ld}${varScript}`));
       // Cada idioma tem o seu Header/Footer; os ativos seguem na raiz por causa
       // do <base href="/">, então o import é que muda de nome.
       if (idioma.prefixo) html = html.replace(/(<dc-import\s+name=")(Header|Footer)(")/g, `$1$2-${idioma.code}$3`);

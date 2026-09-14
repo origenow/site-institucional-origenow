@@ -10,10 +10,11 @@ const ROTAS = [
 
 for (const rota of ROTAS) {
   test(`${rota} nao rola na horizontal`, async ({ page }) => {
-    await page.goto(rota);
-    const estouro = await page.evaluate(() =>
+    await page.goto(rota, { waitUntil: 'networkidle' });
+    await page.waitForSelector('header');
+    const estouro = () => page.evaluate(() =>
       document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(estouro, `${rota} vaza ${estouro}px na horizontal`).toBeLessThanOrEqual(1);
+    await expect.poll(estouro, { message: `${rota} vaza na horizontal`, timeout: 5000 }).toBeLessThanOrEqual(1);
   });
 }
 

@@ -19,6 +19,8 @@ test('serve a home em / com o title de SEO no HTML inicial (sem JS)', async () =
   assert.match(corpo, /property="og:title"/);
   assert.match(corpo, /<script id="om-tracking">/); // tags do Google no <head>
   assert.match(corpo, /<script id="om-antibot">/);
+  // Regras responsivas no <head>: valem antes de o Header (dc-import) carregar.
+  assert.match(corpo, /<style id="om-responsivo">@media[^<]*\[data-om-grid/);
 });
 
 test('antibot protege o POST de lead e emite token', async () => {
@@ -33,6 +35,18 @@ test('antibot protege o POST de lead e emite token', async () => {
   assert.equal(semOrigem.status, 403);
   assert.equal(token.status, 200);
   assert.ok((await token.json()).token);
+});
+
+test('toda versao anunciada no hreflang existe (sem 404 para o Google)', async () => {
+  const { servidor, base } = subir();
+  const home = await (await fetch(`${base}/`)).text();
+  const alternativas = [...home.matchAll(/hreflang="([^"]+)" href="https?:\/\/[^/]+([^"]*)"/g)];
+  const status = await Promise.all(alternativas.map(async ([, lang, caminho]) =>
+    `${lang} ${(await fetch(`${base}${caminho}`)).status}`));
+  servidor.close();
+
+  assert.ok(alternativas.length >= 2);
+  assert.deepEqual(status.filter((s) => !s.endsWith(' 200')), []);
 });
 
 test('referrer entre paginas do proprio site e preservado (atribuicao)', async () => {

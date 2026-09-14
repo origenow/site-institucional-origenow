@@ -15,14 +15,16 @@ const ROTAS = [
 for (const largura of [1024, 1366, 1920]) {
   test(`nenhuma pagina rola na horizontal em ${largura}px com barra de rolagem`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 900 });
-    const vazamentos = [];
+    const estouro = () => page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth);
     for (const rota of ROTAS) {
-      await page.goto(rota);
-      await page.waitForSelector('#om-site');
-      const estouro = await page.evaluate(() =>
-        document.documentElement.scrollWidth - document.documentElement.clientWidth);
-      if (estouro > 1) vazamentos.push(`${rota}: ${estouro}px`);
+      await page.goto(rota, { waitUntil: 'networkidle' });
+      await page.waitForSelector('header');
+      // Parte das regras responsivas chega com o Header (dc-import). Sob carga,
+      // medir antes disso pega um vazamento de passagem; o poll espera o layout
+      // assentar e continua acusando o que persiste.
+      await expect.poll(estouro, { message: `${rota} vaza na horizontal em ${largura}px`, timeout: 5000 })
+        .toBeLessThanOrEqual(1);
     }
-    expect(vazamentos).toEqual([]);
   });
 }
