@@ -22,28 +22,28 @@
 <div id="om-site" style="width:100%;max-width:80rem;margin:0 auto;background:#ffffff;font-family:Manrope,sans-serif">
 <dc-import name="Header" active="cases" style="position:sticky;top:0;z-index:40" hint-size="100%,84px"></dc-import>
 
-<div style="position:relative;overflow:hidden;margin-top:-5.125rem;background:#14111e;padding:9rem 4rem 4rem">
+<div data-om-pad="1" style="position:relative;overflow:hidden;margin-top:-5.125rem;background:#14111e;padding:9rem 4rem 4rem">
 <span style="position:absolute;right:-6%;top:-30%;width:40rem;height:40rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.42),rgba(103,48,190,0) 66%);filter:blur(2.5rem);z-index:0;pointer-events:none;display:block"></span>
 <div style="position:relative;z-index:1;max-width:52rem">
 <a href="Origenow%20Cases.dc.html" style-hover="color:#ffffff" style="display:inline-flex;align-items:center;gap:0.5rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#b69ce0;margin-bottom:1.75rem">← Todos os cases</a>
 <div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.5rem">{{ eyebrow }}</div>
-<h1 data-om-raster="" style="margin:0;font:700 3.25rem/1.08 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">{{ title }}</h1>
+<h1 data-om-raster="" data-om-fz="d2" style="margin:0;font:700 3.25rem/1.08 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">{{ title }}</h1>
 <p style="margin:1.5rem 0 0;max-width:40rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64)">{{ intro }}</p>
 </div>
 </div>
 
-<div style="padding:0 4rem"><img src="{{ cover }}" alt="" style="display:block;width:100%;height:26rem;object-fit:cover"></div>
+<div data-om-pad="1" style="padding:0 4rem"><img src="{{ cover }}" alt="" style="display:block;width:100%;height:26rem;object-fit:cover"></div>
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);margin:3.5rem 4rem 0;border-top:1px solid #14111e;border-bottom:1px solid #e6e2ec">
+<div data-om-grid="multi" data-om-mar="1" style="display:grid;grid-template-columns:repeat(4,1fr);margin:3.5rem 4rem 0;border-top:1px solid #14111e;border-bottom:1px solid #e6e2ec">
 <div style="padding:1.5rem 1.5rem 1.625rem 0"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Setor</div><div style="margin-top:0.625rem;font:600 1rem/1.35 Manrope,sans-serif;letter-spacing:-.01em;color:#14111e">{{ fSetor }}</div></div>
 <div style="padding:1.5rem 1.5rem 1.625rem 1.5rem;border-left:1px solid #e6e2ec"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Modelo</div><div style="margin-top:0.625rem;font:600 1rem/1.35 Manrope,sans-serif;letter-spacing:-.01em;color:#14111e">{{ model }}</div></div>
 <div style="padding:1.5rem 1.5rem 1.625rem 1.5rem;border-left:1px solid #e6e2ec"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Canais</div><div style="margin-top:0.625rem;font:600 1rem/1.35 Manrope,sans-serif;letter-spacing:-.01em;color:#14111e">{{ channels }}</div></div>
 <div style="padding:1.5rem 0 1.625rem 1.5rem;border-left:1px solid #e6e2ec"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Serviço</div><div style="margin-top:0.625rem;font:600 1rem/1.35 Manrope,sans-serif;letter-spacing:-.01em;color:#14111e">{{ svc }}</div></div>
 </div>
 
-<div style="padding:5.5rem 4rem 0">
-<div style="display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start">
-<div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">O desafio</div><h2 style="margin:0;max-width:37.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O ponto de partida</h2><p style="margin:1.375rem 0 0;max-width:35rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a">{{ desafio }}</p></div>
+<div data-om-pad="1" style="padding:5.5rem 4rem 0">
+<div data-om-grid="pair" style="display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start">
+<div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">O desafio</div><h2 data-om-fz="d3" style="margin:0;max-width:37.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O ponto de partida</h2><p style="margin:1.375rem 0 0;max-width:35rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a">{{ desafio }}</p></div>
 <div style="border-top:1px solid #14111e">
 <div style="display:grid;grid-template-columns:8.125rem 1fr;gap:1.25rem;padding:1.375rem 0;border-bottom:1px solid #e6e2ec"><span style="font:600 0.8125rem/1.4 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Setor</span><span style="font:500 0.9375rem/1.5 Manrope,sans-serif;color:#14111e">{{ fSetor }}</span></div>
 <div style="display:grid;grid-template-columns:8.125rem 1fr;gap:1.25rem;padding:1.375rem 0;border-bottom:1px solid #e6e2ec"><span style="font:600 0.8125rem/1.4 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Modelo</span><span style="font:500 0.9375rem/1.5 Manrope,sans-serif;color:#14111e">{{ model }}</span></div>
@@ -52,12 +52,12 @@
 </div>
 </div>
 
-<div style="position:relative;overflow:hidden;background:#14111e;padding:5.5rem 4rem;margin-top:5.5rem">
+<div data-om-pad="1" style="position:relative;overflow:hidden;background:#14111e;padding:5.5rem 4rem;margin-top:5.5rem">
 <span style="position:absolute;right:-4%;top:-20%;width:30rem;height:30rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.5),rgba(103,48,190,0) 68%);filter:blur(3rem);z-index:0;pointer-events:none;display:block"></span>
 <div style="position:relative;z-index:1">
 <div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.25rem">A operação</div>
-<h2 style="margin:0 0 2.5rem;max-width:37.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">{{ scopeTitle }}</h2>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.875rem">
+<h2 data-om-fz="d3" style="margin:0 0 2.5rem;max-width:37.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">{{ scopeTitle }}</h2>
+<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.875rem">
 <sc-for list="{{ scope }}" as="s" hint-placeholder-count="6">
 <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);padding:1.625rem 1.5rem 1.75rem;display:flex;align-items:flex-start;gap:0.875rem"><span style="flex:none;width:0.4375rem;height:0.4375rem;margin-top:0.5rem;background:#e62c7c;display:block"></span><span style="font:600 1rem/1.4 Manrope,sans-serif;letter-spacing:-.01em;color:#ffffff">{{ s }}</span></div>
 </sc-for>
@@ -65,27 +65,27 @@
 </div>
 </div>
 
-<div style="padding:5.5rem 4rem 0">
+<div data-om-pad="1" style="padding:5.5rem 4rem 0">
 <div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Resultados</div>
-<h2 style="margin:0 0 2.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O que ficou</h2>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+<h2 data-om-fz="d3" style="margin:0 0 2.5rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O que ficou</h2>
+<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
 <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
 <div style="border:1px solid #e6e2ec;padding:2rem 1.75rem 2.125rem"><div style="font:800 2.5rem/1 Manrope,sans-serif;letter-spacing:-.04em;color:#6730be">{{ r.big }}</div><div style="margin-top:0.875rem;font:500 0.9375rem/1.5 Manrope,sans-serif;color:#56506a">{{ r.label }}</div></div>
 </sc-for>
 </div>
 </div>
 
-<div style="padding:5.5rem 4rem 0">
-<div style="display:flex;align-items:end;justify-content:space-between;gap:3.75rem;margin-bottom:2.25rem"><div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Frentes aplicadas</div><h2 style="margin:0;max-width:35rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O que usamos neste projeto</h2></div><a href="Origenow%20Servicos.dc.html" style-hover="color:#5527a4" style="font:600 0.875rem/1 Manrope,sans-serif;color:#6730be;text-decoration:none;transition:color .18s ease">Todos os serviços →</a></div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem">
+<div data-om-pad="1" style="padding:5.5rem 4rem 0">
+<div data-om-flex="row" style="display:flex;align-items:end;justify-content:space-between;gap:3.75rem;margin-bottom:2.25rem"><div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Frentes aplicadas</div><h2 data-om-fz="d3" style="margin:0;max-width:35rem;font:700 2.5rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O que usamos neste projeto</h2></div><a href="Origenow%20Servicos.dc.html" style-hover="color:#5527a4" style="font:600 0.875rem/1 Manrope,sans-serif;color:#6730be;text-decoration:none;transition:color .18s ease">Todos os serviços →</a></div>
+<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem">
 <sc-for list="{{ frentes }}" as="f" hint-placeholder-count="3">
 <a href="{{ f.href }}" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:1.875rem 1.75rem;text-decoration:none;display:block"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">{{ f.n }}</div><div style="font:700 1.25rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">{{ f.name }}</div><div style="margin-top:1.25rem;font:600 0.8125rem/1 Manrope,sans-serif;color:#6730be">Ver o serviço →</div></a>
 </sc-for>
 </div>
 </div>
 
-<div style="display:flex;align-items:center;justify-content:space-between;gap:3rem;flex-wrap:wrap;margin-top:5.5rem;padding:5rem 4rem;background:radial-gradient(circle at 94% -34%,rgba(103,48,190,.5),rgba(103,48,190,0) 60%),#0e0b16">
-<div><h2 style="margin:0;max-width:32rem;font:700 2.75rem/1.08 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff">Conte conosco em seu ecommerce<span style="color:#e62c7c">.</span></h2><p style="margin:1.125rem 0 0;max-width:30rem;font:400 1rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64)">Começamos pelo diagnóstico: o número na mesa e um plano de 90 dias por escrito.</p></div>
+<div data-om-pad="1" style="display:flex;align-items:center;justify-content:space-between;gap:3rem;flex-wrap:wrap;margin-top:5.5rem;padding:5rem 4rem;background:radial-gradient(circle at 94% -34%,rgba(103,48,190,.5),rgba(103,48,190,0) 60%),#0e0b16">
+<div><h2 data-om-fz="d3" style="margin:0;max-width:32rem;font:700 2.75rem/1.08 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff">Conte conosco em seu ecommerce<span style="color:#e62c7c">.</span></h2><p style="margin:1.125rem 0 0;max-width:30rem;font:400 1rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64)">Começamos pelo diagnóstico: o número na mesa e um plano de 90 dias por escrito.</p></div>
 <a href="Origenow%20Contato.dc.html" style-hover="background:#e6e2ec" style="flex:none;background:#ffffff;color:#6730be;font:700 1rem/1 Manrope,sans-serif;padding:1.4375rem 2.375rem;text-decoration:none;transition:background .2s ease">Quero meu diagnóstico →</a>
 </div>
 

@@ -2,7 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.skip(({ isMobile }) => !isMobile, 'só roda no projeto mobile');
 
-const ROTAS = ['/', '/servicos', '/cases', '/grupo', '/sobre', '/insights', '/contato'];
+const ROTAS = [
+  '/', '/servicos', '/servicos/consultoria', '/cases', '/cases/camicado', '/cases/cafe-dupan',
+  '/cases/amazon-brasil', '/grupo', '/sobre', '/insights', '/insights/mix-enxuto-vende-mais',
+  '/contato', '/politica-de-privacidade',
+];
 
 for (const rota of ROTAS) {
   test(`${rota} nao rola na horizontal`, async ({ page }) => {
