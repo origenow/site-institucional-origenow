@@ -281,7 +281,9 @@ class Component extends DCLogic {
         throw new Error(resposta.corpo.erro || 'Não conseguimos enviar. Tente novamente.');
       }
       // Conversão só conta com o lead confirmado pelo servidor.
-      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'contato' });
+      // Sai antes de trocar para "Recebido": a detecção automática da conversão
+      // otimizada ainda encontra os campos na página, como reserva do user_data.
+      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'contato' }, { email: lead.email, telefone: lead.whatsapp });
       // Só troca de tela em caso de sucesso — os campos ficam preenchidos se falhar.
       this.setState({ sent: true, enviando: false });
     } catch (e) {

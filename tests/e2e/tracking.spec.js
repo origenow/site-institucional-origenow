@@ -79,6 +79,79 @@ test('modal da home mede abertura, preenchimento e lead', async ({ page }) => {
   expect(ev).toContainEqual(expect.objectContaining({ nome: 'generate_lead', form_id: 'diagnostico_home' }));
 });
 
+// A conversão otimizada do Google Ads está em detecção automática: a tag lê o
+// e-mail e o telefone da página no instante da conversão. Se o generate_lead
+// passar a sair depois de o formulário virar "Recebido", os campos já sumiram
+// e o Google deixa de receber os dados — sem nenhum erro visível.
+test('conversao de lead sai com os campos ainda na pagina (conversao otimizada)', async ({ page }) => {
+  await responderLead(page, 200);
+  await page.addInitScript(() => {
+    window.__camposNaConversao = [];
+    document.addEventListener('DOMContentLoaded', () => {
+      const original = window.omTrack;
+      window.omTrack = function (evento, params) {
+        if (evento === 'generate_lead') {
+          const campo = document.getElementById('lead-email') || document.getElementById('modal-email');
+          window.__camposNaConversao.push({ form_id: params && params.form_id, email: campo ? campo.value : null });
+        }
+        return original.apply(this, arguments);
+      };
+    });
+  });
+
+  await page.goto('/contato');
+  await page.fill('#lead-nome', 'Maria Souza');
+  await page.fill('#lead-email', 'maria@empresa.com.br');
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+  expect(await page.evaluate(() => window.__camposNaConversao))
+    .toEqual([{ form_id: 'contato', email: 'maria@empresa.com.br' }]);
+
+  await page.goto('/');
+  await page.getByText('Quero meu diagnóstico').click();
+  await page.fill('#modal-nome', 'João Lima');
+  await page.fill('#modal-email', 'joao@empresa.com.br');
+  await page.getByText('Solicitar diagnóstico').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+  expect(await page.evaluate(() => window.__camposNaConversao))
+    .toEqual([{ form_id: 'diagnostico_home', email: 'joao@empresa.com.br' }]);
+});
+
+test('conversao otimizada: user_data normalizado sai antes da conversao de lead', async ({ page }) => {
+  await responderLead(page, 200);
+  const comandos = () => page.evaluate(() => (window.dataLayer || [])
+    .filter((x) => x && (x[0] === 'set' || x[0] === 'event'))
+    .map((x) => [x[0], x[1], x[2]]));
+  const posicoes = (lista, envio) => ({
+    set: lista.findIndex((c) => c[0] === 'set' && c[1] === 'user_data'),
+    conversao: lista.findIndex((c) => c[0] === 'event' && c[1] === 'conversion' && c[2] && c[2].send_to === envio),
+  });
+
+  await page.goto('/contato');
+  await page.fill('#lead-nome', 'Maria Souza');
+  await page.fill('#lead-email', 'Maria@Empresa.com.br');
+  await page.fill('#lead-whatsapp', '(31) 99999-0000');
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+
+  let lista = await comandos();
+  let pos = posicoes(lista, 'AW-1234567890/lead-teste');
+  expect(lista[pos.set][2]).toEqual({ email: 'maria@empresa.com.br', phone_number: '+5531999990000' });
+  expect(pos.set).toBeLessThan(pos.conversao);
+
+  await page.goto('/');
+  await page.getByText('Quero meu diagnóstico').click();
+  await page.fill('#modal-nome', 'João Lima');
+  await page.fill('#modal-email', 'joao@empresa.com.br');
+  await page.getByText('Solicitar diagnóstico').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+
+  lista = await comandos();
+  pos = posicoes(lista, 'AW-1234567890/lead-teste');
+  expect(lista[pos.set][2]).toEqual({ email: 'joao@empresa.com.br' });
+  expect(pos.set).toBeLessThan(pos.conversao);
+});
+
 test('clique no WhatsApp vira evento de contato e conversao', async ({ page, context }) => {
   await context.route(/wa\.me/, (rota) => rota.abort());
 

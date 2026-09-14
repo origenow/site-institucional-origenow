@@ -16,7 +16,9 @@
 //   lead_modal_open, lead_form_start, generate_lead (lead confirmado pelo
 //   servidor) e contact (method = whatsapp | email | telefone). Conversões do
 //   Google Ads: lead enviado, clique no WhatsApp e visualização de página (esta
-//   só depois do sinal humano).
+//   só depois do sinal humano). O generate_lead leva e-mail e telefone em
+//   user_data para a conversão otimizada; a tag do Google aplica o hash antes
+//   de enviar.
 //
 // Os IDs não são segredo (ficam visíveis no HTML de qualquer site), então ficam
 // versionados em PADRAO. Variáveis de ambiente de mesmo nome têm precedência —
@@ -156,7 +158,28 @@ function omTracking(C) {
     d.head.appendChild(s);
   }
 
-  function registrar(evento, params) {
+  // Dados para a conversão otimizada do Google Ads: e-mail normalizado e
+  // telefone em E.164. Número sem "+" é tratado como brasileiro (DDD + número).
+  function dadosUsuario(u) {
+    var d = {};
+    var email = String(u.email || '').trim().toLowerCase();
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) d.email = email;
+    var bruto = String(u.telefone || '').trim();
+    var digitos = bruto.replace(/\D/g, '');
+    if (bruto.charAt(0) === '+') {
+      if (digitos.length >= 8 && digitos.length <= 15) d.phone_number = '+' + digitos;
+    } else {
+      if (/^55\d{10,11}$/.test(digitos)) digitos = digitos.slice(2);
+      if (/^\d{10,11}$/.test(digitos)) d.phone_number = '+55' + digitos;
+    }
+    return d.email || d.phone_number ? d : null;
+  }
+
+  function registrar(evento, params, usuario) {
+    if (evento === 'generate_lead' && usuario) {
+      var dados = dadosUsuario(usuario);
+      if (dados) gtag('set', 'user_data', dados);
+    }
     // GTM lê objetos {event}; o GA4 direto lê comandos gtag('event').
     if (C.gtm || !C.ga4) dl.push(Object.assign({ event: evento }, params));
     if (C.ga4) gtag('event', evento, params);
@@ -182,16 +205,17 @@ function omTracking(C) {
       dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
       carregar('https://www.googletagmanager.com/gtm.js?id=' + C.gtm);
     }
-    fila.splice(0).forEach(function (e) { registrar(e[0], e[1]); });
+    fila.splice(0).forEach(function (e) { registrar(e[0], e[1], e[2]); });
   }
 
-  w.omTrack = function (evento, params) {
+  // usuario ({ email, telefone }) só é usado no generate_lead.
+  w.omTrack = function (evento, params, usuario) {
     // Medição nunca pode derrubar o fluxo de quem chamou (ex.: o lead já enviado).
     try {
       params = params || {};
       // Lead confirmado pelo servidor e clique de contato já provam interação.
       if (evento === 'generate_lead' || evento === 'contact') liberar();
-      if (liberado) registrar(evento, params); else fila.push([evento, params]);
+      if (liberado) registrar(evento, params, usuario); else fila.push([evento, params, usuario]);
     } catch (e) { /* ignora */ }
   };
 
