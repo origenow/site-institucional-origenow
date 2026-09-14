@@ -474,10 +474,8 @@ class Component extends DCLogic {
     this.setState({ enviando: true, erro: '' });
     try {
       const origem = window.omOrigem ? window.omOrigem() : undefined;
-      const r = await fetch('/api/lead', {
-        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...lead, origem }),
-      });
-      if (!r.ok) { const b = await r.json().catch(() => ({})); throw new Error(b.erro || 'Não conseguimos enviar. Tente novamente.'); }
+      const r = await window.omEnviarLead({ ...lead, origem });
+      if (!r.ok) throw new Error(r.corpo.erro || 'Não conseguimos enviar. Tente novamente.');
       if (window.omTrack) window.omTrack('generate_lead', { form_id: 'diagnostico_home' });
       this.setState({ sent: true, enviando: false });
     } catch (e) { this.setState({ enviando: false, erro: e.message }); }

@@ -6,30 +6,43 @@
 //   2. guarda a origem da visita (UTM, gclid) para anexar ao lead;
 //   3. expõe window.omTrack / window.omOrigem, usados pelos formulários;
 //   4. mede início de preenchimento e cliques em WhatsApp, e-mail e telefone;
-//   5. carrega o gtag.js (GA4 + Google Ads) e/ou o GTM — só no domínio oficial,
-//      para localhost, testes e a URL *.up.railway.app não sujarem os dados.
+//   5. fala com o Google só no domínio oficial e só com gente: robôs declarados
+//      (User-Agent, navegador automatizado) não carregam nada, e o page_view,
+//      a tag do Ads e o GTM esperam o primeiro sinal humano (mouse, toque,
+//      teclado) ou 10 s de aba visível. localhost, testes e a URL
+//      *.up.railway.app também não sujam os dados.
 //
-// Eventos: lead_modal_open, lead_form_start, generate_lead (conversão de lead),
-// contact (conversão de contato, com method = whatsapp | email | telefone).
+// Eventos (no dataLayer para o GTM e, com GA4 direto, via gtag):
+//   lead_modal_open, lead_form_start, generate_lead (lead confirmado pelo
+//   servidor) e contact (method = whatsapp | email | telefone). Conversões do
+//   Google Ads: lead enviado, clique no WhatsApp e visualização de página (esta
+//   só depois do sinal humano).
 //
-// Os IDs não são segredo (ficam visíveis no HTML de qualquer site), então podem
-// ser versionados em PADRAO. Variáveis de ambiente de mesmo nome têm
-// precedência — a Railway as repassa ao build pelos ARG do Dockerfile.
+// Os IDs não são segredo (ficam visíveis no HTML de qualquer site), então ficam
+// versionados em PADRAO. Variáveis de ambiente de mesmo nome têm precedência —
+// a Railway as repassa ao build pelos ARG do Dockerfile.
+
+import { PADRAO_BOT, EXCECOES_BOT } from '../server/bots.js';
 
 const PADRAO = {
-  ga4: '',         // GA4 · ID da métrica — G-XXXXXXXXXX
-  ads: '',         // Google Ads · tag de conversão — AW-XXXXXXXXXX
-  adsLead: '',     // Google Ads · rótulo da conversão "lead enviado"
-  adsContato: '',  // Google Ads · rótulo da conversão "clique no WhatsApp" (opcional)
-  gtm: '',         // Google Tag Manager — GTM-XXXXXXX (alternativa ao gtag direto)
-  verificacao: '', // Search Console · conteúdo da meta google-site-verification
+  ga4: '',                            // GA4 direto — G-XXXXXXXXXX (vazio: GA4, se houver, vive no GTM)
+  ads: 'AW-470660303',                // Google Ads · tag da conta 891-070-6499
+  adsLead: '9KRZCJL-__ccEM_ptuAB',    // conversão "Enviar formulário de lead"
+  adsContato: 'kAVzCJX-__ccEM_ptuAB', // conversão "Assistente de IA - WhatsApp"
+  adsPagina: 'HEMjCJj-__ccEM_ptuAB',  // conversão "Visualização de página"
+  gtm: 'GTM-K6D5X6B',                 // Google Tag Manager
+  verificacao: '',                    // Search Console · conteúdo da meta google-site-verification
 };
+
+// Valor da conversão "Assistente de IA - WhatsApp", igual ao snippet do Google Ads.
+const VALOR_WHATSAPP_BRL = 1;
 
 const CAMPOS = {
   ga4:         { env: 'GA_MEASUREMENT_ID',        formato: /^G-[A-Z0-9]{4,20}$/ },
   ads:         { env: 'GOOGLE_ADS_ID',            formato: /^AW-\d{6,15}$/ },
   adsLead:     { env: 'GOOGLE_ADS_LEAD_LABEL',    formato: /^[\w-]{4,64}$/ },
   adsContato:  { env: 'GOOGLE_ADS_CONTACT_LABEL', formato: /^[\w-]{4,64}$/ },
+  adsPagina:   { env: 'GOOGLE_ADS_PAGEVIEW_LABEL', formato: /^[\w-]{4,64}$/ },
   gtm:         { env: 'GTM_ID',                   formato: /^GTM-[A-Z0-9]{4,12}$/ },
   verificacao: { env: 'GOOGLE_SITE_VERIFICATION', formato: /^[\w-]{10,100}$/ },
 };
@@ -42,7 +55,7 @@ const REGIOES_OPT_IN = [
 ];
 
 /**
- * Lê os IDs (ambiente > PADRAO). Os valores vão parar dentro de <script>: o
+ * Lê os IDs (ambiente > padrão). Os valores vão parar dentro de <script>: o
  * formato estrito é o que impede um ID digitado errado — ou malicioso — de
  * quebrar a página ou injetar código. Falha o build em vez de publicar errado.
  */
@@ -56,7 +69,7 @@ export function lerConfig(env = process.env, padrao = PADRAO) {
     }
     cfg[chave] = valor;
   }
-  if ((cfg.adsLead || cfg.adsContato) && !cfg.ads) {
+  if ((cfg.adsLead || cfg.adsContato || cfg.adsPagina) && !cfg.ads) {
     throw new Error('GOOGLE_ADS_ID é obrigatório quando há rótulo de conversão do Google Ads');
   }
   return cfg;
@@ -66,7 +79,7 @@ export function lerConfig(env = process.env, padrao = PADRAO) {
 export function resumoConfig(cfg) {
   const itens = [
     cfg.ga4 && `GA4 ${cfg.ga4}`,
-    cfg.ads && `Ads ${cfg.ads}${cfg.adsLead ? ' (lead)' : ''}${cfg.adsContato ? ' (contato)' : ''}`,
+    cfg.ads && `Ads ${cfg.ads}${cfg.adsLead ? ' (lead)' : ''}${cfg.adsContato ? ' (whatsapp)' : ''}${cfg.adsPagina ? ' (página)' : ''}`,
     cfg.gtm && `GTM ${cfg.gtm}`,
     cfg.verificacao && 'Search Console',
   ].filter(Boolean);
@@ -75,11 +88,10 @@ export function resumoConfig(cfg) {
 
 /* Roda no navegador. É serializado com toString(): não pode usar nada de fora. */
 function omTracking(C) {
-  var w = window, d = document;
+  var w = window, d = document, nav = navigator;
   var dl = (w.dataLayer = w.dataLayer || []);
   function gtag() { dl.push(arguments); }
   if (!w.gtag) w.gtag = gtag;
-  var direto = !!(C.ga4 || C.ads);
 
   // Consent Mode v2 — negado só onde a lei exige opt-in (a regra por região
   // vence a geral); no Brasil e no resto, concedido.
@@ -123,15 +135,63 @@ function omTracking(C) {
     return o;
   };
 
-  var CONVERSAO = { generate_lead: C.adsLead, contact: C.adsContato };
+  // ?om_debug=1 (DebugView do GA4, testes) força o Google fora do domínio
+  // oficial e ignora a detecção de robô, mas mantém a espera por sinal humano.
+  // ?gtm_debug= (Tag Assistant) precisa do GTM no carregamento: pula a espera.
+  var debug = /[?&]om_debug=1(&|$)/.test(location.search);
+  var tagAssistant = /[?&]gtm_debug=/.test(location.search);
+  var ua = nav.userAgent || '';
+  var robo = nav.webdriver === true ||
+    (new RegExp(C.padraoBot, 'i').test(ua) && !new RegExp(C.excecoesBot, 'i').test(ua));
+  var ativo = debug || tagAssistant || (location.hostname === C.host && !robo);
+
+  // Fora do domínio oficial, ou para robôs, os eventos vão direto ao dataLayer
+  // e param ali: nenhum script do Google é carregado para lê-los.
+  var liberado = !ativo, fila = [];
+
+  function carregar(src) {
+    var s = d.createElement('script');
+    s.async = true;
+    s.src = src;
+    d.head.appendChild(s);
+  }
+
+  function registrar(evento, params) {
+    // GTM lê objetos {event}; o GA4 direto lê comandos gtag('event').
+    if (C.gtm || !C.ga4) dl.push(Object.assign({ event: evento }, params));
+    if (C.ga4) gtag('event', evento, params);
+    converter(evento === 'contact' ? 'contact_' + params.method : evento);
+  }
+
+  // Conversões do Google Ads, montadas no build (send_to e valor): lead
+  // enviado, clique no WhatsApp e visualização de página.
+  function converter(chave) {
+    var c = C.conversoes[chave];
+    if (c) gtag('event', 'conversion', Object.assign({}, c));
+  }
+
+  // Primeiro sinal humano: sai o page_view (config do GA4), a tag do Ads
+  // (remarketing) e o GTM, e os eventos represados seguem na ordem.
+  function liberar() {
+    if (liberado) return;
+    liberado = true;
+    if (C.ga4) gtag('config', C.ga4, debug ? { debug_mode: true } : {});
+    if (C.ads) gtag('config', C.ads);
+    converter('page_view');
+    if (C.gtm) {
+      dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+      carregar('https://www.googletagmanager.com/gtm.js?id=' + C.gtm);
+    }
+    fila.splice(0).forEach(function (e) { registrar(e[0], e[1]); });
+  }
+
   w.omTrack = function (evento, params) {
     // Medição nunca pode derrubar o fluxo de quem chamou (ex.: o lead já enviado).
     try {
       params = params || {};
-      // GTM lê objetos {event}; o gtag.js lê comandos gtag('event').
-      if (C.gtm || !direto) dl.push(Object.assign({ event: evento }, params));
-      if (direto) gtag('event', evento, params);
-      if (C.ads && CONVERSAO[evento]) gtag('event', 'conversion', { send_to: C.ads + '/' + CONVERSAO[evento] });
+      // Lead confirmado pelo servidor e clique de contato já provam interação.
+      if (evento === 'generate_lead' || evento === 'contact') liberar();
+      if (liberado) registrar(evento, params); else fila.push([evento, params]);
     } catch (e) { /* ignora */ }
   };
 
@@ -145,6 +205,7 @@ function omTracking(C) {
   }, true);
 
   d.addEventListener('click', function (e) {
+    if (e.isTrusted === false) return; // clique disparado por script não conta
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a) return;
     var href = a.getAttribute('href') || '';
@@ -154,32 +215,47 @@ function omTracking(C) {
     if (metodo) w.omTrack('contact', { method: metodo });
   }, true);
 
-  // ?om_debug=1 força o carregamento fora do domínio oficial (DebugView do GA4).
-  var debug = /[?&]om_debug=1(&|$)/.test(location.search);
-  if (location.hostname !== C.host && !debug) return;
+  if (!ativo) return;
 
-  function carregar(src) {
-    var s = d.createElement('script');
-    s.async = true;
-    s.src = src;
-    d.head.appendChild(s);
-  }
-  if (direto) {
+  // O gtag.js já carrega (sem enviar nada) para o config ser processado no
+  // instante do primeiro sinal — inclusive o gclid, quando esse sinal é um
+  // clique que já navega para outra página.
+  if (C.ga4 || C.ads) {
     gtag('js', new Date());
-    if (C.ga4) gtag('config', C.ga4, debug ? { debug_mode: true } : {});
-    if (C.ads) gtag('config', C.ads);
     carregar('https://www.googletagmanager.com/gtag/js?id=' + (C.ga4 || C.ads));
   }
-  if (C.gtm) {
-    dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
-    carregar('https://www.googletagmanager.com/gtm.js?id=' + C.gtm);
+
+  if (tagAssistant) return liberar();
+
+  // Sinais de gente: eventos confiáveis (isTrusted) de mouse, toque, teclado ou
+  // roda — ou 10 s de aba visível, para quem só lê. Crawler que executa JS
+  // costuma sair antes disso e sem interagir.
+  var SINAIS = ['pointerdown', 'pointermove', 'touchstart', 'keydown', 'wheel'];
+  function aoSinal(e) {
+    if (e.isTrusted === false) return;
+    SINAIS.forEach(function (s) { d.removeEventListener(s, aoSinal, true); });
+    liberar();
   }
+  SINAIS.forEach(function (s) { d.addEventListener(s, aoSinal, { capture: true, passive: true }); });
+  var segundosVisivel = 0;
+  var relogio = setInterval(function () {
+    if (liberado) return clearInterval(relogio);
+    if (d.visibilityState === 'visible' && ++segundosVisivel >= 10) liberar();
+  }, 1000);
 }
 
 /** Bloco para o <head>: meta do Search Console (se houver) + script de tracking. */
 export function headTracking(cfg, host) {
   const { verificacao, ...ids } = cfg;
-  const dados = JSON.stringify({ ...ids, host, regioes: REGIOES_OPT_IN }).replace(/</g, '\\u003c');
+  const conversao = (rotulo, extra = {}) => rotulo && { send_to: `${cfg.ads}/${rotulo}`, ...extra };
+  const conversoes = Object.fromEntries(Object.entries({
+    generate_lead: conversao(cfg.adsLead),
+    contact_whatsapp: conversao(cfg.adsContato, { value: VALOR_WHATSAPP_BRL, currency: 'BRL' }),
+    page_view: conversao(cfg.adsPagina),
+  }).filter(([, c]) => c));
+  const dados = JSON.stringify({
+    ...ids, host, conversoes, regioes: REGIOES_OPT_IN, padraoBot: PADRAO_BOT, excecoesBot: EXCECOES_BOT,
+  }).replace(/</g, '\\u003c');
   const meta = verificacao ? `<meta name="google-site-verification" content="${verificacao}">\n` : '';
   return `${meta}<script id="om-tracking">(${omTracking.toString()})(${dados});</script>`;
 }

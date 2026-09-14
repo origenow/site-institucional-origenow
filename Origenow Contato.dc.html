@@ -275,14 +275,10 @@ class Component extends DCLogic {
     try {
       // Origem da visita (UTM, gclid, página de entrada): script de tracking do <head>.
       const origem = window.omOrigem ? window.omOrigem() : undefined;
-      const resposta = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...lead, origem }),
-      });
+      // Token antibot, tempo mínimo e reenvio automático: script om-antibot do <head>.
+      const resposta = await window.omEnviarLead({ ...lead, origem });
       if (!resposta.ok) {
-        const corpo = await resposta.json().catch(() => ({}));
-        throw new Error(corpo.erro || 'Não conseguimos enviar. Tente novamente.');
+        throw new Error(resposta.corpo.erro || 'Não conseguimos enviar. Tente novamente.');
       }
       // Conversão só conta com o lead confirmado pelo servidor.
       if (window.omTrack) window.omTrack('generate_lead', { form_id: 'contato' });

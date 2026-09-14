@@ -107,6 +107,22 @@ test('om_debug=1 forca o carregamento do gtag com o ID configurado', async ({ pa
 
   await page.goto('/?om_debug=1');
 
-  await expect.poll(() => pedidos.length).toBeGreaterThan(0);
-  expect(pedidos[0]).toContain('gtag/js?id=G-TESTE12345');
+  await expect.poll(() => pedidos.some((u) => u.includes('gtag/js?id=G-TESTE12345'))).toBe(true);
+});
+
+test('page_view, Ads e GTM esperam o primeiro sinal humano', async ({ page }) => {
+  const pedidosGtm = [];
+  page.on('request', (r) => { if (/gtm\.js/.test(r.url())) pedidosGtm.push(r.url()); });
+  const configs = () => page.evaluate(() =>
+    (window.dataLayer || []).filter((x) => x && x[0] === 'config').map((x) => x[1]));
+
+  await page.goto('/?om_debug=1');
+  await page.waitForLoadState('load');
+  expect(await configs()).toEqual([]);
+  expect(pedidosGtm).toEqual([]);
+
+  await page.keyboard.press('Shift');
+
+  await expect.poll(configs).toEqual(expect.arrayContaining(['G-TESTE12345', 'AW-1234567890']));
+  await expect.poll(() => pedidosGtm.length).toBeGreaterThan(0);
 });

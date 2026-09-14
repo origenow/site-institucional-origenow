@@ -36,10 +36,28 @@ test('gera um unico <script> valido com host e IDs', () => {
   assert.equal(head.match(/<\/script>/g).length, 1);
   assert.match(head, /"host":"www.origenow.com.br"/);
   assert.match(head, /"ga4":"G-ABC123XYZ"/);
+  assert.match(head, /"padraoBot":"bot\|crawl/); // assinaturas de robô vão para o navegador
   assert.doesNotMatch(head, /google-site-verification/);
 
   const corpo = head.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, '');
   assert.doesNotThrow(() => new Function(corpo)); // só faz o parse, não executa
+});
+
+test('monta as conversoes do Ads so com rotulo, com valor apenas no WhatsApp', () => {
+  const cfg = lerConfig({
+    GOOGLE_ADS_ID: 'AW-1234567890', GOOGLE_ADS_LEAD_LABEL: '9KRZCJL-__ccEM_ptuAB', GOOGLE_ADS_CONTACT_LABEL: 'whats-teste',
+  }, {});
+  const head = headTracking(cfg, 'www.origenow.com.br');
+
+  assert.match(head, /"generate_lead":\{"send_to":"AW-1234567890\/9KRZCJL-__ccEM_ptuAB"\}/);
+  assert.match(head, /"contact_whatsapp":\{"send_to":"AW-1234567890\/whats-teste","value":1,"currency":"BRL"\}/);
+  assert.doesNotMatch(head, /"page_view":/); // sem rótulo, sem conversão
+});
+
+test('os IDs versionados de producao sao validos', () => {
+  const cfg = lerConfig({});
+  assert.equal(cfg.gtm, 'GTM-K6D5X6B');
+  assert.equal(cfg.ads, 'AW-470660303');
 });
 
 test('inclui a meta do Search Console quando configurada', () => {

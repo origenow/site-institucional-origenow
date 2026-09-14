@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit';
 import { resolve, sep } from 'node:path';
 import { existsSync, readFileSync } from 'node:fs';
 import { criarRotaLead } from './lead-route.js';
+import { criarAntibot } from './antibot.js';
 import { enviarSlack } from './notify-slack.js';
 import { enviarEmail } from './notify-email.js';
 
@@ -57,7 +58,19 @@ export function criarApp() {
     legacyHeaders: false,
     message: { erro: 'Muitas tentativas. Aguarde um minuto e tente novamente.' },
   });
-  app.post('/api/lead', limiteLead, criarRotaLead({ enviarSlack, enviarEmail }));
+  // Teto por hora para quem respeita o limite por minuto e insiste.
+  const limiteLeadHora = rateLimit({
+    windowMs: 60 * 60_000,
+    max: 20,
+    standardHeaders: false,
+    legacyHeaders: false,
+    message: { erro: 'Muitas tentativas. Tente novamente mais tarde.' },
+  });
+  const limiteToken = rateLimit({ windowMs: 60_000, max: 30, standardHeaders: true, legacyHeaders: false });
+
+  const antibot = criarAntibot();
+  app.get('/api/lead/token', limiteToken, antibot.rotaToken);
+  app.post('/api/lead', limiteLead, limiteLeadHora, antibot.verificarLead, criarRotaLead({ enviarSlack, enviarEmail }));
 
   // URLs antigas (.dc.html, com ou sem query) -> URL limpa, com 301 para o
   // Google transferir o histórico caso alguma já tenha sido compartilhada.

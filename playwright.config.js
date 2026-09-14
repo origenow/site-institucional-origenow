@@ -18,6 +18,10 @@ export default defineConfig({
       SMTP_USER: 'teste@origenow.com.br',
       SMTP_PASS: 'teste',
       LEAD_EMAIL_TO: 'teste@origenow.com.br',
+      // SMTP numa porta local fechada: falha na hora, sem tocar no Zoho.
+      SMTP_HOST: '127.0.0.1',
+      SMTP_PORT: '9',
+      ANTIBOT_MIN_MS: '400',
     },
   },
   projects: [

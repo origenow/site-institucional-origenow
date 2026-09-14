@@ -18,6 +18,21 @@ test('serve a home em / com o title de SEO no HTML inicial (sem JS)', async () =
   assert.match(corpo, /<title>Origenow · Consultoria data-driven para marketplaces<\/title>/);
   assert.match(corpo, /property="og:title"/);
   assert.match(corpo, /<script id="om-tracking">/); // tags do Google no <head>
+  assert.match(corpo, /<script id="om-antibot">/);
+});
+
+test('antibot protege o POST de lead e emite token', async () => {
+  const { servidor, base } = subir();
+  const semOrigem = await fetch(`${base}/api/lead`, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ nome: 'Maria', email: 'maria@empresa.com.br' }),
+  });
+  const token = await fetch(`${base}/api/lead/token`);
+  servidor.close();
+
+  assert.equal(semOrigem.status, 403);
+  assert.equal(token.status, 200);
+  assert.ok((await token.json()).token);
 });
 
 test('referrer entre paginas do proprio site e preservado (atribuicao)', async () => {
