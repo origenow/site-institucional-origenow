@@ -25,6 +25,7 @@ export const PAGINAS = [
   { src: 'Origenow Sobre.dc.html', url: '/sobre' },
   { src: 'Origenow Insights.dc.html', url: '/insights' },
   { src: 'Origenow Contato.dc.html', url: '/contato' },
+  { src: 'Origenow Privacidade.dc.html', url: '/politica-de-privacidade' },
 ];
 
 const CASE_NOVO = 'Origenow Case Novo.dc.html';

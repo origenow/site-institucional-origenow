@@ -7,6 +7,7 @@ const ROTAS = [
   '/cases', '/cases/camicado', '/cases/mimo-cricut', '/cases/tiktok-shop',
   '/cases/riffel', '/cases/calpen', '/cases/cafe-dupan', '/cases/amazon-brasil',
   '/grupo', '/sobre', '/insights', '/insights/mix-enxuto-vende-mais', '/contato',
+  '/politica-de-privacidade', '/en/politica-de-privacidade',
 ];
 
 for (const rota of ROTAS) {
