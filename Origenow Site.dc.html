@@ -473,10 +473,12 @@ class Component extends DCLogic {
 
     this.setState({ enviando: true, erro: '' });
     try {
+      const origem = window.omOrigem ? window.omOrigem() : undefined;
       const r = await fetch('/api/lead', {
-        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(lead),
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...lead, origem }),
       });
       if (!r.ok) { const b = await r.json().catch(() => ({})); throw new Error(b.erro || 'Não conseguimos enviar. Tente novamente.'); }
+      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'diagnostico_home' });
       this.setState({ sent: true, enviando: false });
     } catch (e) { this.setState({ enviando: false, erro: e.message }); }
   }
@@ -494,7 +496,11 @@ class Component extends DCLogic {
       notSent: !this.state.sent,
       erroModal: this.state.erro,
       rotuloModal: this.state.enviando ? 'Enviando…' : 'Solicitar diagnóstico',
-      openModal: () => { document.body.style.overflow = 'hidden'; this.setState({ modal: true, sent: false, enviando: false, erro: '' }); },
+      openModal: () => {
+        document.body.style.overflow = 'hidden';
+        this.setState({ modal: true, sent: false, enviando: false, erro: '' });
+        if (window.omTrack) window.omTrack('lead_modal_open', { form_id: 'diagnostico_home' });
+      },
       closeModal: () => this.close(),
       stop: (e) => e.stopPropagation(),
       submit: () => this.enviarModal(),

@@ -42,6 +42,10 @@ export function criarApp() {
   app.use(helmet({
     contentSecurityPolicy: false,
     hsts: { maxAge: 15552000, includeSubDomains: false },
+    // O padrão do helmet (no-referrer) apaga o referrer até entre páginas do
+    // próprio site; este é o padrão dos navegadores: caminho completo só na
+    // mesma origem, e só o domínio para sites de fora.
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   }));
 
   app.use(express.json({ limit: '32kb' }));

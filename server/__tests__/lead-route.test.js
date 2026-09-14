@@ -77,6 +77,31 @@ test('responde 502 se os dois notificadores falharem', async () => {
   assert.equal(resposta.status, 502);
 });
 
+test('repassa a origem da campanha so com chaves conhecidas e texto curto', async () => {
+  let recebido;
+  const servidor = subir({ enviarSlack: async (lead) => { recebido = lead; }, enviarEmail: async () => {} });
+
+  await postar(servidor, {
+    ...VALIDO,
+    origem: { utm_source: 'google', gclid: 'abc', pagina: '/contato', intruso: 'x', utm_campaign: 'c'.repeat(1000) },
+  });
+  servidor.close();
+
+  assert.deepEqual(Object.keys(recebido.origem).sort(), ['gclid', 'pagina', 'utm_campaign', 'utm_source']);
+  assert.equal(recebido.origem.utm_campaign.length, 300);
+});
+
+test('ignora origem que nao seja objeto', async () => {
+  let recebido;
+  const servidor = subir({ enviarSlack: async (lead) => { recebido = lead; }, enviarEmail: async () => {} });
+
+  const resposta = await postar(servidor, { ...VALIDO, origem: ['google'] });
+  servidor.close();
+
+  assert.equal(resposta.status, 200);
+  assert.equal(recebido.origem, undefined);
+});
+
 test('descarta silenciosamente quando o honeypot vem preenchido', async () => {
   const chamados = [];
   const servidor = subir({

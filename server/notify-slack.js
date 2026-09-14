@@ -14,6 +14,24 @@ function esc(v) {
   return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// De onde o lead veio: campanha (UTM), clique de anúncio sem UTM, site de
+// referência ou acesso direto — e o caminho percorrido dentro do site.
+function formatarOrigem(o) {
+  if (!o) return [];
+  const campanha = [o.utm_source, o.utm_medium, o.utm_campaign].filter(Boolean).join(' / ');
+  const anuncio = o.gclid || o.gbraid || o.wbraid ? 'clique Google Ads' : o.fbclid ? 'clique Meta Ads' : '';
+  const resumo = [campanha, anuncio].filter(Boolean).join(' · ')
+    || (o.referrer ? `referência ${o.referrer}` : 'acesso direto');
+  return [
+    `*Origem:* ${esc(resumo)}`,
+    o.utm_term    ? `*Termo:* ${esc(o.utm_term)}`      : null,
+    o.utm_content ? `*Anúncio:* ${esc(o.utm_content)}` : null,
+    o.landing || o.pagina
+      ? `*Caminho:* entrou em ${esc(o.landing || '—')} · enviou em ${esc(o.pagina || '—')}`
+      : null,
+  ];
+}
+
 function formatar(lead) {
   return [
     '*Novo lead pelo site*',
@@ -23,6 +41,7 @@ function formatar(lead) {
     lead.whatsapp ? `*WhatsApp:* ${esc(lead.whatsapp)}`   : null,
     lead.canais   ? `*Canais:* ${esc(lead.canais)}`       : null,
     lead.mensagem ? `*Precisa de:* ${esc(lead.mensagem)}` : null,
+    ...formatarOrigem(lead.origem),
   ].filter(Boolean).join('\n');
 }
 

@@ -2,6 +2,15 @@
 # O build é puro Node (fs/path), sem dependências nem navegador.
 FROM node:20-slim AS build
 WORKDIR /app
+# IDs públicos do Google (build/tracking.js). A Railway repassa as variáveis do
+# serviço como build args; sem elas, valem os padrões versionados no arquivo.
+ARG SITE_URL
+ARG GA_MEASUREMENT_ID
+ARG GOOGLE_ADS_ID
+ARG GOOGLE_ADS_LEAD_LABEL
+ARG GOOGLE_ADS_CONTACT_LABEL
+ARG GTM_ID
+ARG GOOGLE_SITE_VERIFICATION
 COPY . .
 RUN node build/build.js
 

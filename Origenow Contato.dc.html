@@ -273,15 +273,19 @@ class Component extends DCLogic {
 
     this.setState({ enviando: true, erro: '' });
     try {
+      // Origem da visita (UTM, gclid, página de entrada): script de tracking do <head>.
+      const origem = window.omOrigem ? window.omOrigem() : undefined;
       const resposta = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(lead),
+        body: JSON.stringify({ ...lead, origem }),
       });
       if (!resposta.ok) {
         const corpo = await resposta.json().catch(() => ({}));
         throw new Error(corpo.erro || 'Não conseguimos enviar. Tente novamente.');
       }
+      // Conversão só conta com o lead confirmado pelo servidor.
+      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'contato' });
       // Só troca de tela em caso de sucesso — os campos ficam preenchidos se falhar.
       this.setState({ sent: true, enviando: false });
     } catch (e) {

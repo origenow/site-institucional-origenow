@@ -14,6 +14,7 @@ import { dirname, resolve } from 'node:path';
 import { TODAS, IMPORTS, PASTAS, ARQUIVOS, mapaDeLinks } from './pages.js';
 import { jsonLd, llmsTxt, tipoDaPagina } from './structured-data.js';
 import { IDIOMAS, traduzir, tagsHreflang } from './i18n.js';
+import { lerConfig, resumoConfig, headTracking } from './tracking.js';
 import { existsSync } from 'node:fs';
 
 const RAIZ = resolve(import.meta.dirname, '..');
@@ -121,6 +122,11 @@ async function gravar(saidaRel, conteudo) {
 }
 
 export async function buildAll() {
+  // Lido antes de apagar o dist/: um ID malformado derruba o build sem estrago.
+  const idsGoogle = lerConfig();
+  const tracking = headTracking(idsGoogle, new URL(SITE_URL).hostname);
+  console.log(`tracking: ${resumoConfig(idsGoogle)}`);
+
   await rm(DIST, { recursive: true, force: true });
   await mkdir(DIST, { recursive: true });
 
@@ -169,7 +175,7 @@ export async function buildAll() {
       // procurados dentro do idioma, quebrando a página inteira.
       let corpo = reescreverLinks(fonte, mapa);
       if (idioma.prefixo) corpo = corpo.replace(/href="\//g, `href="${idioma.prefixo}/`);
-      let html = adiarPreloadDeBinding(injetarHead(corpo, seo, `${ld}${varScript}`));
+      let html = adiarPreloadDeBinding(injetarHead(corpo, seo, `${tracking}\n${ld}${varScript}`));
       // Cada idioma tem o seu Header/Footer; os ativos seguem na raiz por causa
       // do <base href="/">, então o import é que muda de nome.
       if (idioma.prefixo) html = html.replace(/(<dc-import\s+name=")(Header|Footer)(")/g, `$1$2-${idioma.code}$3`);

@@ -17,6 +17,14 @@ test('serve a home em / com o title de SEO no HTML inicial (sem JS)', async () =
   // O <title> foi injetado no <head> estático pelo build — crawler o vê sem executar JS.
   assert.match(corpo, /<title>Origenow · Consultoria data-driven para marketplaces<\/title>/);
   assert.match(corpo, /property="og:title"/);
+  assert.match(corpo, /<script id="om-tracking">/); // tags do Google no <head>
+});
+
+test('referrer entre paginas do proprio site e preservado (atribuicao)', async () => {
+  const { servidor, base } = subir();
+  const r = await fetch(`${base}/`);
+  servidor.close();
+  assert.equal(r.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
 });
 
 test('serve uma pagina .dc.html com o seu title de SEO', async () => {

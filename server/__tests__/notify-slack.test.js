@@ -43,6 +43,48 @@ test('lanca quando o webhook recusa', async () => {
   mock.restoreAll();
 });
 
+// --- Origem do lead ---
+
+async function textoEnviado(lead) {
+  limparEnv();
+  process.env.SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/TESTE';
+  let texto;
+  mock.method(globalThis, 'fetch', async (url, opcoes) => {
+    texto = JSON.parse(opcoes.body).text;
+    return new Response('ok', { status: 200 });
+  });
+  await enviarSlack(lead);
+  mock.restoreAll();
+  return texto;
+}
+
+test('mostra a campanha, o clique de anuncio e o caminho no site', async () => {
+  const texto = await textoEnviado({
+    ...LEAD,
+    origem: { utm_source: 'google', utm_medium: 'cpc', utm_campaign: 'lancamento', utm_term: 'consultoria marketplace',
+      gclid: 'abc', landing: '/servicos', pagina: '/contato' },
+  });
+
+  assert.match(texto, /\*Origem:\* google \/ cpc \/ lancamento · clique Google Ads/);
+  assert.match(texto, /\*Termo:\* consultoria marketplace/);
+  assert.match(texto, /\*Caminho:\* entrou em \/servicos · enviou em \/contato/);
+});
+
+test('sem campanha mostra o site de referencia ou acesso direto', async () => {
+  assert.match(await textoEnviado({ ...LEAD, origem: { referrer: 'www.google.com', pagina: '/' } }),
+    /\*Origem:\* referência www\.google\.com/);
+  assert.match(await textoEnviado({ ...LEAD, origem: { pagina: '/' } }), /\*Origem:\* acesso direto/);
+});
+
+test('lead sem origem nao ganha linha de origem', async () => {
+  assert.doesNotMatch(await textoEnviado(LEAD), /Origem/);
+});
+
+test('escapa a origem para nao injetar mencoes no Slack', async () => {
+  const texto = await textoEnviado({ ...LEAD, origem: { utm_campaign: '<!channel>' } });
+  assert.doesNotMatch(texto, /<!channel>/);
+});
+
 // --- Caminho 2: Bot token (chat.postMessage) ---
 
 test('posta via bot token quando nao ha webhook', async () => {

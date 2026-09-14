@@ -4,6 +4,21 @@ function limpar(valor, max = 2000) {
   return typeof valor === 'string' ? valor.trim().slice(0, max) : '';
 }
 
+// Origem da visita, montada pelo script de tracking no navegador. Só chaves
+// conhecidas e texto curto: o objeto vem do cliente e vai parar no Slack.
+const CHAVES_ORIGEM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  'gclid', 'gbraid', 'wbraid', 'fbclid', 'landing', 'referrer', 'pagina'];
+
+function limparOrigem(bruto) {
+  if (!bruto || typeof bruto !== 'object' || Array.isArray(bruto)) return null;
+  const origem = {};
+  for (const chave of CHAVES_ORIGEM) {
+    const valor = limpar(bruto[chave], 300);
+    if (valor) origem[chave] = valor;
+  }
+  return Object.keys(origem).length ? origem : null;
+}
+
 export function validar(corpo) {
   const lead = {
     nome:     limpar(corpo.nome, 120),
@@ -17,6 +32,9 @@ export function validar(corpo) {
   if (!lead.nome) return { erro: 'Informe seu nome.' };
   if (!lead.email) return { erro: 'Informe seu e-mail.' };
   if (!EMAIL_RE.test(lead.email)) return { erro: 'E-mail inválido.' };
+
+  const origem = limparOrigem(corpo.origem);
+  if (origem) lead.origem = origem;
   return { lead };
 }
 
