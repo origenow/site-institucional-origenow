@@ -72,6 +72,17 @@ export function criarApp() {
   app.get('/api/lead/token', limiteToken, antibot.rotaToken);
   app.post('/api/lead', limiteLead, limiteLeadHora, antibot.verificarLead, criarRotaLead({ enviarSlack, enviarEmail }));
 
+  // Endereços de sitemap digitados errado no Search Console (sem .xml, com
+  // barra ou ponto no fim) caíam no 404 em HTML, e o Google acusava "o sitemap
+  // está em HTML". Comparação exata do caminho: rota com barra opcional do
+  // Express casaria também /sitemap.xml e criaria um laço de redirect.
+  const SITEMAP_ERRADO = new Set(['/sitemap', '/sitemap.', '/sitemap/', '/sitemap.xml/', '/sitemap_index.xml', '/sitemap.html']);
+  app.use((req, res, next) => (
+    (req.method === 'GET' || req.method === 'HEAD') && SITEMAP_ERRADO.has(req.path)
+      ? res.redirect(301, '/sitemap.xml')
+      : next()
+  ));
+
   // URLs antigas (.dc.html, com ou sem query) -> URL limpa, com 301 para o
   // Google transferir o histórico caso alguma já tenha sido compartilhada.
   const rotas = carregarRotas();

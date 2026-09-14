@@ -97,6 +97,20 @@ test('nao expoe o header X-Powered-By', async () => {
   assert.ok(r.headers.get('x-content-type-options')); // helmet ativo
 });
 
+test('sitemap digitado errado redireciona para /sitemap.xml, sem laco', async () => {
+  const { servidor, base } = subir();
+  const errados = await Promise.all(['/sitemap', '/sitemap.', '/sitemap/', '/sitemap.xml/', '/sitemap_index.xml'].map(async (caminho) => {
+    const r = await fetch(`${base}${caminho}`, { redirect: 'manual' });
+    return `${caminho} ${r.status} ${r.headers.get('location')}`;
+  }));
+  const certo = await fetch(`${base}/sitemap.xml`, { redirect: 'manual' });
+  servidor.close();
+
+  assert.deepEqual(errados.filter((s) => !s.endsWith(' 301 /sitemap.xml')), []);
+  assert.equal(certo.status, 200);
+  assert.match(certo.headers.get('content-type'), /xml/);
+});
+
 test('responde 404 em rota inexistente', async () => {
   const { servidor, base } = subir();
   const resposta = await fetch(`${base}/nao-existe`);
