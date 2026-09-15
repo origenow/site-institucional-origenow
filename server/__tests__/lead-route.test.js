@@ -91,6 +91,22 @@ test('repassa a origem da campanha so com chaves conhecidas e texto curto', asyn
   assert.equal(recebido.origem.utm_campaign.length, 300);
 });
 
+test('responde se o lead e qualificado e descarta codigos de perfil invalidos', async () => {
+  const recebidos = [];
+  const servidor = subir({ enviarSlack: async (lead) => { recebidos.push(lead); }, enviarEmail: async () => {} });
+
+  const bom = await postar(servidor, { ...VALIDO, tipo: 'industria', faturamento: '50-200' });
+  const pequeno = await postar(servidor, { ...VALIDO, tipo: 'lojista', faturamento: 'ate-50' });
+  const invalido = await postar(servidor, { ...VALIDO, tipo: '<script>', faturamento: 'muito' });
+  const corpos = [await bom.json(), await pequeno.json(), await invalido.json()];
+  servidor.close();
+
+  assert.deepEqual(corpos.map((c) => c.qualificado), [true, false, false]);
+  assert.equal(recebidos[0].tipo, 'industria');
+  assert.equal(recebidos[2].tipo, '');
+  assert.equal(recebidos[2].motivo, 'perfil não informado');
+});
+
 test('ignora origem que nao seja objeto', async () => {
   let recebido;
   const servidor = subir({ enviarSlack: async (lead) => { recebido = lead; }, enviarEmail: async () => {} });

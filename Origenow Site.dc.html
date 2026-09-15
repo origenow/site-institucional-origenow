@@ -421,6 +421,8 @@
 <input type="text" id="modal-nome" name="nome" required placeholder="Seu nome" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
 <input type="text" id="modal-empresa" name="empresa" placeholder="Empresa" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease">
 <input type="email" id="modal-email" name="email" required placeholder="E-mail corporativo" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;transition:border-color .18s ease,box-shadow .18s ease;grid-column:1 / 3">
+<select id="modal-tipo" name="tipo" required aria-label="Tipo de empresa" style="width:100%;box-sizing:border-box;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;cursor:pointer;transition:border-color .18s ease,box-shadow .18s ease"><option value="">Tipo de empresa</option><option value="industria">Indústria</option><option value="marca">Marca</option><option value="distribuidor">Distribuidor</option><option value="lojista">Lojista</option><option value="outro">Outro</option></select>
+<select id="modal-faturamento" name="faturamento" required aria-label="Faturamento em marketplaces" style="width:100%;box-sizing:border-box;background:#ffffff;border:1px solid #e6e2ec;border-radius:2px;padding:0.9375rem 1rem;font:500 0.875rem/1.2 Manrope,sans-serif;color:#14111e;outline:none;cursor:pointer;transition:border-color .18s ease,box-shadow .18s ease"><option value="">Faturamento em marketplaces</option><option value="nao-vende">Ainda não vendemos</option><option value="ate-50">Até R$ 50 mil por mês</option><option value="50-200">De R$ 50 mil a R$ 200 mil por mês</option><option value="200-1000">De R$ 200 mil a R$ 1 milhão por mês</option><option value="acima-1000">Acima de R$ 1 milhão por mês</option></select>
 </span>
 <span style="display:block;margin-top:1.375rem;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Onde você já vende</span>
 <span data-om-flex="row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.875rem">
@@ -461,6 +463,7 @@ class Component extends DCLogic {
     return {
       nome: val('modal-nome'), empresa: val('modal-empresa'), email: val('modal-email'),
       canais, website: val('modal-website'),
+      tipo: val('modal-tipo'), faturamento: val('modal-faturamento'),
     };
   }
 
@@ -470,13 +473,20 @@ class Component extends DCLogic {
     if (!lead.nome)  return this.setState({ erro: 'Informe seu nome.' });
     if (!lead.email) return this.setState({ erro: 'Informe seu e-mail.' });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) return this.setState({ erro: 'E-mail inválido.' });
+    if (!lead.tipo) return this.setState({ erro: 'Selecione o tipo de empresa.' });
+    if (!lead.faturamento) return this.setState({ erro: 'Selecione o faturamento em marketplaces.' });
 
     this.setState({ enviando: true, erro: '' });
     try {
       const origem = window.omOrigem ? window.omOrigem() : undefined;
       const r = await window.omEnviarLead({ ...lead, origem });
       if (!r.ok) throw new Error(r.corpo.erro || 'Não conseguimos enviar. Tente novamente.');
-      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'diagnostico_home' }, { email: lead.email });
+      if (window.omTrack) {
+        const perfil = { form_id: 'diagnostico_home', tipo_empresa: lead.tipo, faturamento: lead.faturamento };
+        // Só lead qualificado (regra no servidor) vira conversão no Google Ads.
+        if (r.corpo.qualificado) window.omTrack('generate_lead', perfil, { email: lead.email });
+        else window.omTrack('lead_unqualified', perfil);
+      }
       this.setState({ sent: true, enviando: false });
     } catch (e) { this.setState({ enviando: false, erro: e.message }); }
   }

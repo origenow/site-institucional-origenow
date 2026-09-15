@@ -8,6 +8,8 @@
 //      param em silêncio. Só use um token estático se a rotação estiver
 //      desligada para esse app.
 
+import { TIPOS, FATURAMENTOS } from './qualificacao.js';
+
 // Escapa os caracteres de controle do Slack para que dados do lead não injetem
 // menções (<!channel>), links (<url|texto>) ou formatação.
 function esc(v) {
@@ -32,11 +34,23 @@ function formatarOrigem(o) {
   ];
 }
 
+function cabecalho(lead) {
+  if (lead.qualificado) return `*Novo lead pelo site* · :white_check_mark: qualificado (${esc(lead.motivo)})`;
+  if (lead.motivo) return `*Novo lead pelo site* · fora do perfil (${esc(lead.motivo)})`;
+  return '*Novo lead pelo site*';
+}
+
+function perfil(lead) {
+  const partes = [TIPOS[lead.tipo], FATURAMENTOS[lead.faturamento]].filter(Boolean);
+  return partes.length ? `*Perfil:* ${esc(partes.join(' · '))}` : null;
+}
+
 function formatar(lead) {
   return [
-    '*Novo lead pelo site*',
+    cabecalho(lead),
     `*Nome:* ${esc(lead.nome)}`,
     `*E-mail:* ${esc(lead.email)}`,
+    perfil(lead),
     lead.empresa  ? `*Empresa:* ${esc(lead.empresa)}`     : null,
     lead.whatsapp ? `*WhatsApp:* ${esc(lead.whatsapp)}`   : null,
     lead.canais   ? `*Canais:* ${esc(lead.canais)}`       : null,

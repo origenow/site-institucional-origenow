@@ -130,6 +130,8 @@
 <div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Empresa</div><input type="text" id="lead-empresa" name="empresa" placeholder="Razão social ou marca" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
 <div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">E-mail</div><input type="email" id="lead-email" name="email" required placeholder="nome@empresa.com.br" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
 <div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">WhatsApp</div><input type="tel" id="lead-whatsapp" name="whatsapp" placeholder="(00) 00000-0000" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Tipo de empresa</div><select id="lead-tipo" name="tipo" required style="width:100%;box-sizing:border-box;background:#ffffff;outline:none;border:1px solid #e6e2ec;border-radius:0;padding:1rem 1.125rem;font:400 0.9375rem/1.2 Manrope,sans-serif;color:#14111e;cursor:pointer;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"><option value="">Selecione</option><option value="industria">Indústria</option><option value="marca">Marca</option><option value="distribuidor">Distribuidor</option><option value="lojista">Lojista</option><option value="outro">Outro</option></select></div>
+<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Faturamento em marketplaces</div><select id="lead-faturamento" name="faturamento" required style="width:100%;box-sizing:border-box;background:#ffffff;outline:none;border:1px solid #e6e2ec;border-radius:0;padding:1rem 1.125rem;font:400 0.9375rem/1.2 Manrope,sans-serif;color:#14111e;cursor:pointer;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"><option value="">Selecione</option><option value="nao-vende">Ainda não vendemos</option><option value="ate-50">Até R$ 50 mil por mês</option><option value="50-200">De R$ 50 mil a R$ 200 mil por mês</option><option value="200-1000">De R$ 200 mil a R$ 1 milhão por mês</option><option value="acima-1000">Acima de R$ 1 milhão por mês</option></select></div>
 <div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Canais em que já vende</div><input type="text" id="lead-canais" name="canais" placeholder="Mercado Livre, Amazon, loja própria…" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
 <div style="grid-column:span 2"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">O que você precisa</div><textarea id="lead-mensagem" name="mensagem" placeholder="Escreva em duas linhas o seu momento e o seu objetivo." rows="3" style="width:100%;box-sizing:border-box;appearance:none;resize:vertical;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1.5 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></textarea></div>
 </div>
@@ -257,6 +259,7 @@ class Component extends DCLogic {
     return {
       nome: ler('lead-nome'), empresa: ler('lead-empresa'), email: ler('lead-email'),
       whatsapp: ler('lead-whatsapp'), canais: ler('lead-canais'),
+      tipo: ler('lead-tipo'), faturamento: ler('lead-faturamento'),
       mensagem: ler('lead-mensagem'), website: ler('lead-website'),
     };
   }
@@ -270,6 +273,8 @@ class Component extends DCLogic {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
       return this.setState({ erro: 'E-mail inválido.' });
     }
+    if (!lead.tipo) return this.setState({ erro: 'Selecione o tipo de empresa.' });
+    if (!lead.faturamento) return this.setState({ erro: 'Selecione o faturamento em marketplaces.' });
 
     this.setState({ enviando: true, erro: '' });
     try {
@@ -283,7 +288,12 @@ class Component extends DCLogic {
       // Conversão só conta com o lead confirmado pelo servidor.
       // Sai antes de trocar para "Recebido": a detecção automática da conversão
       // otimizada ainda encontra os campos na página, como reserva do user_data.
-      if (window.omTrack) window.omTrack('generate_lead', { form_id: 'contato' }, { email: lead.email, telefone: lead.whatsapp });
+      if (window.omTrack) {
+        const perfil = { form_id: 'contato', tipo_empresa: lead.tipo, faturamento: lead.faturamento };
+        // Só lead qualificado (regra no servidor) vira conversão no Google Ads.
+        if (resposta.corpo.qualificado) window.omTrack('generate_lead', perfil, { email: lead.email, telefone: lead.whatsapp });
+        else window.omTrack('lead_unqualified', perfil);
+      }
       // Só troca de tela em caso de sucesso — os campos ficam preenchidos se falhar.
       this.setState({ sent: true, enviando: false });
     } catch (e) {

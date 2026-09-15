@@ -12,6 +12,8 @@ test('lead de verdade atravessa o antibot (origem, token e tempo minimo)', async
   await page.goto('/contato');
   await page.fill('#lead-nome', 'Teste Antibot');
   await page.fill('#lead-email', 'teste@empresa.com.br');
+  await page.selectOption('#lead-tipo', 'industria');
+  await page.selectOption('#lead-faturamento', '50-200');
   await page.getByText('Enviar e agendar').click();
 
   // Slack e SMTP de teste apontam para destinos inválidos (playwright.config.js):

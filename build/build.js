@@ -75,7 +75,7 @@ export function seoAbsoluto(seo, urlPagina) {
 const CSS_MOBILE = `<style id="om-tap">@media (max-width:767px){` +
   `header a{min-height:44px}` +
   `footer a{min-height:44px;display:flex;align-items:center}` +
-  `#lead-form input,#lead-form textarea{min-height:44px;box-sizing:border-box}` +
+  `#lead-form input,#lead-form select,#lead-form textarea{min-height:44px;box-sizing:border-box}` +
   `}</style>`;
 
 /**

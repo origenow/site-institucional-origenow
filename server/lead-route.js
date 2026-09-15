@@ -1,3 +1,5 @@
+import { TIPOS, FATURAMENTOS, qualificar } from './qualificacao.js';
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function limpar(valor, max = 2000) {
@@ -27,6 +29,9 @@ export function validar(corpo) {
     whatsapp: limpar(corpo.whatsapp, 40),
     canais:   limpar(corpo.canais, 300),
     mensagem: limpar(corpo.mensagem, 2000),
+    // Códigos fechados: o que não estiver na lista vira vazio (perfil não informado).
+    tipo:        TIPOS[corpo.tipo] ? corpo.tipo : '',
+    faturamento: FATURAMENTOS[corpo.faturamento] ? corpo.faturamento : '',
   };
 
   if (!lead.nome) return { erro: 'Informe seu nome.' };
@@ -35,6 +40,8 @@ export function validar(corpo) {
 
   const origem = limparOrigem(corpo.origem);
   if (origem) lead.origem = origem;
+
+  Object.assign(lead, qualificar(lead));
   return { lead };
 }
 
@@ -57,6 +64,7 @@ export function criarRotaLead({ enviarSlack, enviarEmail }) {
       console.error('LEAD PERDIDO:', JSON.stringify(lead));
       return res.status(502).json({ erro: 'Não conseguimos registrar seu contato. Tente novamente.' });
     }
-    return res.status(200).json({ ok: true });
+    // O navegador só dispara a conversão do Google Ads quando qualificado.
+    return res.status(200).json({ ok: true, qualificado: lead.qualificado });
   };
 }

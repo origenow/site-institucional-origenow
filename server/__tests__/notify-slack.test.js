@@ -76,6 +76,22 @@ test('sem campanha mostra o site de referencia ou acesso direto', async () => {
   assert.match(await textoEnviado({ ...LEAD, origem: { pagina: '/' } }), /\*Origem:\* acesso direto/);
 });
 
+test('marca o lead qualificado e mostra o perfil', async () => {
+  const texto = await textoEnviado({
+    ...LEAD, tipo: 'industria', faturamento: '50-200', qualificado: true, motivo: 'fatura a partir de R$ 50 mil/mês',
+  });
+  assert.match(texto, /qualificado \(fatura a partir de R\$ 50 mil\/mês\)/);
+  assert.match(texto, /\*Perfil:\* Indústria · R\$ 50 mil a 200 mil\/mês/);
+});
+
+test('lead fora do perfil chega ao Slack com o motivo', async () => {
+  const texto = await textoEnviado({
+    ...LEAD, tipo: 'lojista', faturamento: 'ate-50', qualificado: false, motivo: 'fatura menos de R$ 50 mil/mês',
+  });
+  assert.match(texto, /fora do perfil \(fatura menos de R\$ 50 mil\/mês\)/);
+  assert.doesNotMatch(texto, /white_check_mark/);
+});
+
 test('lead sem origem nao ganha linha de origem', async () => {
   assert.doesNotMatch(await textoEnviado(LEAD), /Origem/);
 });

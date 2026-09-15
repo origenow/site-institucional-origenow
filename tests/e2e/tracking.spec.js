@@ -18,33 +18,66 @@ function eventos(page) {
   }).filter(Boolean));
 }
 
-function responderLead(page, status, capturar = () => {}) {
+/** Simula o /api/lead; por padrão o servidor diz que o lead é qualificado. */
+function responderLead(page, status, { capturar = () => {}, qualificado = true } = {}) {
   return page.route('**/api/lead', (rota) => {
     capturar(JSON.parse(rota.request().postData()));
-    const body = status === 200 ? '{"ok":true}' : '{"erro":"Não conseguimos registrar seu contato. Tente novamente."}';
+    const body = status === 200
+      ? JSON.stringify({ ok: true, qualificado })
+      : '{"erro":"Não conseguimos registrar seu contato. Tente novamente."}';
     return rota.fulfill({ status, contentType: 'application/json', body });
   });
 }
 
+async function preencherPerfil(page, prefixo, { tipo = 'industria', faturamento = '50-200' } = {}) {
+  await page.selectOption(`#${prefixo}-tipo`, tipo);
+  await page.selectOption(`#${prefixo}-faturamento`, faturamento);
+}
+
 test('lead do Contato leva a origem da campanha e dispara a conversao', async ({ page }) => {
   let capturado = null;
-  await responderLead(page, 200, (corpo) => { capturado = corpo; });
+  await responderLead(page, 200, { capturar: (corpo) => { capturado = corpo; } });
 
   await page.goto('/servicos?utm_source=google&utm_medium=cpc&utm_campaign=lancamento&gclid=teste123');
   await page.goto('/contato');
   await page.fill('#lead-nome', 'Maria Souza');
   await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
   await page.getByText('Enviar e agendar').click();
   await expect(page.getByText('Recebido')).toBeVisible();
 
+  expect(capturado).toMatchObject({ tipo: 'industria', faturamento: '50-200' });
   expect(capturado.origem).toMatchObject({
     utm_source: 'google', utm_medium: 'cpc', utm_campaign: 'lancamento', gclid: 'teste123',
     landing: '/servicos', pagina: '/contato',
   });
   const ev = await eventos(page);
   expect(ev).toContainEqual(expect.objectContaining({ nome: 'lead_form_start', form_id: 'contato' }));
-  expect(ev).toContainEqual(expect.objectContaining({ nome: 'generate_lead', form_id: 'contato' }));
+  expect(ev).toContainEqual(expect.objectContaining({
+    nome: 'generate_lead', form_id: 'contato', tipo_empresa: 'industria', faturamento: '50-200',
+  }));
   expect(ev).toContainEqual(expect.objectContaining({ nome: 'conversion', send_to: 'AW-1234567890/lead-teste' }));
+});
+
+// O lead pequeno chega ao comercial, mas não ensina o lance a buscar mais dele.
+test('lead fora do perfil chega, mas nao vira conversao no Ads', async ({ page }) => {
+  await responderLead(page, 200, { qualificado: false });
+
+  await page.goto('/contato');
+  await page.fill('#lead-nome', 'Ana Lima');
+  await page.fill('#lead-email', 'ana@loja.com.br');
+  await preencherPerfil(page, 'lead', { tipo: 'lojista', faturamento: 'ate-50' });
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+
+  const ev = await eventos(page);
+  expect(ev).toContainEqual(expect.objectContaining({
+    nome: 'lead_unqualified', form_id: 'contato', tipo_empresa: 'lojista', faturamento: 'ate-50',
+  }));
+  expect(ev.map((e) => e.nome)).not.toContain('generate_lead');
+  expect(ev.map((e) => e.nome)).not.toContain('conversion');
+  expect(await page.evaluate(() => (window.dataLayer || []).some((x) => x && x[0] === 'set' && x[1] === 'user_data')))
+    .toBe(false);
 });
 
 test('envio que falha nao conta como lead', async ({ page }) => {
@@ -53,6 +86,7 @@ test('envio que falha nao conta como lead', async ({ page }) => {
   await page.goto('/contato');
   await page.fill('#lead-nome', 'Maria Souza');
   await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
   await page.getByText('Enviar e agendar').click();
   await expect(page.getByText('Não conseguimos registrar seu contato. Tente novamente.')).toBeVisible();
 
@@ -63,15 +97,17 @@ test('envio que falha nao conta como lead', async ({ page }) => {
 
 test('modal da home mede abertura, preenchimento e lead', async ({ page }) => {
   let capturado = null;
-  await responderLead(page, 200, (corpo) => { capturado = corpo; });
+  await responderLead(page, 200, { capturar: (corpo) => { capturado = corpo; } });
 
   await page.goto('/');
   await page.getByText('Quero meu diagnóstico').click();
   await page.fill('#modal-nome', 'João Lima');
   await page.fill('#modal-email', 'joao@empresa.com.br');
+  await preencherPerfil(page, 'modal', { tipo: 'marca', faturamento: 'nao-vende' });
   await page.getByText('Solicitar diagnóstico').click();
   await expect(page.getByText('Recebido')).toBeVisible();
 
+  expect(capturado).toMatchObject({ tipo: 'marca', faturamento: 'nao-vende' });
   expect(capturado.origem).toMatchObject({ landing: '/', pagina: '/' });
   const ev = await eventos(page);
   expect(ev).toContainEqual(expect.objectContaining({ nome: 'lead_modal_open', form_id: 'diagnostico_home' }));
@@ -79,10 +115,9 @@ test('modal da home mede abertura, preenchimento e lead', async ({ page }) => {
   expect(ev).toContainEqual(expect.objectContaining({ nome: 'generate_lead', form_id: 'diagnostico_home' }));
 });
 
-// A conversão otimizada do Google Ads está em detecção automática: a tag lê o
-// e-mail e o telefone da página no instante da conversão. Se o generate_lead
-// passar a sair depois de o formulário virar "Recebido", os campos já sumiram
-// e o Google deixa de receber os dados — sem nenhum erro visível.
+// A conversão otimizada também tem a detecção automática do Google como reserva:
+// a tag lê o e-mail da página no instante da conversão. Se o generate_lead passar
+// a sair depois de o formulário virar "Recebido", os campos já sumiram.
 test('conversao de lead sai com os campos ainda na pagina (conversao otimizada)', async ({ page }) => {
   await responderLead(page, 200);
   await page.addInitScript(() => {
@@ -102,6 +137,7 @@ test('conversao de lead sai com os campos ainda na pagina (conversao otimizada)'
   await page.goto('/contato');
   await page.fill('#lead-nome', 'Maria Souza');
   await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
   await page.getByText('Enviar e agendar').click();
   await expect(page.getByText('Recebido')).toBeVisible();
   expect(await page.evaluate(() => window.__camposNaConversao))
@@ -111,6 +147,7 @@ test('conversao de lead sai com os campos ainda na pagina (conversao otimizada)'
   await page.getByText('Quero meu diagnóstico').click();
   await page.fill('#modal-nome', 'João Lima');
   await page.fill('#modal-email', 'joao@empresa.com.br');
+  await preencherPerfil(page, 'modal');
   await page.getByText('Solicitar diagnóstico').click();
   await expect(page.getByText('Recebido')).toBeVisible();
   expect(await page.evaluate(() => window.__camposNaConversao))
@@ -131,6 +168,7 @@ test('conversao otimizada: user_data normalizado sai antes da conversao de lead'
   await page.fill('#lead-nome', 'Maria Souza');
   await page.fill('#lead-email', 'Maria@Empresa.com.br');
   await page.fill('#lead-whatsapp', '(31) 99999-0000');
+  await preencherPerfil(page, 'lead');
   await page.getByText('Enviar e agendar').click();
   await expect(page.getByText('Recebido')).toBeVisible();
 
@@ -143,6 +181,7 @@ test('conversao otimizada: user_data normalizado sai antes da conversao de lead'
   await page.getByText('Quero meu diagnóstico').click();
   await page.fill('#modal-nome', 'João Lima');
   await page.fill('#modal-email', 'joao@empresa.com.br');
+  await preencherPerfil(page, 'modal');
   await page.getByText('Solicitar diagnóstico').click();
   await expect(page.getByText('Recebido')).toBeVisible();
 
@@ -152,8 +191,8 @@ test('conversao otimizada: user_data normalizado sai antes da conversao de lead'
   expect(pos.set).toBeLessThan(pos.conversao);
 });
 
-// Só lead é conversão no Google Ads: clique no WhatsApp fica como evento para
-// análise, sem ensinar o lance a buscar clique.
+// Só lead qualificado é conversão no Google Ads: clique no WhatsApp fica como
+// evento para análise, sem ensinar o lance a buscar clique.
 test('clique no WhatsApp vira evento de contato, sem conversao no Ads', async ({ page, context }) => {
   await context.route(/wa\.me/, (rota) => rota.abort());
 
