@@ -14,9 +14,9 @@
 //
 // Eventos (no dataLayer para o GTM e, com GA4 direto, via gtag):
 //   lead_modal_open, lead_form_start, generate_lead (lead confirmado pelo
-//   servidor) e contact (method = whatsapp | email | telefone). Conversões do
-//   Google Ads: lead enviado, clique no WhatsApp e visualização de página (esta
-//   só depois do sinal humano). O generate_lead leva e-mail e telefone em
+//   servidor) e contact (method = whatsapp | email | telefone). Conversão do
+//   Google Ads: só o lead enviado (clique no WhatsApp e visualização de página
+//   aceitam rótulo, mas ficam desligados). O generate_lead leva e-mail e telefone em
 //   user_data para a conversão otimizada; a tag do Google aplica o hash antes
 //   de enviar.
 //
@@ -30,8 +30,12 @@ const PADRAO = {
   ga4: 'G-THYDSTFRER',                // GA4 direto (não criar tag de GA4 no GTM: contaria em dobro)
   ads: 'AW-470660303',                // Google Ads · tag da conta 891-070-6499
   adsLead: '9KRZCJL-__ccEM_ptuAB',    // conversão "Enviar formulário de lead"
-  adsContato: 'kAVzCJX-__ccEM_ptuAB', // conversão "Assistente de IA - WhatsApp"
-  adsPagina: 'HEMjCJj-__ccEM_ptuAB',  // conversão "Visualização de página"
+  // Clique no WhatsApp e visualização de página não viram conversão no Ads:
+  // contados como conversão, ensinavam o lance a buscar visita barata em vez de
+  // lead. Seguem medidos como eventos no GA4 (contact, page_view). Rótulos da
+  // conta, se um dia voltarem: WhatsApp kAVzCJX-__ccEM_ptuAB · página HEMjCJj-__ccEM_ptuAB.
+  adsContato: '',
+  adsPagina: '',
   gtm: 'GTM-K6D5X6B',                 // Google Tag Manager
   verificacao: '',                    // Search Console · conteúdo da meta google-site-verification
 };

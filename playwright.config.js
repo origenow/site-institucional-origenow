@@ -13,7 +13,6 @@ export default defineConfig({
       GA_MEASUREMENT_ID: 'G-TESTE12345',
       GOOGLE_ADS_ID: 'AW-1234567890',
       GOOGLE_ADS_LEAD_LABEL: 'lead-teste',
-      GOOGLE_ADS_CONTACT_LABEL: 'whats-teste',
       SLACK_WEBHOOK_URL: 'https://exemplo.invalido/webhook',
       SMTP_USER: 'teste@origenow.com.br',
       SMTP_PASS: 'teste',

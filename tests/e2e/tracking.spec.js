@@ -152,7 +152,9 @@ test('conversao otimizada: user_data normalizado sai antes da conversao de lead'
   expect(pos.set).toBeLessThan(pos.conversao);
 });
 
-test('clique no WhatsApp vira evento de contato e conversao', async ({ page, context }) => {
+// Só lead é conversão no Google Ads: clique no WhatsApp fica como evento para
+// análise, sem ensinar o lance a buscar clique.
+test('clique no WhatsApp vira evento de contato, sem conversao no Ads', async ({ page, context }) => {
   await context.route(/wa\.me/, (rota) => rota.abort());
 
   await page.goto('/contato');
@@ -160,8 +162,7 @@ test('clique no WhatsApp vira evento de contato e conversao', async ({ page, con
 
   await expect.poll(() => eventos(page))
     .toContainEqual(expect.objectContaining({ nome: 'contact', method: 'whatsapp' }));
-  expect(await eventos(page))
-    .toContainEqual(expect.objectContaining({ nome: 'conversion', send_to: 'AW-1234567890/whats-teste' }));
+  expect((await eventos(page)).map((e) => e.nome)).not.toContain('conversion');
 });
 
 test('nao carrega o Google fora do dominio oficial', async ({ page }) => {

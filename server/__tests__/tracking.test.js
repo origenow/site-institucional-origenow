@@ -59,6 +59,10 @@ test('os IDs versionados de producao sao validos', () => {
   assert.equal(cfg.ga4, 'G-THYDSTFRER');
   assert.equal(cfg.gtm, 'GTM-K6D5X6B');
   assert.equal(cfg.ads, 'AW-470660303');
+  assert.equal(cfg.adsLead, '9KRZCJL-__ccEM_ptuAB');
+  // Só o lead é conversão: clique e visualização de página não entram no lance.
+  assert.equal(cfg.adsContato, '');
+  assert.equal(cfg.adsPagina, '');
 });
 
 test('inclui a meta do Search Console quando configurada', () => {
