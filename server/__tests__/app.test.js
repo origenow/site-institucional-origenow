@@ -97,6 +97,13 @@ test('nao expoe o header X-Powered-By', async () => {
   assert.ok(r.headers.get('x-content-type-options')); // helmet ativo
 });
 
+test('nao envia Cross-Origin-Opener-Policy (o preview do GTM precisa conectar)', async () => {
+  const { servidor, base } = subir();
+  const r = await fetch(`${base}/`);
+  servidor.close();
+  assert.equal(r.headers.get('cross-origin-opener-policy'), null);
+});
+
 test('sitemap digitado errado redireciona para /sitemap.xml, sem laco', async () => {
   const { servidor, base } = subir();
   const errados = await Promise.all(['/sitemap', '/sitemap.', '/sitemap/', '/sitemap.xml/', '/sitemap_index.xml'].map(async (caminho) => {

@@ -47,6 +47,10 @@ export function criarApp() {
     // próprio site; este é o padrão dos navegadores: caminho completo só na
     // mesma origem, e só o domínio para sites de fora.
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    // O padrão do helmet (same-origin) corta a ligação com a janela que abriu
+    // o site, e o modo de visualização do GTM (Tag Assistant) precisa dela para
+    // conectar. O site não usa recursos que exijam isolamento entre origens.
+    crossOriginOpenerPolicy: false,
   }));
 
   app.use(express.json({ limit: '32kb' }));
