@@ -7,10 +7,10 @@
 //   3. expõe window.omTrack / window.omOrigem, usados pelos formulários;
 //   4. mede início de preenchimento e cliques em WhatsApp, e-mail e telefone;
 //   5. fala com o Google só no domínio oficial e só com gente: robôs declarados
-//      (User-Agent, navegador automatizado) não carregam nada, e o page_view,
-//      a tag do Ads e o GTM esperam o primeiro sinal humano (mouse, toque,
-//      teclado) ou 10 s de aba visível. localhost, testes e a URL
-//      *.up.railway.app também não sujam os dados.
+//      (User-Agent, navegador automatizado) não carregam nada. O GTM carrega
+//      já no head (async); o page_view e a tag do Ads esperam o primeiro
+//      sinal humano (mouse, toque, teclado) ou 10 s de aba visível. localhost,
+//      testes e a URL *.up.railway.app também não sujam os dados.
 //
 // Eventos (no dataLayer para o GTM e, com GA4 direto, via gtag):
 //   lead_modal_open, lead_form_start, generate_lead (lead confirmado pelo
@@ -143,7 +143,7 @@ function omTracking(C) {
 
   // ?om_debug=1 (DebugView do GA4, testes) força o Google fora do domínio
   // oficial e ignora a detecção de robô, mas mantém a espera por sinal humano.
-  // ?gtm_debug= (Tag Assistant) precisa do GTM no carregamento: pula a espera.
+  // ?gtm_debug= (Tag Assistant) também libera o GA4/Ads sem esperar o sinal.
   var debug = /[?&]om_debug=1(&|$)/.test(location.search);
   var tagAssistant = /[?&]gtm_debug=/.test(location.search);
   var ua = nav.userAgent || '';
@@ -197,18 +197,15 @@ function omTracking(C) {
     if (c) gtag('event', 'conversion', Object.assign({}, c));
   }
 
-  // Primeiro sinal humano: sai o page_view (config do GA4), a tag do Ads
-  // (remarketing) e o GTM, e os eventos represados seguem na ordem.
+  // Primeiro sinal humano: sai o page_view (config do GA4) e a tag do Ads
+  // (remarketing), e os eventos represados seguem na ordem. O GTM não espera
+  // por aqui: carrega já no head (ver abaixo).
   function liberar() {
     if (liberado) return;
     liberado = true;
     if (C.ga4) gtag('config', C.ga4, debug ? { debug_mode: true } : {});
     if (C.ads) gtag('config', C.ads);
     converter('page_view');
-    if (C.gtm) {
-      dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
-      carregar('https://www.googletagmanager.com/gtm.js?id=' + C.gtm);
-    }
     fila.splice(0).forEach(function (e) { registrar(e[0], e[1], e[2]); });
   }
 
@@ -244,6 +241,15 @@ function omTracking(C) {
   }, true);
 
   if (!ativo) return;
+
+  // GTM no carregamento da página, como o snippet padrão do Google (gtm.start
+  // antes do gtm.js). O script é async: não bloqueia a renderização. Só chega
+  // aqui no domínio oficial e sem robô declarado. As tags do contêiner passam a
+  // disparar no carregamento, sem esperar o primeiro sinal humano.
+  if (C.gtm) {
+    dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+    carregar('https://www.googletagmanager.com/gtm.js?id=' + C.gtm);
+  }
 
   // O gtag.js já carrega (sem enviar nada) para o config ser processado no
   // instante do primeiro sinal — inclusive o gclid, quando esse sinal é um
