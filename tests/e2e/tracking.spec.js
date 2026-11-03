@@ -194,7 +194,7 @@ test('conversao otimizada: user_data normalizado sai antes da conversao de lead'
 // Só lead qualificado é conversão no Google Ads: clique no WhatsApp fica como
 // evento para análise, sem ensinar o lance a buscar clique.
 test('clique no WhatsApp vira evento de contato, sem conversao no Ads', async ({ page, context }) => {
-  await context.route(/wa\.me/, (rota) => rota.abort());
+  await context.route(/wa\.me|tintim\.link/, (rota) => rota.abort());
 
   await page.goto('/contato');
   await page.getByText('Falar com a assistente').click();
@@ -202,6 +202,82 @@ test('clique no WhatsApp vira evento de contato, sem conversao no Ads', async ({
   await expect.poll(() => eventos(page))
     .toContainEqual(expect.objectContaining({ nome: 'contact', method: 'whatsapp' }));
   expect((await eventos(page)).map((e) => e.nome)).not.toContain('conversion');
+});
+
+/** Clica no WhatsApp do Contato e devolve a URL que o navegador tentou abrir. */
+async function destinoDoWhatsApp(page, context) {
+  let destino = null;
+  await context.route(/wa\.me|tintim\.link/, (rota) => {
+    destino = destino || rota.request().url();
+    return rota.abort();
+  });
+  await page.getByText('Falar com a assistente').click();
+  await expect.poll(() => destino).not.toBeNull();
+  return new URL(destino);
+}
+
+test('WhatsApp leva UTMs e fbclid da entrada ate o link do TinTim', async ({ page, context }) => {
+  await page.goto('/servicos?utm_source=meta&utm_medium=paid&utm_campaign=b2b&utm_content=video1&fbclid=fb123');
+  await page.goto('/contato');
+
+  const url = await destinoDoWhatsApp(page, context);
+
+  expect(url.origin + url.pathname).toBe('https://tintim.link/whatsapp/conta-teste/link-teste');
+  expect(Object.fromEntries(url.searchParams)).toEqual({
+    utm_source: 'meta', utm_medium: 'paid', utm_campaign: 'b2b', utm_content: 'video1', fbclid: 'fb123',
+  });
+  await expect.poll(() => eventos(page))
+    .toContainEqual(expect.objectContaining({ nome: 'contact', method: 'whatsapp' }));
+});
+
+test('WhatsApp leva gclid e os cookies tt_ do pixel, sem dados da pagina', async ({ page, context }) => {
+  await context.addCookies([
+    { name: 'tt_campaignid', value: 'c%2042', url: 'http://localhost:3000' },
+    { name: 'tt_gclid', value: 'antigo', url: 'http://localhost:3000' },
+  ]);
+  await page.goto('/contato?utm_source=google&utm_medium=cpc&gclid=gc456');
+
+  const url = await destinoDoWhatsApp(page, context);
+
+  expect(Object.fromEntries(url.searchParams)).toEqual({
+    utm_source: 'google', utm_medium: 'cpc', gclid: 'gc456', campaignid: 'c 42',
+  });
+});
+
+test('WhatsApp sem campanha abre o link do TinTim limpo', async ({ page, context }) => {
+  await page.goto('/contato');
+
+  const url = await destinoDoWhatsApp(page, context);
+
+  expect(url.href).toBe('https://tintim.link/whatsapp/conta-teste/link-teste');
+});
+
+test('campanha vencida (90 dias) nao vai para o WhatsApp', async ({ page, context }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('om_campanha', JSON.stringify({ utm_source: 'velha', ts: Date.now() - 91 * 864e5 }));
+  });
+  await page.goto('/contato');
+
+  const url = await destinoDoWhatsApp(page, context);
+
+  expect(url.searchParams.has('utm_source')).toBe(false);
+});
+
+test('lead do formulario leva UTMs e fbclid da campanha da Meta', async ({ page }) => {
+  let capturado = null;
+  await responderLead(page, 200, { capturar: (corpo) => { capturado = corpo; } });
+
+  await page.goto('/?utm_source=meta&utm_medium=paid&utm_campaign=b2b&fbclid=fb123');
+  await page.goto('/contato');
+  await page.fill('#lead-nome', 'Maria Souza');
+  await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+
+  expect(capturado.origem).toMatchObject({
+    utm_source: 'meta', utm_medium: 'paid', utm_campaign: 'b2b', fbclid: 'fb123', landing: '/', pagina: '/contato',
+  });
 });
 
 test('nao carrega o Google fora do dominio oficial', async ({ page }) => {

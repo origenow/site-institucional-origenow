@@ -5,7 +5,8 @@
 //   1. define window.dataLayer / gtag e o Consent Mode v2;
 //   2. guarda a origem da visita (UTM, gclid) para anexar ao lead;
 //   3. expõe window.omTrack / window.omOrigem, usados pelos formulários;
-//   4. mede início de preenchimento e cliques em WhatsApp, e-mail e telefone;
+//   4. mede início de preenchimento e cliques em WhatsApp, e-mail e telefone, e
+//      leva a origem até o WhatsApp pelo link rastreável do TinTim;
 //   5. fala com o Google só no domínio oficial e só com gente: robôs declarados
 //      (User-Agent, navegador automatizado) não carregam nada. O GTM carrega
 //      já no head (async); o page_view e a tag do Ads esperam o primeiro
@@ -37,6 +38,10 @@ const PADRAO = {
   adsContato: '',
   adsPagina: '',
   gtm: 'GTM-K6D5X6B',                 // Google Tag Manager
+  // Link rastreável de WhatsApp da conta TinTim da Origenow (painel do TinTim).
+  // Vazio: os botões seguem no wa.me, que funciona, mas chega sem origem no TinTim.
+  // O pixel não entra aqui: ele é uma tag do GTM (carregar também pelo site dobraria).
+  tintimLink: '',
   verificacao: '',                    // Search Console · conteúdo da meta google-site-verification
 };
 
@@ -50,6 +55,7 @@ const CAMPOS = {
   adsContato:  { env: 'GOOGLE_ADS_CONTACT_LABEL', formato: /^[\w-]{4,64}$/ },
   adsPagina:   { env: 'GOOGLE_ADS_PAGEVIEW_LABEL', formato: /^[\w-]{4,64}$/ },
   gtm:         { env: 'GTM_ID',                   formato: /^GTM-[A-Z0-9]{4,12}$/ },
+  tintimLink:  { env: 'TINTIM_WHATSAPP_URL',      formato: /^https:\/\/(tintim\.link|s\.tintim\.app)\/[\w/-]{8,200}$/ },
   verificacao: { env: 'GOOGLE_SITE_VERIFICATION', formato: /^[\w-]{10,100}$/ },
 };
 
@@ -87,6 +93,7 @@ export function resumoConfig(cfg) {
     cfg.ga4 && `GA4 ${cfg.ga4}`,
     cfg.ads && `Ads ${cfg.ads}${cfg.adsLead ? ' (lead)' : ''}${cfg.adsContato ? ' (whatsapp)' : ''}${cfg.adsPagina ? ' (página)' : ''}`,
     cfg.gtm && `GTM ${cfg.gtm}`,
+    cfg.tintimLink && 'link TinTim',
     cfg.verificacao && 'Search Console',
   ].filter(Boolean);
   return itens.length ? itens.join(' · ') : 'nenhum ID — só dataLayer e origem do lead';
@@ -132,14 +139,40 @@ function omTracking(C) {
     try { var u = new URL(d.referrer); if (u.hostname !== location.hostname) ref = u.hostname; } catch (e) { /* sem referrer */ }
     gravar('sessionStorage', 'om_entrada', { landing: location.pathname, referrer: ref });
   }
-  w.omOrigem = function () {
+  function campanhaVigente() {
     var c = ler('localStorage', 'om_campanha');
-    if (c && !(Date.now() - c.ts < 90 * 864e5)) c = null;
-    var o = Object.assign({}, ler('sessionStorage', 'om_entrada'), c, { pagina: location.pathname });
+    return c && Date.now() - c.ts < 90 * 864e5 ? c : null;
+  }
+  w.omOrigem = function () {
+    var o = Object.assign({}, ler('sessionStorage', 'om_entrada'), campanhaVigente(), { pagina: location.pathname });
     delete o.ts;
     if (!o.referrer) delete o.referrer;
     return o;
   };
+
+  // WhatsApp com origem: troca o wa.me pelo link rastreável do TinTim e anexa a
+  // campanha, no instante do clique. Não fica só com o pixel porque ele prende o
+  // clique uma vez, nos links que já existem quando carrega, e aqui as páginas
+  // são renderizadas no cliente. Vale a mesma campanha do formulário (último
+  // clique, 90 dias); os cookies tt_ do pixel completam o que ela não guarda
+  // (utm_id, gad_source, campaignid...). Parâmetro já presente no link é mantido.
+  function levarOrigem(a, href) {
+    var tintim = /^https:\/\/(tintim\.link|s\.tintim\.app)\//i.test(href);
+    if (!tintim && !C.tintimLink) return;
+    var u = new URL(tintim ? href : C.tintimLink);
+    var params = campanhaVigente() || {};
+    delete params.ts;
+    d.cookie.split('; ').forEach(function (par) {
+      var i = par.indexOf('='), nome = par.slice(3, i);
+      if (par.indexOf('tt_') === 0 && !params[nome]) {
+        try { params[nome] = decodeURIComponent(par.slice(i + 1)); } catch (e) { /* cookie malformado */ }
+      }
+    });
+    Object.keys(params).forEach(function (k) {
+      if (!u.searchParams.has(k)) u.searchParams.set(k, params[k]);
+    });
+    a.href = u.toString();
+  }
 
   // ?om_debug=1 (DebugView do GA4, testes) força o Google fora do domínio
   // oficial e ignora a detecção de robô, mas mantém a espera por sinal humano.
@@ -229,16 +262,21 @@ function omTracking(C) {
     if (form && !iniciados[form]) { iniciados[form] = 1; w.omTrack('lead_form_start', { form_id: form }); }
   }, true);
 
-  d.addEventListener('click', function (e) {
+  function aoClicar(e) {
     if (e.isTrusted === false) return; // clique disparado por script não conta
+    if (e.type === 'auxclick' && e.button !== 1) return; // botão do meio abre em nova aba
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a) return;
     var href = a.getAttribute('href') || '';
-    var metodo = /^https?:\/\/(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com)\//i.test(href) ? 'whatsapp'
+    var metodo = /^https?:\/\/(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|tintim\.link|s\.tintim\.app)\//i.test(href) ? 'whatsapp'
       : /^mailto:/i.test(href) ? 'email'
       : /^tel:/i.test(href) ? 'telefone' : '';
+    // Falha aqui não pode impedir a conversa: o link original segue valendo.
+    if (metodo === 'whatsapp') { try { levarOrigem(a, href); } catch (err) { /* ignora */ } }
     if (metodo) w.omTrack('contact', { method: metodo });
-  }, true);
+  }
+  d.addEventListener('click', aoClicar, true);
+  d.addEventListener('auxclick', aoClicar, true);
 
   if (!ativo) return;
 

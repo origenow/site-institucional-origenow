@@ -65,6 +65,25 @@ test('os IDs versionados de producao sao validos', () => {
   assert.equal(cfg.adsPagina, '');
 });
 
+test('aceita so link rastreavel do TinTim, para nao injetar codigo nem desviar o WhatsApp', () => {
+  const link = 'https://tintim.link/whatsapp/200d1708-84c9/c2d7a668-def1';
+  assert.equal(lerConfig({ TINTIM_WHATSAPP_URL: link }, {}).tintimLink, link);
+  assert.equal(lerConfig({}, {}).tintimLink, '');
+  for (const ruim of [
+    'https://exemplo.com/whatsapp/conta/link',
+    'http://tintim.link/whatsapp/conta/link',
+    'https://tintim.link/x"</script><script>alert(1)',
+  ]) {
+    assert.throws(() => lerConfig({ TINTIM_WHATSAPP_URL: ruim }, {}), /TINTIM_WHATSAPP_URL/);
+  }
+});
+
+test('nao carrega o pixel do TinTim pelo site: ele e tag do GTM', () => {
+  const head = headTracking(lerConfig({ TINTIM_WHATSAPP_URL: 'https://tintim.link/whatsapp/conta/link' }), 'www.origenow.com.br');
+  assert.doesNotMatch(head, /tintim-1\.0\.js/);
+  assert.match(head, /"tintimLink":"https:\/\/tintim\.link\/whatsapp\/conta\/link"/);
+});
+
 test('inclui a meta do Search Console quando configurada', () => {
   const cfg = lerConfig({ GOOGLE_SITE_VERIFICATION: 'abcdefghij_1234567890' }, {});
   assert.match(headTracking(cfg, 'www.origenow.com.br'),
