@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { qualificarAmazon } from '../qualificacao.js';
+import { qualificarAmazon, qualificarTiktok } from '../qualificacao.js';
 import { validar } from '../lead-route.js';
 import { montarMensagem } from '../notify-email.js';
 import { extrairFaq, jsonLd, tipoDaPagina } from '../../build/structured-data.js';
@@ -75,6 +75,28 @@ test('a pagina e classificada como servico e publica o FAQ da propria fonte', ()
   assert.match(ld, /"FAQPage"/);
   assert.match(ld, /"Service"/);
   assert.match(ld, /Pergunta\?/);
+});
+
+test('TikTok: performance so acima de R$ 1 milhao, sem plano gratuito', () => {
+  assert.equal(qualificarTiktok({ faturamento: 'acima-1000' }).oferta, 'performance');
+  for (const faturamento of ['ate-50', '50-200', '200-1000']) {
+    assert.equal(qualificarTiktok({ faturamento }).oferta, 'planos', faturamento);
+  }
+  assert.equal(qualificarTiktok({ faturamento: 'ate-50' }).qualificado, false);
+  assert.equal(qualificarTiktok({ faturamento: '50-200' }).qualificado, true);
+  assert.equal(tipoDaPagina('/vender-no-tiktok-shop'), 'servico');
+});
+
+test('TikTok: validar recusa faixa fora da lista e identifica a pagina', () => {
+  const { lead } = validar({ nome: 'Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'nao-vende' });
+  assert.equal(lead.programa, 'tiktok');
+  assert.equal(lead.faturamento, '');
+  assert.equal(lead.motivo, 'perfil não informado');
+
+  const msg = montarMensagem(validar({ nome: 'Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'acima-1000' }).lead);
+  assert.match(msg.subject, /TikTok Shop/);
+  assert.match(msg.text, /Oferta: Plano de performance/);
+  assert.match(msg.text, /Acima de R\$ 1 milhão/);
 });
 
 test('sem FAQ nao publica FAQPage', () => {

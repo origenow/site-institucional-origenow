@@ -1,15 +1,20 @@
 import nodemailer from 'nodemailer';
-import { FATURAMENTOS_AMAZON, OFERTAS_AMAZON } from './qualificacao.js';
+import { FATURAMENTOS, FATURAMENTOS_AMAZON, OFERTAS_AMAZON, OFERTAS_TIKTOK } from './qualificacao.js';
+
+const PAGINAS = { amazon: 'Vender na Amazon', tiktok: 'Vender no TikTok Shop' };
+const OFERTAS = { ...OFERTAS_AMAZON, ...OFERTAS_TIKTOK };
 
 export function montarMensagem(lead) {
   const amazon = lead.programa === 'amazon';
+  const pagina = PAGINAS[lead.programa];
+  const faixa = (amazon ? FATURAMENTOS_AMAZON : FATURAMENTOS)[lead.faturamento];
   const linhas = [
     `Nome: ${lead.nome}`,
     `E-mail: ${lead.email}`,
-    amazon ? `Página: Vender na Amazon (${lead.qualificado ? 'qualificado' : 'fora do perfil'}: ${lead.motivo})` : null,
+    pagina ? `Página: ${pagina} (${lead.qualificado ? 'qualificado' : 'fora do perfil'}: ${lead.motivo})` : null,
     amazon && lead.uf ? `Estado: ${lead.uf}` : null,
-    amazon && FATURAMENTOS_AMAZON[lead.faturamento] ? `Faturamento mensal: ${FATURAMENTOS_AMAZON[lead.faturamento]}` : null,
-    amazon && OFERTAS_AMAZON[lead.oferta] ? `Oferta: ${OFERTAS_AMAZON[lead.oferta]}` : null,
+    pagina && faixa ? `Faturamento mensal: ${faixa}` : null,
+    pagina && OFERTAS[lead.oferta] ? `Oferta: ${OFERTAS[lead.oferta]}` : null,
     lead.empresa  ? `Empresa: ${lead.empresa}`   : null,
     lead.whatsapp ? `WhatsApp: ${lead.whatsapp}` : null,
     lead.canais   ? `Canais: ${lead.canais}`     : null,
@@ -20,7 +25,7 @@ export function montarMensagem(lead) {
     from: process.env.SMTP_USER,
     to: process.env.LEAD_EMAIL_TO,
     replyTo: lead.email,
-    subject: `Novo lead pelo site${amazon ? ' (Vender na Amazon)' : ''} — ${lead.nome}`,
+    subject: `Novo lead pelo site${pagina ? ` (${pagina})` : ''} — ${lead.nome}`,
     text: linhas.join('\n'),
   };
 }

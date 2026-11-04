@@ -32,6 +32,12 @@ async function preencher(page, { uf = 'MG', faturamento = 'acima-250' } = {}) {
 
 const enviar = (page) => page.locator('#lead-form').getByText('Ver minha oferta').click();
 
+test('o hero destaca a consultoria e reserva o espaco do video', async ({ page }) => {
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('3 meses de consultoria gratuita');
+  await expect(page.locator('#amz-video')).toContainText('2 conferências por mês');
+  await expect(page.locator('#amz-video iframe')).toHaveCount(0);
+});
+
 test('o link de cadastro so aparece depois do formulario', async ({ page }) => {
   await expect(page.locator('#amz-abrir-conta')).toHaveCount(0);
 });
@@ -55,7 +61,7 @@ test('acima de R$ 250 mil ve consultoria gratuita, gera conversao e recebe o lin
   await preencher(page, { uf: 'SP' });
   await enviar(page);
 
-  await expect(page.getByText('Sua empresa tem consultoria gratuita')).toBeVisible();
+  await expect(page.getByText('Sua empresa tem 3 meses de consultoria gratuita')).toBeVisible();
   expect(corpo).toMatchObject({ programa: 'amazon', uf: 'SP', faturamento: 'acima-250', whatsapp: '(31) 99999-0000' });
 
   const link = page.locator('#amz-abrir-conta');

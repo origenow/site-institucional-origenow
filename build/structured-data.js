@@ -21,7 +21,7 @@ export const ORG = {
 /** Classifica a página pela URL, para escolher o schema adequado. */
 export function tipoDaPagina(url) {
   if (url === '/') return 'home';
-  if (url.startsWith('/servicos/') || url === '/vender-na-amazon') return 'servico';
+  if (url.startsWith('/servicos/') || url === '/vender-na-amazon' || url === '/vender-no-tiktok-shop') return 'servico';
   if (url.startsWith('/cases/')) return 'case';
   if (url.startsWith('/insights/')) return 'artigo';
   if (url === '/contato') return 'contato';
