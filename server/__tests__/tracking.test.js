@@ -63,6 +63,32 @@ test('os IDs versionados de producao sao validos', () => {
   // Só o lead é conversão: clique e visualização de página não entram no lance.
   assert.equal(cfg.adsContato, '');
   assert.equal(cfg.adsPagina, '');
+  assert.equal(cfg.metaPixel, '500995551485983');
+  assert.match(cfg.tintimLink, /^https:\/\/tintim\.link\/whatsapp\/37ff02ac-4035-4197-9834-52ddd7078557\//);
+});
+
+test('recusa ID do Pixel da Meta malformado', () => {
+  assert.equal(lerConfig({ META_PIXEL_ID: '1234567890123' }, {}).metaPixel, '1234567890123');
+  assert.throws(() => lerConfig({ META_PIXEL_ID: '123"</script>' }, {}), /META_PIXEL_ID/);
+});
+
+test('aceita so link rastreavel do TinTim, para nao injetar codigo nem desviar o WhatsApp', () => {
+  const link = 'https://tintim.link/whatsapp/200d1708-84c9/c2d7a668-def1';
+  assert.equal(lerConfig({ TINTIM_WHATSAPP_URL: link }, {}).tintimLink, link);
+  assert.equal(lerConfig({}, {}).tintimLink, '');
+  for (const ruim of [
+    'https://exemplo.com/whatsapp/conta/link',
+    'http://tintim.link/whatsapp/conta/link',
+    'https://tintim.link/x"</script><script>alert(1)',
+  ]) {
+    assert.throws(() => lerConfig({ TINTIM_WHATSAPP_URL: ruim }, {}), /TINTIM_WHATSAPP_URL/);
+  }
+});
+
+test('nao carrega o pixel do TinTim pelo site: ele e tag do GTM', () => {
+  const head = headTracking(lerConfig({ TINTIM_WHATSAPP_URL: 'https://tintim.link/whatsapp/conta/link' }), 'www.origenow.com.br');
+  assert.doesNotMatch(head, /tintim-1\.0\.js/);
+  assert.match(head, /"tintimLink":"https:\/\/tintim\.link\/whatsapp\/conta\/link"/);
 });
 
 test('inclui a meta do Search Console quando configurada', () => {
