@@ -14,6 +14,7 @@ export default defineConfig({
       GOOGLE_ADS_ID: 'AW-1234567890',
       GOOGLE_ADS_LEAD_LABEL: 'lead-teste',
       TINTIM_WHATSAPP_URL: 'https://tintim.link/whatsapp/conta-teste/link-teste',
+      META_PIXEL_ID: '1234567890123',
       SLACK_WEBHOOK_URL: 'https://exemplo.invalido/webhook',
       SMTP_USER: 'teste@origenow.com.br',
       SMTP_PASS: 'teste',

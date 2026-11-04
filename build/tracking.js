@@ -21,6 +21,9 @@
 //   user_data para a conversão otimizada; a tag do Google aplica o hash antes
 //   de enviar.
 //
+// Pixel da Meta: PageView, Lead (lead qualificado, junto do generate_lead) e
+// Contact (clique no WhatsApp). Mesmas travas do Google: domínio oficial, sem robô.
+//
 // Os IDs não são segredo (ficam visíveis no HTML de qualquer site), então ficam
 // versionados em PADRAO. Variáveis de ambiente de mesmo nome têm precedência —
 // a Railway as repassa ao build pelos ARG do Dockerfile.
@@ -42,7 +45,8 @@ const PADRAO = {
   // Vazio: os botões seguem no wa.me, que funciona, mas chega sem origem no TinTim.
   // O pixel não entra aqui: ele é uma tag do GTM (carregar também pelo site dobraria).
   tintimLink: '',
-  verificacao: '',                    // Search Console · conteúdo da meta google-site-verification
+  metaPixel: '500995551485983',       // Pixel de Origenow (não criar tag da Meta no GTM: contaria em dobro)
+  verificacao: '',                   // Search Console · conteúdo da meta google-site-verification
 };
 
 // Valor da conversão "Assistente de IA - WhatsApp", igual ao snippet do Google Ads.
@@ -56,6 +60,7 @@ const CAMPOS = {
   adsPagina:   { env: 'GOOGLE_ADS_PAGEVIEW_LABEL', formato: /^[\w-]{4,64}$/ },
   gtm:         { env: 'GTM_ID',                   formato: /^GTM-[A-Z0-9]{4,12}$/ },
   tintimLink:  { env: 'TINTIM_WHATSAPP_URL',      formato: /^https:\/\/(tintim\.link|s\.tintim\.app)\/[\w/-]{8,200}$/ },
+  metaPixel:   { env: 'META_PIXEL_ID',            formato: /^\d{10,20}$/ },
   verificacao: { env: 'GOOGLE_SITE_VERIFICATION', formato: /^[\w-]{10,100}$/ },
 };
 
@@ -94,6 +99,7 @@ export function resumoConfig(cfg) {
     cfg.ads && `Ads ${cfg.ads}${cfg.adsLead ? ' (lead)' : ''}${cfg.adsContato ? ' (whatsapp)' : ''}${cfg.adsPagina ? ' (página)' : ''}`,
     cfg.gtm && `GTM ${cfg.gtm}`,
     cfg.tintimLink && 'link TinTim',
+    cfg.metaPixel && `Meta ${cfg.metaPixel}`,
     cfg.verificacao && 'Search Console',
   ].filter(Boolean);
   return itens.length ? itens.join(' · ') : 'nenhum ID — só dataLayer e origem do lead';
@@ -186,7 +192,7 @@ function omTracking(C) {
 
   // Fora do domínio oficial, ou para robôs, os eventos vão direto ao dataLayer
   // e param ali: nenhum script do Google é carregado para lê-los.
-  var liberado = !ativo, fila = [];
+  var liberado = !ativo, fila = [], fbq = null;
 
   function carregar(src) {
     var s = d.createElement('script');
@@ -221,6 +227,9 @@ function omTracking(C) {
     if (C.gtm || !C.ga4) dl.push(Object.assign({ event: evento }, params));
     if (C.ga4) gtag('event', evento, params);
     converter(evento === 'contact' ? 'contact_' + params.method : evento);
+    // Meta: Lead só para o lead qualificado, a mesma regra do Google Ads.
+    if (fbq && evento === 'generate_lead') fbq('track', 'Lead', { content_name: params.form_id });
+    if (fbq && evento === 'contact' && params.method === 'whatsapp') fbq('track', 'Contact');
   }
 
   // Conversões do Google Ads, montadas no build (send_to e valor): lead
@@ -239,6 +248,12 @@ function omTracking(C) {
     if (C.ga4) gtag('config', C.ga4, debug ? { debug_mode: true } : {});
     if (C.ads) gtag('config', C.ads);
     converter('page_view');
+    if (fbq) {
+      // Sem os eventos automáticos (cliques em botão, metadados): só os da lista acima.
+      fbq('set', 'autoConfig', false, C.metaPixel);
+      fbq('init', C.metaPixel);
+      fbq('track', 'PageView');
+    }
     fila.splice(0).forEach(function (e) { registrar(e[0], e[1], e[2]); });
   }
 
@@ -295,6 +310,18 @@ function omTracking(C) {
   if (C.ga4 || C.ads) {
     gtag('js', new Date());
     carregar('https://www.googletagmanager.com/gtag/js?id=' + (C.ga4 || C.ads));
+  }
+
+  // Pixel da Meta, no mesmo esquema do gtag: o script já carrega, sem enviar nada,
+  // e o PageView sai no primeiro sinal humano. Mesma fila do snippet padrão da Meta.
+  if (C.metaPixel) {
+    fbq = function () { fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments); };
+    w.fbq = w._fbq = fbq;
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = '2.0';
+    fbq.queue = [];
+    carregar('https://connect.facebook.net/en_US/fbevents.js');
   }
 
   if (tagAssistant) return liberar();

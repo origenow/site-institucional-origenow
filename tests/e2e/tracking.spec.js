@@ -6,7 +6,7 @@ test.skip(!!process.env.BASE_URL, 'eventos só são medidos contra o servidor lo
 // O webServer do Playwright builda com IDs de teste (playwright.config.js).
 // Nenhuma chamada ao Google sai do teste, mesmo se o host-gate falhar.
 test.beforeEach(async ({ page }) => {
-  await page.route(/googletagmanager\.com|google-analytics\.com/, (rota) => rota.abort());
+  await page.route(/googletagmanager\.com|google-analytics\.com|connect\.facebook\.net|facebook\.com/, (rota) => rota.abort());
 });
 
 /** Eventos do dataLayer, normalizados: gtag('event', nome, params) ou {event} do GTM. */
@@ -280,14 +280,87 @@ test('lead do formulario leva UTMs e fbclid da campanha da Meta', async ({ page 
   });
 });
 
-test('nao carrega o Google fora do dominio oficial', async ({ page }) => {
+test('nao carrega Google nem Meta fora do dominio oficial', async ({ page }) => {
   const pedidos = [];
-  page.on('request', (r) => { if (/googletagmanager\.com/.test(r.url())) pedidos.push(r.url()); });
+  page.on('request', (r) => { if (/googletagmanager\.com|facebook/.test(r.url())) pedidos.push(r.url()); });
 
   await page.goto('/');
   await page.waitForLoadState('load');
 
   expect(pedidos).toEqual([]);
+  expect(await page.evaluate(() => typeof window.fbq)).toBe('undefined');
+});
+
+/** Comandos que o site passou ao Pixel da Meta (o fbevents.js está bloqueado no teste). */
+function comandosMeta(page) {
+  return page.evaluate(() => Array.from((window.fbq && window.fbq.queue) || []).map((c) => Array.from(c)));
+}
+const nomesMeta = (comandos) => comandos.filter((c) => c[0] === 'track').map((c) => c[1]);
+
+test('Meta: PageView espera o primeiro sinal humano e usa o Pixel configurado', async ({ page }) => {
+  const pedidos = [];
+  page.on('request', (r) => { if (/fbevents\.js/.test(r.url())) pedidos.push(r.url()); });
+
+  await page.goto('/?om_debug=1');
+  await page.waitForLoadState('load');
+  expect(await comandosMeta(page)).toEqual([]);
+  expect(pedidos.length).toBeGreaterThan(0);
+
+  await page.keyboard.press('Shift');
+
+  await expect.poll(() => comandosMeta(page)).toEqual([
+    ['set', 'autoConfig', false, '1234567890123'],
+    ['init', '1234567890123'],
+    ['track', 'PageView'],
+  ]);
+});
+
+test('Meta: lead qualificado dispara Lead', async ({ page }) => {
+  await responderLead(page, 200);
+
+  await page.goto('/contato?om_debug=1');
+  await page.fill('#lead-nome', 'Maria Souza');
+  await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+
+  const comandos = await comandosMeta(page);
+  expect(comandos).toContainEqual(['track', 'Lead', { content_name: 'contato' }]);
+  expect(nomesMeta(comandos).filter((n) => n === 'Lead')).toHaveLength(1);
+  // Nenhum dado do formulário vai como parâmetro do evento.
+  expect(JSON.stringify(comandos)).not.toContain('maria');
+});
+
+test('Meta: lead fora do perfil e envio com falha nao disparam Lead', async ({ page }) => {
+  await responderLead(page, 200, { qualificado: false });
+  await page.goto('/contato?om_debug=1');
+  await page.fill('#lead-nome', 'Ana Lima');
+  await page.fill('#lead-email', 'ana@loja.com.br');
+  await preencherPerfil(page, 'lead', { tipo: 'lojista', faturamento: 'ate-50' });
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Recebido')).toBeVisible();
+  expect(nomesMeta(await comandosMeta(page))).not.toContain('Lead');
+
+  await page.unroute('**/api/lead');
+  await responderLead(page, 502);
+  await page.goto('/contato?om_debug=1');
+  await page.fill('#lead-nome', 'Maria Souza');
+  await page.fill('#lead-email', 'maria@empresa.com.br');
+  await preencherPerfil(page, 'lead');
+  await page.getByText('Enviar e agendar').click();
+  await expect(page.getByText('Não conseguimos registrar seu contato. Tente novamente.')).toBeVisible();
+  expect(nomesMeta(await comandosMeta(page))).not.toContain('Lead');
+});
+
+test('Meta: clique no WhatsApp dispara Contact, sem Lead', async ({ page, context }) => {
+  await context.route(/wa\.me|tintim\.link/, (rota) => rota.abort());
+
+  await page.goto('/contato?om_debug=1');
+  await page.getByText('Falar com a assistente').click();
+
+  await expect.poll(async () => nomesMeta(await comandosMeta(page))).toContain('Contact');
+  expect(nomesMeta(await comandosMeta(page))).not.toContain('Lead');
 });
 
 test('om_debug=1 forca o carregamento do gtag com o ID configurado', async ({ page }) => {

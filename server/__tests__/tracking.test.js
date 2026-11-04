@@ -63,6 +63,12 @@ test('os IDs versionados de producao sao validos', () => {
   // Só o lead é conversão: clique e visualização de página não entram no lance.
   assert.equal(cfg.adsContato, '');
   assert.equal(cfg.adsPagina, '');
+  assert.equal(cfg.metaPixel, '500995551485983');
+});
+
+test('recusa ID do Pixel da Meta malformado', () => {
+  assert.equal(lerConfig({ META_PIXEL_ID: '1234567890123' }, {}).metaPixel, '1234567890123');
+  assert.throws(() => lerConfig({ META_PIXEL_ID: '123"</script>' }, {}), /META_PIXEL_ID/);
 });
 
 test('aceita so link rastreavel do TinTim, para nao injetar codigo nem desviar o WhatsApp', () => {
