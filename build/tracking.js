@@ -46,7 +46,8 @@ const PADRAO = {
   // Vazio: os botões seguem no wa.me, que funciona, mas chega sem origem no TinTim.
   // O pixel não entra aqui: ele é uma tag do GTM (carregar também pelo site dobraria).
   tintimLink: 'https://tintim.link/whatsapp/37ff02ac-4035-4197-9834-52ddd7078557/fd1cb55b-0d59-4320-8fd4-786fb851a5cb',
-  metaPixel: '500995551485983',       // Pixel de Origenow (não criar tag da Meta no GTM: contaria em dobro)
+  metaPixel: '1513759330615964',      // Origenow - Site B2B, o Pixel das campanhas (não criar tag da Meta no GTM: contaria em dobro)
+  metaPixelLegado: '500995551485983', // Pixel de Origenow, mantido em paralelo: a conta de anúncios não tem acesso a ele
   verificacao: '',                   // Search Console · conteúdo da meta google-site-verification
 };
 
@@ -62,6 +63,7 @@ const CAMPOS = {
   gtm:         { env: 'GTM_ID',                   formato: /^GTM-[A-Z0-9]{4,12}$/ },
   tintimLink:  { env: 'TINTIM_WHATSAPP_URL',      formato: /^https:\/\/(tintim\.link|s\.tintim\.app)\/[\w/-]{8,200}$/ },
   metaPixel:   { env: 'META_PIXEL_ID',            formato: /^\d{10,20}$/ },
+  metaPixelLegado: { env: 'META_PIXEL_ID_LEGADO', formato: /^\d{10,20}$/ },
   verificacao: { env: 'GOOGLE_SITE_VERIFICATION', formato: /^[\w-]{10,100}$/ },
 };
 
@@ -253,6 +255,11 @@ function omTracking(C) {
       // Sem os eventos automáticos (cliques em botão, metadados): só os da lista acima.
       fbq('set', 'autoConfig', false, C.metaPixel);
       fbq('init', C.metaPixel);
+      if (C.metaPixelLegado) {
+        fbq('set', 'autoConfig', false, C.metaPixelLegado);
+        fbq('init', C.metaPixelLegado);
+      }
+      // Sem ID, o `track` vale para todos os Pixels iniciados, aqui e nos eventos abaixo.
       fbq('track', 'PageView');
     }
     fila.splice(0).forEach(function (e) { registrar(e[0], e[1], e[2]); });
