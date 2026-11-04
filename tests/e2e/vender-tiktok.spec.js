@@ -70,3 +70,19 @@ test('o HTML servido traz SEO, FAQ e entra no sitemap, sem executar JS', async (
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('/vender-no-tiktok-shop</loc>');
 });
+
+for (const rota of ['/vender-na-amazon', '/vender-no-tiktok-shop']) {
+  test(`${rota}: com UTM, o botao rola ao formulario sem recarregar`, async ({ page }) => {
+    await page.goto(`${rota}?utm_source=teste&gclid=abc`, { waitUntil: 'networkidle' });
+    await page.evaluate(() => { window.__semRecarga = true; });
+    await page.getByRole('link', { name: 'Quero começar' }).first().click();
+    await expect(page.locator('#lead-form input[name="nome"]')).toBeInViewport({ timeout: 4000 });
+    expect(page.url()).toContain('utm_source=teste');
+    expect(await page.evaluate(() => window.__semRecarga)).toBe(true);
+  });
+
+  test(`${rota}: link direto com #formulario desce ao formulario`, async ({ page }) => {
+    await page.goto(`${rota}?utm_source=teste#formulario`, { waitUntil: 'networkidle' });
+    await expect(page.locator('#lead-form input[name="nome"]')).toBeInViewport({ timeout: 4000 });
+  });
+}

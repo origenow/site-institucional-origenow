@@ -113,7 +113,7 @@
 <h1 data-om-fz="d2" style="margin:0;max-width:56.25rem;font:700 3.5rem/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">Comece no TikTok Shop <span style="color:#e62c7c">sem custo fixo</span>, pagando só pelo resultado</h1>
 <p style="margin:1.5rem 0 0;max-width:37.5rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.72)">Para lojistas que faturam mais de R$ 1 milhão por mês: a Origenow recebe apenas uma comissão sobre o que ajudar você a gerar no canal.</p>
 <div data-om-flex="row" data-om-cta="1" style="display:flex;align-items:center;gap:0.875rem;margin-top:2.25rem">
-<a href="/vender-no-tiktok-shop#formulario" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none">Quero começar</a>
+<a href="/vender-no-tiktok-shop#formulario" onClick="{{ irFormulario }}" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none">Quero começar</a>
 <a href="Origenow%20Case%2003.dc.html" style-hover="background:rgba(255,255,255,.09)" style="transition:background .18s ease;border:1px solid rgba(255,255,255,.26);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none">Ver o case TikTok Shop →</a>
 </div>
 </div>
@@ -227,7 +227,7 @@
 </div>
 <div data-om-flex="row" style="margin-top:6rem;background:radial-gradient(circle at 94% -34%,rgba(103,48,190,.58),rgba(103,48,190,0) 60%),radial-gradient(circle at 4% 132%,rgba(230,44,124,.32),rgba(230,44,124,0) 58%),#14111e;padding:5rem;display:flex;align-items:center;justify-content:space-between;gap:3.5rem" data-om-pad="1">
 <div><h2 data-om-fz="d2" style="margin:0;max-width:38.75rem;font:700 3.5rem/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff">Sua marca no TikTok Shop<span style="color:#e62c7c">.</span></h2><p style="margin:1.125rem 0 0;max-width:31.25rem;font:400 1rem/1.7 Manrope,sans-serif;color:rgba(255,255,255,.64)">Preencha o formulário e veja o plano para a sua operação.</p></div>
-<div style="flex:none;display:flex;flex-direction:column;gap:0.75rem"><a href="/vender-no-tiktok-shop#formulario" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Quero começar</a><a href="Origenow%20Servicos.dc.html" style-hover="background:rgba(255,255,255,.1)" style="transition:background .18s ease;border:1px solid rgba(255,255,255,.34);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Ver todos os serviços</a></div>
+<div style="flex:none;display:flex;flex-direction:column;gap:0.75rem"><a href="/vender-no-tiktok-shop#formulario" onClick="{{ irFormulario }}" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Quero começar</a><a href="Origenow%20Servicos.dc.html" style-hover="background:rgba(255,255,255,.1)" style="transition:background .18s ease;border:1px solid rgba(255,255,255,.34);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Ver todos os serviços</a></div>
 </div>
 <dc-import name="Footer" hint-size="100%,430px"></dc-import>
 </div>
@@ -238,6 +238,9 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.reveal();
+    // Link direto para o formulário: o corpo é renderizado no cliente, então o
+    // navegador não encontra a âncora sozinho ao carregar a página.
+    if (location.hash === '#formulario') this._rolagem = setTimeout(() => this.rolarAoFormulario(), 300);
     // O botão é um <span onClick>, então o submit nativo (tecla Enter) precisa
     // ser interceptado à parte, senão a página recarrega e o lead se perde.
     this._form = document.getElementById('lead-form');
@@ -255,7 +258,17 @@ class Component extends DCLogic {
       notSent: !sent,
       erro: this.state.erro,
       enviarForm: () => this.enviar(),
+      // Só rola: seguir o link recarregaria a página quando a URL tem UTM ou gclid.
+      irFormulario: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        this.rolarAoFormulario();
+      },
     };
+  }
+
+  rolarAoFormulario() {
+    const alvo = document.getElementById('formulario');
+    if (alvo) alvo.scrollIntoView({ behavior: 'smooth' });
   }
 
   lerCampos() {
@@ -334,6 +347,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    clearTimeout(this._rolagem);
     if (this._form && this._onSubmit) this._form.removeEventListener('submit', this._onSubmit);
     cancelAnimationFrame(this._revealRaf);
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll, { capture: true });
