@@ -1,4 +1,4 @@
-import { TIPOS, FATURAMENTOS, qualificar } from './qualificacao.js';
+import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON, UFS, qualificar, qualificarAmazon } from './qualificacao.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,6 +22,7 @@ function limparOrigem(bruto) {
 }
 
 export function validar(corpo) {
+  const amazon = corpo.programa === 'amazon';
   const lead = {
     nome:     limpar(corpo.nome, 120),
     email:    limpar(corpo.email, 200),
@@ -31,8 +32,12 @@ export function validar(corpo) {
     mensagem: limpar(corpo.mensagem, 2000),
     // Códigos fechados: o que não estiver na lista vira vazio (perfil não informado).
     tipo:        TIPOS[corpo.tipo] ? corpo.tipo : '',
-    faturamento: FATURAMENTOS[corpo.faturamento] ? corpo.faturamento : '',
+    faturamento: (amazon ? FATURAMENTOS_AMAZON : FATURAMENTOS)[corpo.faturamento] ? corpo.faturamento : '',
   };
+  if (amazon) {
+    lead.programa = 'amazon';
+    lead.uf = UFS.has(corpo.uf) ? corpo.uf : '';
+  }
 
   if (!lead.nome) return { erro: 'Informe seu nome.' };
   if (!lead.email) return { erro: 'Informe seu e-mail.' };
@@ -41,7 +46,7 @@ export function validar(corpo) {
   const origem = limparOrigem(corpo.origem);
   if (origem) lead.origem = origem;
 
-  Object.assign(lead, qualificar(lead));
+  Object.assign(lead, amazon ? qualificarAmazon(lead) : qualificar(lead));
   return { lead };
 }
 

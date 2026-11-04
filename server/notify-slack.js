@@ -8,7 +8,7 @@
 //      param em silêncio. Só use um token estático se a rotação estiver
 //      desligada para esse app.
 
-import { TIPOS, FATURAMENTOS } from './qualificacao.js';
+import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON } from './qualificacao.js';
 
 // Escapa os caracteres de controle do Slack para que dados do lead não injetem
 // menções (<!channel>), links (<url|texto>) ou formatação.
@@ -35,13 +35,16 @@ function formatarOrigem(o) {
 }
 
 function cabecalho(lead) {
-  if (lead.qualificado) return `*Novo lead pelo site* · :white_check_mark: qualificado (${esc(lead.motivo)})`;
-  if (lead.motivo) return `*Novo lead pelo site* · fora do perfil (${esc(lead.motivo)})`;
-  return '*Novo lead pelo site*';
+  const titulo = lead.programa === 'amazon' ? '*Novo lead pelo site · Vender na Amazon*' : '*Novo lead pelo site*';
+  if (lead.qualificado) return `${titulo} · :white_check_mark: qualificado (${esc(lead.motivo)})`;
+  if (lead.motivo) return `${titulo} · fora do perfil (${esc(lead.motivo)})`;
+  return titulo;
 }
 
 function perfil(lead) {
-  const partes = [TIPOS[lead.tipo], FATURAMENTOS[lead.faturamento]].filter(Boolean);
+  const partes = lead.programa === 'amazon'
+    ? [lead.uf, FATURAMENTOS_AMAZON[lead.faturamento]].filter(Boolean)
+    : [TIPOS[lead.tipo], FATURAMENTOS[lead.faturamento]].filter(Boolean);
   return partes.length ? `*Perfil:* ${esc(partes.join(' · '))}` : null;
 }
 

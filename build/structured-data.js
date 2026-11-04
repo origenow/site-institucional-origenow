@@ -21,7 +21,7 @@ export const ORG = {
 /** Classifica a página pela URL, para escolher o schema adequado. */
 export function tipoDaPagina(url) {
   if (url === '/') return 'home';
-  if (url.startsWith('/servicos/')) return 'servico';
+  if (url.startsWith('/servicos/') || url === '/vender-na-amazon') return 'servico';
   if (url.startsWith('/cases/')) return 'case';
   if (url.startsWith('/insights/')) return 'artigo';
   if (url === '/contato') return 'contato';
@@ -69,8 +69,17 @@ function breadcrumb(site, url, titulo) {
   return { '@type': 'BreadcrumbList', itemListElement: itens };
 }
 
+/**
+ * Perguntas e respostas do bloco data-om-faq da própria página. Lidas do HTML,
+ * e não repetidas no mapa de páginas, para o JSON-LD não divergir do texto visível.
+ */
+export function extrairFaq(html) {
+  const re = /data-om-faq-q="1"[^>]*><span[^>]*>([^<]+)<\/span>[\s\S]*?data-om-faq-a="1"[^>]*><p[^>]*>([^<]+)<\/p>/g;
+  return [...html.matchAll(re)].map((m) => ({ pergunta: m[1].trim(), resposta: m[2].trim() }));
+}
+
 /** Monta o bloco <script type="application/ld+json"> da página. */
-export function jsonLd({ site, url, titulo, descricao, tipo }) {
+export function jsonLd({ site, url, titulo, descricao, tipo, faq = [] }) {
   const urlAbs = `${site}${url}`;
   const grafo = [organizacao(site)];
 
@@ -97,6 +106,18 @@ export function jsonLd({ site, url, titulo, descricao, tipo }) {
       provider: { '@id': `${site}/#organizacao` },
       areaServed: 'BR',
       serviceType: 'Consultoria para marketplaces e ecommerce',
+    });
+  }
+
+  if (faq.length) {
+    grafo.push({
+      '@type': 'FAQPage',
+      url: urlAbs,
+      mainEntity: faq.map(({ pergunta, resposta }) => ({
+        '@type': 'Question',
+        name: pergunta,
+        acceptedAnswer: { '@type': 'Answer', text: resposta },
+      })),
     });
   }
 

@@ -25,6 +25,33 @@ export const FATURAMENTOS = {
 const FATURA_O_SUFICIENTE = new Set(['50-200', '200-1000', 'acima-1000']);
 const ENTRANTES = new Set(['industria', 'marca']);
 
+// Página /vender-na-amazon. O crivo é o do programa de ingresso gratuito: empresa
+// fora de SP que fatura mais de R$ 120 mil/mês somando todos os canais. Quem não
+// passa continua como lead e recebe o link de cadastro, só não vira conversão.
+export const UFS = new Set(['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT',
+  'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO']);
+
+export const FATURAMENTOS_AMAZON = {
+  'ate-50': 'Até R$ 50 mil/mês',
+  '50-120': 'R$ 50 mil a 120 mil/mês',
+  '120-500': 'Mais de R$ 120 mil até 500 mil/mês',
+  'acima-500': 'Mais de R$ 500 mil/mês',
+};
+
+const FATURA_PROGRAMA_AMAZON = new Set(['120-500', 'acima-500']);
+
+/** @returns {{ qualificado: boolean, motivo: string }} */
+export function qualificarAmazon({ uf, faturamento }) {
+  if (!UFS.has(uf) || !FATURAMENTOS_AMAZON[faturamento]) {
+    return { qualificado: false, motivo: 'perfil não informado' };
+  }
+  if (!FATURA_PROGRAMA_AMAZON.has(faturamento)) {
+    return { qualificado: false, motivo: 'fatura até R$ 120 mil/mês' };
+  }
+  if (uf === 'SP') return { qualificado: false, motivo: 'empresa em SP, fora do programa' };
+  return { qualificado: true, motivo: 'fora de SP e fatura mais de R$ 120 mil/mês' };
+}
+
 /** @returns {{ qualificado: boolean, motivo: string }} */
 export function qualificar({ tipo, faturamento }) {
   if (FATURA_O_SUFICIENTE.has(faturamento)) {

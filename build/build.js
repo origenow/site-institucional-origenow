@@ -12,7 +12,7 @@
 import { mkdir, writeFile, readFile, cp, rm } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { TODAS, IMPORTS, PASTAS, ARQUIVOS, mapaDeLinks } from './pages.js';
-import { jsonLd, llmsTxt, tipoDaPagina } from './structured-data.js';
+import { jsonLd, llmsTxt, tipoDaPagina, extrairFaq } from './structured-data.js';
 import { IDIOMAS, traduzir, tagsHreflang } from './i18n.js';
 import { lerConfig, resumoConfig, headTracking } from './tracking.js';
 import { headAntibot } from './antibot.js';
@@ -200,7 +200,8 @@ export async function buildAll() {
 
       const titulo = /<title>([\s\S]*?)<\/title>/i.exec(seo)?.[1] || '';
       const descricao = /name="description"\s+content="([^"]*)"/i.exec(seo)?.[1] || '';
-      const ld = jsonLd({ site: SITE_URL, url: urlLocal, titulo, descricao, tipo: tipoDaPagina(p.url) });
+      const faq = p.faq ? extrairFaq(fonte) : [];
+      const ld = jsonLd({ site: SITE_URL, url: urlLocal, titulo, descricao, tipo: tipoDaPagina(p.url), faq });
 
       // O prefixo de idioma entra ANTES do <base href="/"> ser injetado —
       // senão a própria tag <base> vira /en/ e os ativos passam a ser
