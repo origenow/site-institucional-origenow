@@ -64,6 +64,7 @@ test('os IDs versionados de producao sao validos', () => {
   assert.equal(cfg.adsContato, '');
   assert.equal(cfg.adsPagina, '');
   assert.equal(cfg.metaPixel, '500995551485983');
+  assert.match(cfg.tintimLink, /^https:\/\/tintim\.link\/whatsapp\/37ff02ac-4035-4197-9834-52ddd7078557\//);
 });
 
 test('recusa ID do Pixel da Meta malformado', () => {

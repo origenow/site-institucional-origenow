@@ -41,10 +41,11 @@ const PADRAO = {
   adsContato: '',
   adsPagina: '',
   gtm: 'GTM-K6D5X6B',                 // Google Tag Manager
-  // Link rastreável de WhatsApp da conta TinTim da Origenow (painel do TinTim).
+  // Link rastreável "Contato Site" do TinTim. Abre o número conectado na conta
+  // Origenow do TinTim: hoje a Letícia, o mesmo destino do wa.me que ele substitui.
   // Vazio: os botões seguem no wa.me, que funciona, mas chega sem origem no TinTim.
   // O pixel não entra aqui: ele é uma tag do GTM (carregar também pelo site dobraria).
-  tintimLink: '',
+  tintimLink: 'https://tintim.link/whatsapp/37ff02ac-4035-4197-9834-52ddd7078557/fd1cb55b-0d59-4320-8fd4-786fb851a5cb',
   metaPixel: '500995551485983',       // Pixel de Origenow (não criar tag da Meta no GTM: contaria em dobro)
   verificacao: '',                   // Search Console · conteúdo da meta google-site-verification
 };
