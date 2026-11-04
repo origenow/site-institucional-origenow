@@ -41,7 +41,7 @@ const PADRAO = {
   adsContato: '',
   adsPagina: '',
   gtm: 'GTM-K6D5X6B',                 // Google Tag Manager
-  // Link rastreável "Contato Site" do TinTim. Abre o número conectado na conta
+  // Link rastreável "Letícia - Site" do TinTim. Abre o número conectado na conta
   // Origenow do TinTim: hoje a Letícia, o mesmo destino do wa.me que ele substitui.
   // Vazio: os botões seguem no wa.me, que funciona, mas chega sem origem no TinTim.
   // O pixel não entra aqui: ele é uma tag do GTM (carregar também pelo site dobraria).
