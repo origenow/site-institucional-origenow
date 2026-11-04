@@ -8,7 +8,7 @@
 //      param em silêncio. Só use um token estático se a rotação estiver
 //      desligada para esse app.
 
-import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON } from './qualificacao.js';
+import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON, OFERTAS_AMAZON } from './qualificacao.js';
 
 // Escapa os caracteres de controle do Slack para que dados do lead não injetem
 // menções (<!channel>), links (<url|texto>) ou formatação.
@@ -54,6 +54,7 @@ function formatar(lead) {
     `*Nome:* ${esc(lead.nome)}`,
     `*E-mail:* ${esc(lead.email)}`,
     perfil(lead),
+    OFERTAS_AMAZON[lead.oferta] ? `*Oferta:* ${esc(OFERTAS_AMAZON[lead.oferta])}` : null,
     lead.empresa  ? `*Empresa:* ${esc(lead.empresa)}`     : null,
     lead.whatsapp ? `*WhatsApp:* ${esc(lead.whatsapp)}`   : null,
     lead.canais   ? `*Canais:* ${esc(lead.canais)}`       : null,

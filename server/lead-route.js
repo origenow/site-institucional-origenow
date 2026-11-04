@@ -70,6 +70,6 @@ export function criarRotaLead({ enviarSlack, enviarEmail }) {
       return res.status(502).json({ erro: 'Não conseguimos registrar seu contato. Tente novamente.' });
     }
     // O navegador só dispara a conversão do Google Ads quando qualificado.
-    return res.status(200).json({ ok: true, qualificado: lead.qualificado });
+    return res.status(200).json({ ok: true, qualificado: lead.qualificado, oferta: lead.oferta });
   };
 }
