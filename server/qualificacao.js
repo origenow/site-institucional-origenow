@@ -25,6 +25,43 @@ export const FATURAMENTOS = {
 const FATURA_O_SUFICIENTE = new Set(['50-200', '200-1000', 'acima-1000']);
 const ENTRANTES = new Set(['industria', 'marca']);
 
+// Página /vender-na-amazon. Conta e cadastro de produtos são gratuitos para todo
+// novo lojista, em qualquer estado. O faturamento mensal, somando os canais em que
+// já vende, define a oferta de consultoria. Conversão no Google Ads segue a régua
+// comercial de R$ 50 mil/mês, a mesma do /contato.
+export const UFS = new Set(['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT',
+  'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO']);
+
+export const FATURAMENTOS_AMAZON = {
+  'ate-50': 'Até R$ 50 mil/mês',
+  '50-150': 'R$ 50 mil a 150 mil/mês',
+  '150-250': 'Mais de R$ 150 mil até 250 mil/mês',
+  'acima-250': 'Mais de R$ 250 mil/mês',
+};
+
+export const OFERTAS_AMAZON = {
+  'consultoria-gratuita': 'Consultoria gratuita',
+  'consultoria-desconto': 'Consultoria com desconto',
+  'a-definir': 'Consultoria a definir pelo comercial',
+};
+
+const OFERTA_POR_FATURAMENTO = {
+  'ate-50': 'consultoria-desconto',
+  '50-150': 'consultoria-desconto',
+  '150-250': 'a-definir',
+  'acima-250': 'consultoria-gratuita',
+};
+
+/** @returns {{ qualificado: boolean, motivo: string, oferta: string }} */
+export function qualificarAmazon({ faturamento }) {
+  if (!FATURAMENTOS_AMAZON[faturamento]) {
+    return { qualificado: false, motivo: 'perfil não informado', oferta: 'a-definir' };
+  }
+  const oferta = OFERTA_POR_FATURAMENTO[faturamento];
+  if (faturamento === 'ate-50') return { qualificado: false, motivo: 'fatura até R$ 50 mil/mês', oferta };
+  return { qualificado: true, motivo: 'fatura mais de R$ 50 mil/mês', oferta };
+}
+
 /** @returns {{ qualificado: boolean, motivo: string }} */
 export function qualificar({ tipo, faturamento }) {
   if (FATURA_O_SUFICIENTE.has(faturamento)) {

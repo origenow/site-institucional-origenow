@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const ROTAS = [
   '/', '/servicos', '/servicos/assessoria', '/servicos/consultoria',
   '/servicos/full-service', '/servicos/inteligencia-comercial',
-  '/servicos/logistica', '/servicos/representacao',
+  '/servicos/logistica', '/servicos/representacao', '/vender-na-amazon', '/en/vender-na-amazon',
   '/cases', '/cases/camicado', '/cases/mimo-cricut', '/cases/tiktok-shop',
   '/cases/riffel', '/cases/calpen', '/cases/cafe-dupan', '/cases/amazon-brasil',
   '/grupo', '/sobre', '/insights', '/insights/mix-enxuto-vende-mais', '/contato',

@@ -15,6 +15,7 @@ export const PAGINAS = [
   { src: 'Origenow Servico Inteligencia Comercial.dc.html', url: '/servicos/inteligencia-comercial' },
   { src: 'Origenow Servico Logistica.dc.html', url: '/servicos/logistica' },
   { src: 'Origenow Servico Representacao.dc.html', url: '/servicos/representacao' },
+  { src: 'Origenow Vender na Amazon.dc.html', url: '/vender-na-amazon', faq: true },
   { src: 'Origenow Cases.dc.html', url: '/cases' },
   { src: 'Origenow Case 01.dc.html', url: '/cases/camicado' },
   { src: 'Origenow Case 02.dc.html', url: '/cases/mimo-cricut' },
