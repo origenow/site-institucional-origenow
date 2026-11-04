@@ -8,7 +8,10 @@
 //      param em silêncio. Só use um token estático se a rotação estiver
 //      desligada para esse app.
 
-import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON, OFERTAS_AMAZON } from './qualificacao.js';
+import { TIPOS, FATURAMENTOS, FATURAMENTOS_AMAZON, OFERTAS_AMAZON, OFERTAS_TIKTOK } from './qualificacao.js';
+
+const OFERTAS = { ...OFERTAS_AMAZON, ...OFERTAS_TIKTOK };
+const PAGINAS = { amazon: 'Vender na Amazon', tiktok: 'Vender no TikTok Shop' };
 
 // Escapa os caracteres de controle do Slack para que dados do lead não injetem
 // menções (<!channel>), links (<url|texto>) ou formatação.
@@ -35,7 +38,7 @@ function formatarOrigem(o) {
 }
 
 function cabecalho(lead) {
-  const titulo = lead.programa === 'amazon' ? '*Novo lead pelo site · Vender na Amazon*' : '*Novo lead pelo site*';
+  const titulo = PAGINAS[lead.programa] ? `*Novo lead pelo site · ${PAGINAS[lead.programa]}*` : '*Novo lead pelo site*';
   if (lead.qualificado) return `${titulo} · :white_check_mark: qualificado (${esc(lead.motivo)})`;
   if (lead.motivo) return `${titulo} · fora do perfil (${esc(lead.motivo)})`;
   return titulo;
@@ -54,7 +57,7 @@ function formatar(lead) {
     `*Nome:* ${esc(lead.nome)}`,
     `*E-mail:* ${esc(lead.email)}`,
     perfil(lead),
-    OFERTAS_AMAZON[lead.oferta] ? `*Oferta:* ${esc(OFERTAS_AMAZON[lead.oferta])}` : null,
+    OFERTAS[lead.oferta] ? `*Oferta:* ${esc(OFERTAS[lead.oferta])}` : null,
     lead.empresa  ? `*Empresa:* ${esc(lead.empresa)}`     : null,
     lead.whatsapp ? `*WhatsApp:* ${esc(lead.whatsapp)}`   : null,
     lead.canais   ? `*Canais:* ${esc(lead.canais)}`       : null,

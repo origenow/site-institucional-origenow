@@ -274,7 +274,7 @@ function omTracking(C) {
   var iniciados = {};
   d.addEventListener('focusin', function (e) {
     var id = (e.target && e.target.id) || '';
-    var form = /^lead-/.test(id) ? 'contato' : /^modal-/.test(id) ? 'diagnostico_home' : /^amz-/.test(id) ? 'vender_amazon' : '';
+    var form = /^lead-/.test(id) ? 'contato' : /^modal-/.test(id) ? 'diagnostico_home' : /^amz-/.test(id) ? 'vender_amazon' : /^tts-/.test(id) ? 'vender_tiktok' : '';
     if (form && !iniciados[form]) { iniciados[form] = 1; w.omTrack('lead_form_start', { form_id: form }); }
   }, true);
 

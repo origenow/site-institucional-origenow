@@ -62,6 +62,31 @@ export function qualificarAmazon({ faturamento }) {
   return { qualificado: true, motivo: 'fatura mais de R$ 50 mil/mês', oferta };
 }
 
+// Página /vender-no-tiktok-shop. Não há plano gratuito: acima de R$ 1 milhão/mês o
+// plano é de performance (sem custo fixo, só comissão sobre o resultado); abaixo
+// disso, o comercial apresenta os planos pagos. Conversão segue a régua de R$ 50 mil/mês.
+export const FATURAMENTOS_TIKTOK = {
+  'ate-50': FATURAMENTOS['ate-50'],
+  '50-200': FATURAMENTOS['50-200'],
+  '200-1000': FATURAMENTOS['200-1000'],
+  'acima-1000': FATURAMENTOS['acima-1000'],
+};
+
+export const OFERTAS_TIKTOK = {
+  performance: 'Plano de performance',
+  planos: 'Planos de consultoria e assessoria',
+};
+
+/** @returns {{ qualificado: boolean, motivo: string, oferta: string }} */
+export function qualificarTiktok({ faturamento }) {
+  if (!FATURAMENTOS_TIKTOK[faturamento]) {
+    return { qualificado: false, motivo: 'perfil não informado', oferta: 'planos' };
+  }
+  const oferta = faturamento === 'acima-1000' ? 'performance' : 'planos';
+  if (faturamento === 'ate-50') return { qualificado: false, motivo: 'fatura até R$ 50 mil/mês', oferta };
+  return { qualificado: true, motivo: 'fatura mais de R$ 50 mil/mês', oferta };
+}
+
 /** @returns {{ qualificado: boolean, motivo: string }} */
 export function qualificar({ tipo, faturamento }) {
   if (FATURA_O_SUFICIENTE.has(faturamento)) {
