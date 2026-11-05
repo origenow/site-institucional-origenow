@@ -87,13 +87,20 @@ test('TikTok: performance so acima de R$ 1 milhao, sem plano gratuito', () => {
   assert.equal(tipoDaPagina('/vender-no-tiktok-shop'), 'servico');
 });
 
+test('TikTok: empresa e obrigatoria so nesta pagina', () => {
+  assert.equal(validar({ nome: 'Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: '50-200' }).erro, 'Informe sua empresa.');
+  assert.equal(validar({ nome: 'Ana', empresa: '   ', email: 'ana@x.com', programa: 'tiktok', faturamento: '50-200' }).erro, 'Informe sua empresa.');
+  assert.equal(validar({ nome: 'Ana', email: 'ana@x.com', programa: 'amazon', faturamento: 'ate-50' }).erro, undefined);
+  assert.equal(validar({ nome: 'Ana', email: 'ana@x.com' }).erro, undefined);
+});
+
 test('TikTok: validar recusa faixa fora da lista e identifica a pagina', () => {
-  const { lead } = validar({ nome: 'Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'nao-vende' });
+  const { lead } = validar({ nome: 'Ana', empresa: 'Loja da Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'nao-vende' });
   assert.equal(lead.programa, 'tiktok');
   assert.equal(lead.faturamento, '');
   assert.equal(lead.motivo, 'perfil não informado');
 
-  const msg = montarMensagem(validar({ nome: 'Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'acima-1000' }).lead);
+  const msg = montarMensagem(validar({ nome: 'Ana', empresa: 'Loja da Ana', email: 'ana@x.com', programa: 'tiktok', faturamento: 'acima-1000' }).lead);
   assert.match(msg.subject, /TikTok Shop/);
   assert.match(msg.text, /Oferta: Plano de performance/);
   assert.match(msg.text, /Acima de R\$ 1 milhão/);

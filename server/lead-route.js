@@ -43,6 +43,7 @@ export function validar(corpo) {
   if (tiktok) lead.programa = 'tiktok';
 
   if (!lead.nome) return { erro: 'Informe seu nome.' };
+  if (tiktok && !lead.empresa) return { erro: 'Informe sua empresa.' };
   if (!lead.email) return { erro: 'Informe seu e-mail.' };
   if (!EMAIL_RE.test(lead.email)) return { erro: 'E-mail inválido.' };
 
