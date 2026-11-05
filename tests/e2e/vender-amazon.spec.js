@@ -22,19 +22,24 @@ function responderLead(page, corpo, capturar = () => {}) {
   });
 }
 
+// O faturamento é escolhido em cartões (rádio): o clique vai no rótulo, como faz o visitante.
+const escolherFaturamento = (page, valor) =>
+  page.locator(`#lead-form label:has(input[name="faturamento"][value="${valor}"])`).click();
+
 async function preencher(page, { uf = 'MG', faturamento = 'acima-250' } = {}) {
   await page.fill('#amz-nome', 'Maria Souza');
   await page.fill('#amz-email', 'maria@empresa.com.br');
   await page.fill('#amz-whatsapp', '(31) 99999-0000');
   await page.selectOption('#amz-uf', uf);
-  await page.selectOption('#amz-faturamento', faturamento);
+  await escolherFaturamento(page, faturamento);
 }
 
 const enviar = (page) => page.locator('#lead-form').getByText('Ver minha oferta').click();
 
 test('o hero destaca a consultoria e reserva o espaco do video', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('3 meses de consultoria gratuita');
-  await expect(page.locator('#amz-video')).toContainText('2 conferências por mês');
+  await expect(page.locator('#amz-video')).toBeVisible();
+  await expect(page.locator('.ticket')).toContainText('2 conferências por mês');
   await expect(page.locator('#amz-video iframe')).toHaveCount(0);
 });
 

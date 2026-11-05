@@ -19,12 +19,16 @@ function responderLead(page, corpo, capturar = () => {}) {
   });
 }
 
+// O faturamento é escolhido em cartões (rádio): o clique vai no rótulo, como faz o visitante.
+const escolherFaturamento = (page, valor) =>
+  page.locator(`#lead-form label:has(input[name="faturamento"][value="${valor}"])`).click();
+
 async function preencher(page, faturamento) {
   await page.fill('#tts-nome', 'Maria Souza');
   await page.fill('#tts-empresa', 'Loja da Maria');
   await page.fill('#tts-email', 'maria@empresa.com.br');
   await page.fill('#tts-whatsapp', '(31) 99999-0000');
-  await page.selectOption('#tts-faturamento', faturamento);
+  await escolherFaturamento(page, faturamento);
 }
 
 const enviar = (page) => page.locator('#lead-form').getByText('Ver meu plano').click();
@@ -44,6 +48,13 @@ test('exige WhatsApp e faturamento antes de enviar', async ({ page }) => {
   await page.fill('#tts-whatsapp', '(31) 99999-0000');
   await enviar(page);
   await expect(page.getByText('Selecione o faturamento mensal.')).toBeVisible();
+});
+
+test('a faixa escolhida acende o plano correspondente antes do envio', async ({ page }) => {
+  await escolherFaturamento(page, 'acima-1000');
+  await expect(page.locator('.plan.is-match')).toContainText('Plano de performance');
+  await escolherFaturamento(page, 'ate-50');
+  await expect(page.locator('.plan.is-match')).toContainText('Consultoria e assessoria');
 });
 
 test('acima de R$ 1 milhao ve o plano de performance e gera conversao', async ({ page }) => {

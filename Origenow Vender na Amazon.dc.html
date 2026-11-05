@@ -101,198 +101,640 @@
 [data-om-fz="d2"]{font-size:1.875rem!important}
 [data-om-fz="d3"]{font-size:1.625rem!important}
 }body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}@keyframes om-dot{0%,75%,100%{opacity:.28;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}@keyframes om-caret{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes om-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style>
+<style>
+.om,.om *{box-sizing:border-box}
+.om{--ink:#14111e;--purple:#6730be;--purple7:#5527a4;--lav:#b69ce0;--mag:#e62c7c;--mint:#2ecf9a;--g6:#56506a;--gl:#6b6480;--line:#e6e2ec;--wh:#f7f3fc;--e:cubic-bezier(.2,.7,.2,1);--eio:cubic-bezier(.6,.05,.3,1);overflow-x:clip}
+.om img{display:block;max-width:100%}
+.om h1,.om h2,.om h3,.om p{margin:0}
+.wrap{width:100%;max-width:90rem;margin:0 auto;padding-left:5rem;padding-right:5rem}
+.ic{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- tipografia ---------- */
+.eyebrow{display:flex;align-items:center;gap:.875rem;font:600 .8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--purple)}
+.eyebrow .n{font-weight:800;letter-spacing:.04em;color:var(--mag)}
+.eyebrow .bar{width:2rem;height:1px;background:currentColor;opacity:.5}
+.eyebrow.lav{color:var(--lav)}
+.d1{font:700 clamp(2.5rem,5vw,4.5rem)/1.02 Manrope,sans-serif;letter-spacing:-.05em;color:#fff;text-wrap:pretty}
+.d2{font:700 clamp(2.125rem,3.6vw,3.25rem)/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:var(--ink);text-wrap:balance}
+.d2.on-dark{color:#fff}
+.h3{font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:var(--ink)}
+.body{font:400 1rem/1.7 Manrope,sans-serif;color:var(--g6);text-wrap:pretty}
+.lead{font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.72);text-wrap:pretty}
+.foot{font:400 .8125rem/1.55 Manrope,sans-serif;color:var(--gl)}
+.mag{color:var(--mag)}
+
+/* ---------- botões e links ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.375rem;padding:1.125rem 1.875rem;border:1px solid transparent;border-radius:2px;font:600 .9375rem/1 Manrope,sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .18s ease,border-color .18s ease,transform .18s cubic-bezier(.2,.7,.2,1)}
+.btn:focus-visible{outline:2px solid var(--mag);outline-offset:3px}
+.btn[disabled]{cursor:progress}
+.btn-light{background:#fff;color:var(--ink)}
+.btn-light:hover{background:#e6e2ec;color:var(--ink)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.26)}
+.btn-ghost:hover{background:rgba(255,255,255,.09);color:#fff}
+.btn-primary{background:var(--purple);color:#fff}
+.btn-primary:hover{background:var(--purple7);color:#fff;transform:translateY(-1px)}
+.btn-sm{min-height:2.75rem;padding:.75rem 1.125rem;font-size:.8125rem}
+.lnk{display:inline-block;font:600 .9375rem/1.2 Manrope,sans-serif;color:var(--lav);transition:color .18s ease}
+.lnk:hover{color:#fff}
+.ulink{color:inherit;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:color .25s}
+.ulink:hover{color:var(--purple)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;margin-top:-5.125rem;padding:10rem 0 5rem;background:#14111e;color:#fff}
+.orb{position:absolute;border-radius:50%;pointer-events:none;z-index:-1;filter:blur(90px)}
+.orb.p{width:46rem;height:46rem;right:-12rem;top:-16rem;background:rgba(103,48,190,.55);animation:om-drift 16s ease-in-out infinite alternate}
+.orb.m{width:22rem;height:22rem;left:-8rem;bottom:-10rem;background:rgba(230,44,124,.24);animation:om-drift 20s ease-in-out infinite alternate-reverse}
+.hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:4rem;align-items:center}
+.live{position:relative;width:.5rem;height:.5rem;border-radius:50%;background:var(--mint);animation:om-pulse 2s ease-out infinite;flex:none}
+.hero .eyebrow{animation:om-fade .8s var(--e) .05s both}
+.hero h1{margin-top:1.5rem;font-size:clamp(2.5rem,4.4vw,4rem)}
+.hero-spot{position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(26rem circle at var(--hx,72%) var(--hy,28%),rgba(182,156,224,.07),rgba(182,156,224,0) 62%)}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .14em 0;margin-bottom:-.14em}
+.w>span{display:inline-block;transform-origin:0 100%;animation:om-word 1.1s var(--e) both}
+.hl{position:relative;display:inline-block;white-space:nowrap;color:var(--mag)}
+.smile{position:absolute;left:-4%;bottom:-.3em;width:108%;height:auto;overflow:visible;fill:none;stroke:var(--mag);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:300;stroke-dashoffset:300;animation:om-draw 1.2s var(--eio) 1.25s forwards}
+.hero .lead{max-width:36rem;margin-top:1.5rem;font-size:1.0625rem;animation:om-blur 1s var(--e) .95s both}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.875rem;margin-top:2.5rem}
+.cta-row>*{animation:om-fade .9s var(--e) 1.1s both}
+.cta-row>*+*{animation-delay:1.2s}
+.checks{display:flex;flex-wrap:wrap;gap:.75rem 1.75rem;margin:2.25rem 0 0;padding:1.5rem 0 0;list-style:none;border-top:1px solid rgba(255,255,255,.12);animation:om-fade .9s var(--e) 1.3s both}
+.checks li{display:flex;align-items:center;gap:.5rem;font:500 .875rem/1.3 Manrope,sans-serif;color:rgba(255,255,255,.74)}
+.checks .ic{width:1rem;height:1rem;stroke:var(--mint);stroke-width:2.2}
+.stage{position:relative}
+.stage-glow{position:absolute;left:10%;top:0;width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.55),rgba(103,48,190,0) 65%);filter:blur(30px);pointer-events:none}
+.vid{position:relative;z-index:2;aspect-ratio:16/9;overflow:hidden;border-radius:2px;background:#1c1430;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 80px -30px rgba(0,0,0,.75);animation:om-rise 1s var(--e) .45s both;transition:transform .6s var(--e),border-color .4s}
+.vid:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.3)}
+.vid video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
+.vid-poster{position:absolute;inset:0}
+.vid-poster img{width:100%;height:100%;object-fit:cover;opacity:.75;transform:scale(1.04);transition:transform 1.4s var(--e),opacity .6s}
+.vid:hover .vid-poster img{transform:scale(1.1);opacity:.9}
+.vid-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,30,.88),rgba(20,17,30,.1) 58%)}
+.vid-play{position:absolute;left:50%;top:44%;z-index:2;display:grid;place-items:center;width:4.5rem;height:4.5rem;margin:-2.25rem 0 0 -2.25rem;border-radius:50%;background:#fff;color:var(--purple);box-shadow:0 0 0 0 rgba(255,255,255,.2);transition:transform .5s var(--e),box-shadow .6s var(--e),background .4s,color .4s}
+.vid-play svg{width:1.375rem;height:1.375rem;margin-left:3px;fill:currentColor}
+.vid:hover .vid-play{transform:scale(1.08);box-shadow:0 0 0 12px rgba(255,255,255,.14);background:var(--mag);color:#fff}
+.vid-cap{position:absolute;left:1.25rem;right:1.25rem;bottom:1.125rem;z-index:2;display:flex;align-items:center;gap:.75rem}
+.vid-cap .tag{flex:none;display:inline-flex;align-items:center;padding:.375rem .5rem;border-radius:2px;background:rgba(20,17,30,.6);border:1px solid rgba(255,255,255,.16);font:700 .75rem/1 Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+.vid-cap b{font:600 .9375rem/1.3 Manrope,sans-serif;letter-spacing:-.01em;color:#fff}
+.par{translate:calc(var(--px,0) * var(--d,10px)) calc(var(--py,0) * var(--d,10px));transition:translate .8s var(--e)}
+.ticket{position:relative;z-index:3;display:grid;grid-template-columns:12.5rem minmax(0,1fr);align-items:stretch;width:100%;margin:1rem 0 0;color:#fff;background:rgba(44,21,89,.74);border:1px solid rgba(255,255,255,.16);border-radius:2px;-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);box-shadow:0 30px 60px -24px rgba(0,0,0,.7);-webkit-mask:radial-gradient(circle at 12.5rem 0,transparent .625rem,#000 calc(.625rem + .5px)) top/100% 51% no-repeat,radial-gradient(circle at 12.5rem 100%,transparent .625rem,#000 calc(.625rem + .5px)) bottom/100% 51% no-repeat;mask:radial-gradient(circle at 12.5rem 0,transparent .625rem,#000 calc(.625rem + .5px)) top/100% 51% no-repeat,radial-gradient(circle at 12.5rem 100%,transparent .625rem,#000 calc(.625rem + .5px)) bottom/100% 51% no-repeat;transform:perspective(1000px) rotateY(calc(var(--px,0) * 6deg)) rotateX(calc(var(--py,0) * -6deg));transition:transform .8s var(--e);animation:om-rise 1s var(--e) .75s both}
+@keyframes om-rise{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+.ticket-a{display:flex;flex-direction:column;justify-content:center;padding:1.25rem 1.5rem;border-right:1px dashed rgba(255,255,255,.28)}
+.ticket .k{font:600 .75rem/1.2 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--lav)}
+.ticket .big{margin-top:.5rem;font:700 2.5rem/.95 Manrope,sans-serif;letter-spacing:-.05em;white-space:nowrap}
+.ticket-b{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.125rem 1.25rem 1.125rem 1.5rem}
+.ticket .sub{font:700 1rem/1.25 Manrope,sans-serif;letter-spacing:-.015em}
+.ticket-b p{margin-top:.3125rem;font:400 .8125rem/1.45 Manrope,sans-serif;color:rgba(255,255,255,.7)}
+.ticket-b .seal{flex:none;display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--mag);color:#fff;transition:transform .5s var(--e)}
+.ticket:hover .seal{transform:translateX(3px)}
+.ticket-b .seal svg{width:1.125rem;height:1.125rem}
+.chip{position:absolute;z-index:4;display:inline-flex;align-items:center;gap:.5rem;padding:.625rem .875rem;border-radius:2px;font:600 .8125rem/1 Manrope,sans-serif;white-space:nowrap;box-shadow:0 18px 40px -16px rgba(0,0,0,.55)}
+.chip .ic{width:1rem;height:1rem}
+.chip.white{background:#fff;color:var(--ink)}
+.chip.violet{background:var(--purple);color:#fff}
+.chip.glass{background:rgba(20,17,30,.55);color:#fff;border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+
+
+/* ---------- seções claras ---------- */
+.sec{background:#fff;padding:8rem 0}
+.sec-head{display:flex;flex-direction:column;gap:1.25rem;max-width:40rem}
+.sec-head .body{max-width:34rem}
+
+/* ---------- formulário ---------- */
+.form-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:5rem;align-items:start}
+.plans{display:flex;flex-direction:column;gap:1rem;margin-top:2.75rem}
+.plan{position:relative;padding:1.625rem 1.75rem 1.75rem;border:1px solid var(--line);border-radius:2px;background:#fff;transition:opacity .45s var(--e),transform .45s var(--e),box-shadow .45s var(--e),border-color .45s var(--e)}
+.plan.dark{background:var(--ink);border-color:var(--ink)}
+.plan .k{font:600 .8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--purple)}
+.plan.dark .k{color:var(--lav)}
+.plan h3{margin-top:.875rem}
+.plan.dark h3{color:#fff}
+.plan p{margin-top:.5rem;font:400 .9375rem/1.6 Manrope,sans-serif;color:var(--g6)}
+.plan.dark p{color:rgba(255,255,255,.66)}
+.plan-tag{position:absolute;top:1.25rem;right:1.25rem;display:inline-flex;align-items:center;gap:.375rem;padding:.4375rem .625rem;border-radius:2px;background:var(--mint);color:var(--ink);font:700 .6875rem/1 Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateY(-6px) scale(.92);transition:opacity .35s var(--e),transform .45s var(--e)}
+.plan.is-match{transform:translateY(-3px);box-shadow:0 0 0 2px var(--purple),0 28px 56px -28px rgba(103,48,190,.55)}
+.plan.is-match .plan-tag{opacity:1;transform:none}
+.plan.is-dim{opacity:.42}
+.cred{display:flex;align-items:center;gap:1.25rem;margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--line)}
+.cred span{font:600 .75rem/1.4 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gl)}
+.cred img{height:2.75rem;width:auto}
+.panel{position:relative;padding:2.75rem;background:#fff;border:1px solid var(--line);border-radius:2px;box-shadow:0 40px 80px -48px rgba(103,48,190,.45)}
+.panel::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:linear-gradient(90deg,var(--purple) 0 72%,var(--mag) 72% 100%)}
+.panel-top{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.panel-top b{font:700 1.125rem/1.2 Manrope,sans-serif;letter-spacing:-.02em;color:var(--ink)}
+.panel-top span{font:400 .8125rem/1 Manrope,sans-serif;color:var(--gl)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.fld{position:relative}
+.fld.full{grid-column:1/-1}
+.fld input,.fld select{display:block;width:100%;height:3.75rem;padding:1.5rem 2.75rem .5rem 1rem;border:1px solid var(--line);border-radius:2px;background:#fff;font:500 .9375rem/1.2 Manrope,sans-serif;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none;transition:border-color .3s var(--e),background .3s}
+.fld input{padding-right:1rem}
+.fld select{cursor:pointer}
+.fld input:hover,.fld select:hover{border-color:#cfc8d8}
+.fld input:focus,.fld select:focus{border-color:var(--purple);background:#fdfcff}
+.fld input::placeholder{color:transparent;transition:color .25s}
+.fld input:focus::placeholder{color:#8b839e}
+.fld label{position:absolute;left:1rem;top:1.875rem;transform:translateY(-50%);transform-origin:0 50%;font:500 .9375rem/1 Manrope,sans-serif;color:var(--gl);pointer-events:none;transition:transform .35s var(--e),top .35s var(--e),color .3s}
+.fld input:focus+label,.fld input:not(:placeholder-shown)+label,.fld label.up{top:1.0625rem;transform:translateY(-50%) scale(.78)}
+.fld input:focus+label,.fld select:focus+label{color:var(--purple)}
+.fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--purple);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--e);pointer-events:none}
+.fld:focus-within::after{transform:scaleX(1)}
+.fld .chev{position:absolute;right:1rem;top:50%;width:1rem;height:1rem;margin-top:-.5rem;fill:none;stroke:var(--gl);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:transform .35s var(--e),stroke .3s}
+.fld:focus-within .chev{transform:rotate(180deg);stroke:var(--purple)}
+.fat{margin:1.5rem 0 0;padding:0;border:0;min-width:0}
+.fat legend{padding:0;margin-bottom:.875rem;font:600 .8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gl)}
+.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+.chipr{position:relative;display:block;cursor:pointer}
+.chipr input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.chipr-b{display:flex;align-items:center;gap:.875rem;min-height:3.5rem;height:100%;padding:.875rem 1rem;border:1px solid var(--line);border-radius:2px;background:#fff;transition:border-color .3s var(--e),background .3s,box-shadow .3s}
+.chipr:hover .chipr-b{border-color:var(--lav);background:#fcfaff}
+.chipr-dot{position:relative;width:1.125rem;height:1.125rem;border-radius:50%;border:1.5px solid #cfc8d8;flex:none;transition:border-color .3s}
+.chipr-dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--purple);transform:scale(0);transition:transform .4s var(--e)}
+.chipr-t{display:flex;flex-direction:column;gap:.3125rem}
+.chipr-t b{font:600 .9375rem/1.25 Manrope,sans-serif;color:var(--ink)}
+.chipr-t small{font:700 .6875rem/1 Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+.chipr-t small.m{color:var(--mag)}
+.chipr input:checked+.chipr-b{border-color:var(--purple);background:var(--wh);box-shadow:inset 0 0 0 1px var(--purple)}
+.chipr input:checked+.chipr-b .chipr-dot{border-color:var(--purple)}
+.chipr input:checked+.chipr-b .chipr-dot::after{transform:scale(1)}
+.chipr input:focus-visible+.chipr-b{outline:2px solid var(--mag);outline-offset:2px}
+.hint{margin-top:.75rem;font:400 .8125rem/1.45 Manrope,sans-serif;color:var(--gl)}
+.submit-row{display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem;margin-top:2rem}
+.submit-row .foot{max-width:22rem}
+.dots{display:inline-flex;gap:4px}
+.dots span{width:5px;height:5px;border-radius:50%;background:currentColor;animation:om-dot 1.1s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.15s}
+.dots span:nth-child(3){animation-delay:.3s}
+.err{margin-top:1.25rem;padding:1rem 1.125rem;border:1px solid #e0574f;border-radius:2px;background:#fdf2f1;font:500 .9375rem/1.5 Manrope,sans-serif;color:#a3322b}
+.err.sh1{animation:om-shake1 .45s var(--e)}
+.err.sh2{animation:om-shake2 .45s var(--e)}
+.ok{display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:1rem 0 .5rem;animation:om-in .6s var(--e) both}
+.ok svg.mk{width:4rem;height:4rem;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ok .ring{stroke:var(--mint);stroke-width:2.5;stroke-dasharray:160;stroke-dashoffset:160;animation:om-draw .9s var(--eio) .1s forwards}
+.ok .tick{stroke:var(--mint);stroke-width:3;stroke-dasharray:40;stroke-dashoffset:40;animation:om-draw .5s var(--e) .75s forwards}
+.ok b{display:block;max-width:30rem;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.ok p{max-width:32rem;font:400 .9375rem/1.65 Manrope,sans-serif;color:var(--g6)}
+.ok .foot{max-width:30rem;font-size:.8125rem;color:var(--gl)}
+
+/* ---------- bento ---------- */
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.25rem;margin-top:3.5rem}
+.tile{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;min-height:19rem;padding:2.25rem;background:#fff;border:1px solid var(--line);border-radius:2px;transition:border-color .45s var(--e),transform .5s var(--e),box-shadow .5s var(--e)}
+.tile::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(26rem circle at var(--mx,50%) var(--my,50%),rgba(103,48,190,.11),rgba(103,48,190,0) 45%);opacity:0;transition:opacity .45s}
+.tile:hover{border-color:var(--lav);transform:translateY(-4px);box-shadow:0 30px 60px -36px rgba(103,48,190,.5)}
+.tile:hover::before{opacity:1}
+.tile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.tile-n{font:800 .8125rem/1 Manrope,sans-serif;color:var(--purple)}
+.tile-ic{display:grid;place-items:center;width:3rem;height:3rem;border:1px solid var(--line);border-radius:2px;color:var(--purple);transition:background .4s var(--e),color .4s,border-color .4s,transform .6s var(--e)}
+.tile:hover .tile-ic{background:var(--purple);border-color:var(--purple);color:#fff}
+.tile p{margin-top:.625rem;font:400 .9375rem/1.6 Manrope,sans-serif;color:var(--g6)}
+.tile.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.tile.dark::before{background:radial-gradient(30rem circle at var(--mx,50%) var(--my,50%),rgba(230,44,124,.2),rgba(230,44,124,0) 45%)}
+.tile.dark .tile-n{color:var(--mag)}
+.tile.dark h3{color:#fff}
+.tile.dark p{color:rgba(255,255,255,.66);max-width:26rem}
+.tile.dark::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.07) 50%,rgba(255,255,255,0) 65%);transform:translateX(-100%);transition:transform 1.2s var(--e);pointer-events:none}
+.tile.dark:hover::after{transform:translateX(100%)}
+.big-n{font:800 clamp(3.25rem,5.4vw,5rem)/.9 Manrope,sans-serif;letter-spacing:-.06em;color:var(--purple);transition:color .45s;white-space:nowrap}
+.big-n small{font-size:.42em;letter-spacing:-.02em;margin-left:.15em}
+.tile:hover .big-n{color:var(--mag)}
+.tile.dark .big-n{color:#fff;font-size:clamp(3.5rem,6.4vw,6rem)}
+.tile.dark .big-n small{color:var(--mag)}
+.tile.dark:hover .big-n{color:#fff}
+.s3{grid-column:span 3}
+.s4{grid-column:span 4}
+.s5{grid-column:span 5}
+.s6{grid-column:span 6}
+.meter{position:relative;height:.375rem;margin-top:1.25rem;background:var(--line);overflow:hidden}
+.meter i{position:absolute;left:0;top:0;bottom:0;width:60%;background:linear-gradient(90deg,var(--purple),var(--mag));transform-origin:0 50%}
+
+/* ---------- etapas ---------- */
+.steps-w{position:relative;margin-top:4rem}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:0;list-style:none}
+.tl{position:absolute;left:0;right:0;top:0;height:1px;background:var(--line)}
+.tl-fill{position:absolute;inset:0;background:linear-gradient(90deg,var(--purple),var(--mag));transform-origin:0 50%}
+.step{position:relative;padding:3rem 2rem 0 0}
+.step-node{position:absolute;top:-7px;left:0;width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--purple);transition:transform .45s var(--e),background .35s}
+.step:last-child .step-node{border-color:var(--mag)}
+.step:hover .step-node{transform:scale(1.35);background:var(--purple)}
+.step:last-child:hover .step-node{background:var(--mag)}
+.step-n{display:block;font:800 4.5rem/1 Manrope,sans-serif;letter-spacing:-.05em;color:#ede6f8;transition:color .45s var(--e),transform .6s var(--e)}
+.step:hover .step-n{color:var(--purple);transform:translateY(-4px)}
+.step:last-child:hover .step-n{color:var(--mag)}
+.step h3{margin-top:1.75rem}
+.step p{margin-top:.75rem;font:400 .9375rem/1.6 Manrope,sans-serif;color:var(--g6);max-width:16rem}
+
+/* ---------- seção escura ---------- */
+.dsec{position:relative;isolation:isolate;overflow:hidden;background:var(--ink);color:#fff;padding:8rem 0}
+.dsec .orb.p{width:36rem;height:36rem;right:-10rem;top:-8rem;background:rgba(103,48,190,.5)}
+.tri-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:5rem;align-items:center}
+.dsec .body{color:rgba(255,255,255,.64);max-width:34rem}
+.map{position:relative;aspect-ratio:1264/848;overflow:hidden;border-radius:2px;border:1px solid rgba(255,255,255,.12)}
+.map img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.4s var(--e)}
+.map:hover img{transform:scale(1.1)}
+.map::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,30,.75),rgba(20,17,30,0) 45%);pointer-events:none}
+.map .chip{left:1.5rem;bottom:1.5rem;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:4.5rem;border-top:1px solid rgba(255,255,255,.14)}
+.stat{padding:2.25rem 2rem 0 0}
+.stat+.stat{padding-left:2rem;border-left:1px solid rgba(255,255,255,.14)}
+.stat b{display:block;font:700 clamp(2.25rem,4vw,3.75rem)/1 Manrope,sans-serif;letter-spacing:-.05em;color:#fff}
+.stat b em{font-style:normal;color:var(--mag)}
+.stat p{margin-top:.875rem;max-width:20rem;font:400 .9375rem/1.55 Manrope,sans-serif;color:rgba(255,255,255,.62)}
+
+/* ---------- FAQ ---------- */
+.faq-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:5rem;align-items:start}
+.faq-side{position:sticky;top:8rem;display:flex;flex-direction:column;gap:1.25rem}
+.faq{border-top:1px solid var(--ink)}
+.faq-i{border-bottom:1px solid var(--line)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:2rem;width:100%;padding:1.75rem 0;background:transparent;border:0;text-align:left;cursor:pointer;color:var(--ink)}
+.faq-q:focus-visible{outline:2px solid var(--mag);outline-offset:4px}
+.faq-q .qt{flex:1;font:700 1.25rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.faq-ic{position:relative;flex:none;width:2.5rem;height:2.5rem;border:1px solid var(--line);border-radius:50%;transition:border-color .2s ease}
+.faq-q:hover .faq-ic{border-color:var(--purple)}
+.faq-ic span{position:absolute;left:50%;top:50%;display:block;background:var(--purple)}
+.faq-ic .h{width:.875rem;height:1.5px;margin:-.75px 0 0 -.4375rem}
+.faq-ic .v{width:1.5px;height:.875rem;margin:-.4375rem 0 0 -.75px;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease}
+.faq-a p{margin:0 0 1.875rem;max-width:42rem;font:400 1rem/1.7 Manrope,sans-serif;color:var(--g6);text-wrap:pretty}
+
+/* ---------- CTA final ---------- */
+.cta{position:relative;isolation:isolate;overflow:hidden;background:var(--ink);padding:8rem 0;border-top:1px solid rgba(255,255,255,.08)}
+.cta .orb.p{width:40rem;height:40rem;right:-10rem;top:-22rem;background:rgba(103,48,190,.58)}
+.cta .orb.m{width:30rem;height:30rem;left:-6rem;bottom:-20rem;background:rgba(230,44,124,.3)}
+.cta-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:3.5rem;flex-wrap:wrap}
+.cta h2{font:700 clamp(2.75rem,6vw,5.75rem)/1 Manrope,sans-serif;letter-spacing:-.055em;color:#fff;max-width:54rem}
+.cta h2 .dot{color:var(--mag)}
+.cta .body{margin-top:1.25rem;max-width:32rem;color:rgba(255,255,255,.64)}
+.cta-btns{display:flex;flex-direction:column;gap:.75rem;flex:none}
+
+/* ---------- movimento ---------- */
+@keyframes om-fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes om-blur{from{opacity:0;filter:blur(14px);transform:translateY(24px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes om-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes om-draw{to{stroke-dashoffset:0}}
+@keyframes om-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.6)}70%{box-shadow:0 0 0 9px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}
+@keyframes om-marq{to{transform:translateX(-50%)}}
+@keyframes om-dot{0%,75%,100%{opacity:.3;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}
+@keyframes om-ring{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+@keyframes om-drift{from{transform:translate(0,0)}to{transform:translate(-7%,9%)}}
+@keyframes om-shake1{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes om-shake2{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes om-rv{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+@keyframes om-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes om-panel{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes om-item{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes om-pulse7{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}
+@keyframes om-word{from{opacity:0;transform:translateY(108%) rotate(5deg)}to{opacity:1;transform:none}}
+@keyframes om-hdr{from{background-color:rgba(20,17,30,0);border-bottom-color:rgba(255,255,255,0)}to{background-color:rgba(20,17,30,.86);border-bottom-color:rgba(255,255,255,.1)}}
+@supports (animation-timeline: view()){
+.rv{animation:om-rv linear both;animation-timeline:view();animation-range:entry 0% cover 30%}
+.tl-fill,.meter i{animation:om-grow linear both;animation-timeline:view();animation-range:entry 20% cover 55%}
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1100px){
+.hero-grid,.form-grid,.tri-grid,.faq-grid{grid-template-columns:minmax(0,1fr);gap:3.5rem}
+.stage{max-width:32rem;width:100%}
+.bento{grid-template-columns:repeat(6,minmax(0,1fr))}
+.s3,.s4,.s5{grid-column:span 3}
+.s6{grid-column:span 6}
+.faq-side{position:static}
+}
+@media (max-width:720px){
+.wrap{padding-left:1.25rem;padding-right:1.25rem}
+.hero{margin-top:-5.125rem;padding:7.5rem 0 3.5rem}
+.terms,.stats{grid-template-columns:minmax(0,1fr)}
+.term,.term+.term,.stat,.stat+.stat{padding:1.25rem 0;border-left:0}
+.term+.term,.stat+.stat{border-top:1px solid rgba(255,255,255,.14)}
+.ticket{width:100%;margin-left:0;grid-template-columns:9.5rem minmax(0,1fr);-webkit-mask:none;mask:none}
+.ticket-a{padding:1rem}
+.ticket .big{font-size:2rem}
+.vid-cap b{font-size:.8125rem}
+.sec,.dsec,.cta{padding:5rem 0}
+.fields,.chips{grid-template-columns:minmax(0,1fr)}
+.panel{padding:1.75rem 1.25rem}
+.bento{grid-template-columns:minmax(0,1fr)}
+.s3,.s4,.s5,.s6{grid-column:auto}
+.steps{grid-template-columns:minmax(0,1fr)}
+.tl{display:none}
+.step{padding:1.75rem 0 1.75rem 2rem;border-left:1px solid var(--line)}
+.step-node{top:2.25rem;left:-8px}
+.step-n{font-size:3.25rem}
+.faq-a p{margin-left:0}
+.faq-q .qn{display:none}
+.cta-btns{width:100%}
+.cta-btns .btn,.cta-row .btn{width:100%}
+.ftr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ftr-brand{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){
+.om *,.om *::before,.om *::after{animation:none!important;transition:none!important}
+.smile{stroke-dashoffset:0}
+.ok .ring,.ok .tick{stroke-dashoffset:0}
+}
+/* ---------- título do hero: entra por trechos (cada trecho é uma string traduzível) ---------- */
+.ch{animation:om-chunk 1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes om-chunk{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.ch{animation:none}}
+</style>
 <script src="./image-slot.js"></script>
 <script src="./om-motion.js" defer></script>
 </helmet>
 <div id="om-site" style="width:100%;max-width:var(--size-container-max);margin:0 auto;background:#ffffff;font-family:Manrope,sans-serif">
 <dc-import name="Header" active="servicos" style="position:sticky;top:0;z-index:40" hint-size="100%,84px"></dc-import>
-<div data-om-motion="off" data-om-pad="1" data-om-pv="9rem-6rem" data-om-pull="1" style="position:relative;isolation:isolate;overflow:hidden;margin-top:-5.125rem;background:#14111e;padding:9rem 5rem 6rem">
-<img data-om-fade="1" src="assets/case-novo-amazon.png" alt="" style="position:absolute;inset:0;z-index:-3;display:block;width:100%;height:100%;object-fit:cover;opacity:.85;mix-blend-mode:luminosity">
-<span style="position:absolute;inset:0;z-index:-2;display:block;background:rgba(35,20,70,.82);pointer-events:none"></span>
-<div data-om-grid="pair" style="display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center">
+<div class="om" data-om-motion="off">
+<section class="hero" onMouseMove="{{ heroMove }}" onMouseLeave="{{ heroLeave }}">
+<span class="orb p" aria-hidden="true"></span>
+<span class="orb m" aria-hidden="true"></span>
+<span class="hero-spot" aria-hidden="true"></span>
+<div class="wrap hero-grid">
 <div>
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.5rem">Vender na Amazon · Novos lojistas de todo o Brasil</div>
-<h1 data-om-fz="d2" style="margin:0;font:700 3.5rem/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff;text-wrap:pretty">Entre na Amazon com <span style="color:#e62c7c">3 meses de consultoria gratuita</span></h1>
-<p style="margin:1.5rem 0 0;max-width:37.5rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.72)">São 2 conferências por mês com a Origenow, para empresas que faturam mais de R$ 250 mil por mês em outros canais. Para todo novo lojista, a criação da conta e o auxílio no cadastro de produtos também saem sem custo, em qualquer estado.</p>
-<div data-om-flex="row" data-om-cta="1" style="display:flex;align-items:center;gap:0.875rem;margin-top:2.25rem">
-<a href="/vender-na-amazon#formulario" onClick="{{ irFormulario }}" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none">Quero começar</a>
-<a href="Origenow%20Case%20Novo.dc.html?c=amazon" style-hover="background:rgba(255,255,255,.09)" style="transition:background .18s ease;border:1px solid rgba(255,255,255,.26);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none">Ver o case Amazon →</a>
+<div class="eyebrow lav"><span class="live" aria-hidden="true"></span>Vender na Amazon · Novos lojistas de todo o Brasil</div>
+<h1 class="d1"><span class="ch" style="animation-delay:.2s">Entre na Amazon com</span> <span class="mag ch" style="animation-delay:.38s">3 meses de consultoria</span> <span class="hl ch" style="animation-delay:.54s">gratuita<svg class="smile" viewBox="0 0 240 24" aria-hidden="true"><path d="M3 5 C 60 21, 180 21, 237 3"></path></svg></span></h1>
+<p class="lead">São 2 conferências por mês com a Origenow, para empresas que faturam mais de R$ 250 mil por mês em outros canais. Para todo novo lojista, a criação da conta e o auxílio no cadastro de produtos também saem sem custo, em qualquer estado.</p>
+<div class="cta-row">
+<a class="btn btn-light" href="/vender-na-amazon#formulario" onClick="{{ irForm }}">Quero começar</a>
+<a class="btn btn-ghost" href="Origenow%20Case%20Novo.dc.html?c=amazon">Ver o case Amazon →</a>
 </div>
+<ul class="checks">
+<li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Conta e cadastro de produtos grátis</li>
+<li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Novos lojistas de qualquer estado</li>
+<li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>30 dias de FBA sem tarifa</li>
+</ul>
 </div>
-<div id="amz-video" style="position:relative;aspect-ratio:16/9;min-height:14.5rem;overflow:hidden;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(1rem) saturate(140%);-webkit-backdrop-filter:blur(1rem) saturate(140%)">
+<div class="stage">
+<span class="stage-glow" aria-hidden="true"></span>
+<div class="vid" id="amz-video">
 <sc-if value="{{ temVideo }}" hint-placeholder-val="{{ false }}">
-<iframe src="{{ videoHero }}" title="Vídeo sobre vender na Amazon com a Origenow" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
+<iframe src="{{ videoHero }}" title="Vídeo sobre vender na Amazon com a Origenow" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
 </sc-if>
 <sc-if value="{{ semVideo }}" hint-placeholder-val="{{ true }}">
-<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:1.5rem 2.25rem">
-<div style="font:600 0.8125rem/1.3 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0">Consultoria gratuita</div>
-<div style="margin-top:0.75rem;font:700 3.25rem/1.05 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff">3 meses</div>
-<div style="margin-top:0.5rem;font:600 1.25rem/1.3 Manrope,sans-serif;letter-spacing:-.02em;color:#ffffff">2 conferências por mês</div>
-<div style="margin-top:0.875rem;font:400 0.875rem/1.5 Manrope,sans-serif;color:rgba(255,255,255,.66)">Para empresas acima de R$ 250 mil por mês em outros canais.</div>
-</div>
+<div class="vid-poster"><img src="assets/case-novo-amazon.webp" alt=""></div>
+<span class="vid-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"></path></svg></span>
+<div class="vid-cap"><span class="tag">Vídeo</span><b>Vender na Amazon com a Origenow</b></div>
 </sc-if>
 </div>
+<div class="ticket">
+<div class="ticket-a"><div class="k">Consultoria gratuita</div><div class="big">3 meses</div></div>
+<div class="ticket-b"><div><div class="sub">2 conferências por mês</div><p>Para empresas acima de R$ 250 mil por mês em outros canais.</p></div><span class="seal" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></div>
 </div>
 </div>
-<div id="formulario" data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0;scroll-margin-top:5rem">
-<div data-om-grid="pair" style="display:grid;grid-template-columns:1.15fr .85fr;gap:4rem;align-items:start">
-<div>
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Comece aqui</div><h2 data-om-fz="d3" style="margin:0;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">Veja a sua oferta para entrar na Amazon</h2>
+</div>
+</section>
+
+<section class="sec" id="formulario" style="scroll-margin-top:5rem">
+<div class="wrap form-grid">
+<div class="rv">
+<div class="sec-head">
+<div class="eyebrow"><span class="n">01</span><span class="bar"></span>Comece aqui</div>
+<h2 class="d2">Veja a sua oferta para entrar na Amazon</h2>
+<p class="body">Escolha a faixa de faturamento e veja o que já vale para a sua empresa. A resposta completa aparece logo depois do envio.</p>
+</div>
+<div class="plans">
+<div class="{{ planConta }}">
+<span class="plan-tag">Incluído</span>
+<div class="k">Para todo novo lojista</div>
+<h3 class="h3">Conta e cadastro de produtos grátis</h3>
+<p>A Origenow ajuda na criação da conta e no cadastro dos produtos, sem custo, em qualquer estado.</p>
+</div>
+<div class="{{ planGratis }}">
+<span class="plan-tag">Seu perfil</span>
+<div class="k">Mais de R$ 250 mil por mês</div>
+<h3 class="h3">3 meses de consultoria gratuita</h3>
+<p>São 2 conferências por mês, para quem já fatura esse valor em outros canais e quer entrar na Amazon com um plano.</p>
+</div>
+<div class="{{ planDesc }}">
+<span class="plan-tag">Seu perfil</span>
+<div class="k">Até R$ 150 mil por mês</div>
+<h3 class="h3">Consultoria com desconto</h3>
+<p>Para quem está crescendo e quer apoio da Origenow na entrada do canal.</p>
+</div>
+</div>
+<div class="cred"><span>Parceiro certificado</span><img src="assets/cert-amazon-spn.png" alt="Amazon SPN certified, Service Provider Network"></div>
+</div>
+
+<div class="panel rv" id="form-painel" aria-live="polite">
 <sc-if value="{{ gratuita }}" hint-placeholder-val="{{ false }}">
-<div style="display:flex;flex-direction:column;align-items:flex-start;gap:1.125rem;margin-top:2.25rem">
-<span style="width:3.5rem;height:3.5rem;background:#2ecf9a;color:#ffffff;font:700 1.3125rem/3.5rem Manrope,sans-serif;text-align:center;border-radius:50%;display:block">✓</span>
-<span style="display:block;max-width:32rem;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Sua empresa tem 3 meses de consultoria gratuita</span>
-<span style="display:block;max-width:32rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">São 2 conferências por mês com a Origenow, além da conta e do cadastro de produtos sem custo. Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis. Se preferir, já pode começar a sua conta.</span>
-<a id="amz-abrir-conta" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}" style-hover="background:#5527a4;color:#ffffff" style="display:inline-block;transition:background .18s ease;background:#6730be;color:#ffffff;font:600 0.9375rem/1.2 Manrope,sans-serif;padding:1.125rem 2rem;text-decoration:none">Começar a conta na Amazon</a>
-<p style="margin:0;max-width:30rem;font:400 0.8125rem/1.55 Manrope,sans-serif;color:#6b6480">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
+<div class="ok">
+<svg class="mk" viewBox="0 0 52 52" aria-hidden="true"><circle class="ring" cx="26" cy="26" r="24"></circle><path class="tick" d="M15 27l7 7 15-15"></path></svg>
+<b>Sua empresa tem 3 meses de consultoria gratuita</b>
+<p>São 2 conferências por mês com a Origenow, além da conta e do cadastro de produtos sem custo. Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis. Se preferir, já pode começar a sua conta.</p>
+<a id="amz-abrir-conta" class="btn btn-primary" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}">Começar a conta na Amazon</a>
+<p class="foot">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
 </div>
 </sc-if>
 <sc-if value="{{ desconto }}" hint-placeholder-val="{{ false }}">
-<div style="display:flex;flex-direction:column;align-items:flex-start;gap:1.125rem;margin-top:2.25rem">
-<span style="width:3.5rem;height:3.5rem;background:#2ecf9a;color:#ffffff;font:700 1.3125rem/3.5rem Manrope,sans-serif;text-align:center;border-radius:50%;display:block">✓</span>
-<span style="display:block;max-width:32rem;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Sua empresa tem consultoria com desconto</span>
-<span style="display:block;max-width:32rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Além da conta e do cadastro de produtos sem custo, você tem desconto na consultoria da Origenow. Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis. Se preferir, já pode começar a sua conta.</span>
-<a id="amz-abrir-conta" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}" style-hover="background:#5527a4;color:#ffffff" style="display:inline-block;transition:background .18s ease;background:#6730be;color:#ffffff;font:600 0.9375rem/1.2 Manrope,sans-serif;padding:1.125rem 2rem;text-decoration:none">Começar a conta na Amazon</a>
-<p style="margin:0;max-width:30rem;font:400 0.8125rem/1.55 Manrope,sans-serif;color:#6b6480">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
+<div class="ok">
+<svg class="mk" viewBox="0 0 52 52" aria-hidden="true"><circle class="ring" cx="26" cy="26" r="24"></circle><path class="tick" d="M15 27l7 7 15-15"></path></svg>
+<b>Sua empresa tem consultoria com desconto</b>
+<p>Além da conta e do cadastro de produtos sem custo, você tem desconto na consultoria da Origenow. Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis. Se preferir, já pode começar a sua conta.</p>
+<a id="amz-abrir-conta" class="btn btn-primary" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}">Começar a conta na Amazon</a>
+<p class="foot">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
 </div>
 </sc-if>
 <sc-if value="{{ aDefinir }}" hint-placeholder-val="{{ false }}">
-<div style="display:flex;flex-direction:column;align-items:flex-start;gap:1.125rem;margin-top:2.25rem">
-<span style="width:3.5rem;height:3.5rem;background:#2ecf9a;color:#ffffff;font:700 1.3125rem/3.5rem Manrope,sans-serif;text-align:center;border-radius:50%;display:block">✓</span>
-<span style="display:block;max-width:32rem;font:700 1.625rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Sua conta e o cadastro de produtos saem sem custo</span>
-<span style="display:block;max-width:32rem;font:400 0.9375rem/1.65 Manrope,sans-serif;color:#56506a">Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis e apresenta as opções de consultoria para o seu faturamento. Se preferir, já pode começar a sua conta.</span>
-<a id="amz-abrir-conta" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}" style-hover="background:#5527a4;color:#ffffff" style="display:inline-block;transition:background .18s ease;background:#6730be;color:#ffffff;font:600 0.9375rem/1.2 Manrope,sans-serif;padding:1.125rem 2rem;text-decoration:none">Começar a conta na Amazon</a>
-<p style="margin:0;max-width:30rem;font:400 0.8125rem/1.55 Manrope,sans-serif;color:#6b6480">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
+<div class="ok">
+<svg class="mk" viewBox="0 0 52 52" aria-hidden="true"><circle class="ring" cx="26" cy="26" r="24"></circle><path class="tick" d="M15 27l7 7 15-15"></path></svg>
+<b>Sua conta e o cadastro de produtos saem sem custo</b>
+<p>Nosso comercial fala com você pelo WhatsApp em até 2 dias úteis e apresenta as opções de consultoria para o seu faturamento. Se preferir, já pode começar a sua conta.</p>
+<a id="amz-abrir-conta" class="btn btn-primary" href="{{ linkAmazon }}" target="_blank" rel="noopener sponsored" onClick="{{ aoAbrirConta }}">Começar a conta na Amazon</a>
+<p class="foot">Link de parceiro: a Origenow pode ser remunerada pela Amazon pelas contas abertas por ele. O cadastro, a aprovação e as tarifas são da Amazon.</p>
 </div>
 </sc-if>
 <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
-<form id="lead-form" novalidate style="display:contents">
-<div data-om-grid="pair" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.25rem">
+<form id="lead-form" novalidate>
+<div class="panel-top"><b>Conte sobre a empresa</b><span>* obrigatório</span></div>
 <input type="text" id="amz-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Nome</div><input type="text" id="amz-nome" name="nome" required placeholder="Como te chamamos?" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Empresa</div><input type="text" id="amz-empresa" name="empresa" placeholder="Razão social ou marca" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">E-mail</div><input type="email" id="amz-email" name="email" required placeholder="nome@empresa.com.br" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">WhatsApp</div><input type="tel" id="amz-whatsapp" name="whatsapp" required placeholder="(00) 00000-0000" style="width:100%;box-sizing:border-box;appearance:none;background:#ffffff;outline:none;border:1px solid #e6e2ec;padding:1rem 1.125rem;font:400 0.9375rem/1 Manrope,sans-serif;color:#14111e;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Estado da empresa</div><select id="amz-uf" name="uf" required style="width:100%;box-sizing:border-box;background:#ffffff;outline:none;border:1px solid #e6e2ec;border-radius:0;padding:1rem 1.125rem;font:400 0.9375rem/1.2 Manrope,sans-serif;color:#14111e;cursor:pointer;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"><option value="">Selecione</option><option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapá</option><option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceará</option><option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option><option value="GO">Goiás</option><option value="MA">Maranhão</option><option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option><option value="PA">Pará</option><option value="PB">Paraíba</option><option value="PR">Paraná</option><option value="PE">Pernambuco</option><option value="PI">Piauí</option><option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option><option value="RO">Rondônia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option><option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option></select></div>
-<div style="grid-column:span 1"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480;margin-bottom:0.625rem">Faturamento mensal</div><select id="amz-faturamento" name="faturamento" required style="width:100%;box-sizing:border-box;background:#ffffff;outline:none;border:1px solid #e6e2ec;border-radius:0;padding:1rem 1.125rem;font:400 0.9375rem/1.2 Manrope,sans-serif;color:#14111e;cursor:pointer;transition:border-color .18s ease" style-hover="border-color:#6730be" style-focus="border-color:#6730be"><option value="">Selecione</option><option value="ate-50">Até R$ 50 mil por mês</option><option value="50-150">De R$ 50 mil a R$ 150 mil por mês</option><option value="150-250">Mais de R$ 150 mil até R$ 250 mil por mês</option><option value="acima-250">Mais de R$ 250 mil por mês</option></select><div style="margin-top:0.5rem;font:400 0.8125rem/1.45 Manrope,sans-serif;color:#6b6480">Some os canais em que você já vende: marketplaces, loja própria e venda direta.</div></div>
+<div class="fields">
+<div class="fld"><input type="text" id="amz-nome" name="nome" required autocomplete="name" placeholder="Como te chamamos?"><label for="amz-nome">Nome<span aria-hidden="true"> *</span></label></div>
+<div class="fld"><input type="text" id="amz-empresa" name="empresa" autocomplete="organization" placeholder="Razão social ou marca"><label for="amz-empresa">Empresa</label></div>
+<div class="fld"><input type="email" id="amz-email" name="email" required autocomplete="email" placeholder="nome@empresa.com.br"><label for="amz-email">E-mail<span aria-hidden="true"> *</span></label></div>
+<div class="fld"><input type="tel" id="amz-whatsapp" name="whatsapp" required autocomplete="tel" placeholder="(00) 00000-0000"><label for="amz-whatsapp">WhatsApp<span aria-hidden="true"> *</span></label></div>
+<div class="fld full"><select id="amz-uf" name="uf" required><option value="">Selecione</option><option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapá</option><option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceará</option><option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option><option value="GO">Goiás</option><option value="MA">Maranhão</option><option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option><option value="PA">Pará</option><option value="PB">Paraíba</option><option value="PR">Paraná</option><option value="PE">Pernambuco</option><option value="PI">Piauí</option><option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option><option value="RO">Rondônia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option><option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option></select><label class="up" for="amz-uf">Estado da empresa<span aria-hidden="true"> *</span></label><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></div>
 </div>
-<div data-om-flex="row" style="display:flex;align-items:center;gap:1.25rem;margin-top:2rem"><span onClick="{{ enviarForm }}" style-hover="background:#5527a4;transform:translateY(-1px)" style="transition:background .18s ease,transform .18s cubic-bezier(.2,.7,.2,1);background:#6730be;color:#ffffff;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 2rem;cursor:pointer">Ver minha oferta</span><span style="font:400 0.8125rem/1.5 Manrope,sans-serif;color:#6b6480">A resposta aparece aqui. Seus dados seguem a nossa <a href="Origenow%20Privacidade.dc.html" style="color:inherit;text-decoration:underline">Política de Privacidade</a>.</span></div>
-<sc-if value="{{ erro }}">
-<div style="margin-top:1rem;border:1px solid #e0574f;background:#fdf2f1;padding:1rem 1.125rem;font:400 0.9375rem/1.5 Manrope,sans-serif;color:#a3322b">{{ erro }}</div>
+<fieldset class="fat">
+<legend>Faturamento mensal<span aria-hidden="true"> *</span></legend>
+<div class="chips">
+<label class="chipr"><input type="radio" name="faturamento" value="ate-50" onChange="{{ pickFat }}"><span class="chipr-b"><span class="chipr-dot"></span><span class="chipr-t"><b>Até R$ 50 mil por mês</b><small>Consultoria com desconto</small></span></span></label>
+<label class="chipr"><input type="radio" name="faturamento" value="50-150" onChange="{{ pickFat }}"><span class="chipr-b"><span class="chipr-dot"></span><span class="chipr-t"><b>De R$ 50 mil a R$ 150 mil por mês</b><small>Consultoria com desconto</small></span></span></label>
+<label class="chipr"><input type="radio" name="faturamento" value="150-250" onChange="{{ pickFat }}"><span class="chipr-b"><span class="chipr-dot"></span><span class="chipr-t"><b>Mais de R$ 150 mil até R$ 250 mil por mês</b></span></span></label>
+<label class="chipr"><input type="radio" name="faturamento" value="acima-250" onChange="{{ pickFat }}"><span class="chipr-b"><span class="chipr-dot"></span><span class="chipr-t"><b>Mais de R$ 250 mil por mês</b><small class="m">3 meses de consultoria gratuita</small></span></span></label>
+</div>
+<p class="hint">Some os canais em que você já vende: marketplaces, loja própria e venda direta.</p>
+</fieldset>
+<div class="submit-row">
+<button class="btn btn-primary" type="submit" disabled="{{ enviando }}">
+<sc-if value="{{ ocioso }}" hint-placeholder-val="{{ true }}"><span>Ver minha oferta</span></sc-if>
+<sc-if value="{{ enviando }}" hint-placeholder-val="{{ false }}"><span>Enviando</span><span class="dots" aria-hidden="true"><span></span><span></span><span></span></span></sc-if>
+</button>
+<p class="foot">A resposta aparece aqui. Seus dados seguem a nossa <a class="ulink" href="Origenow%20Privacidade.dc.html">Política de Privacidade</a>.</p>
+</div>
+<sc-if value="{{ erro }}" hint-placeholder-val="{{ false }}">
+<div class="{{ errCls }}" role="alert">{{ erro }}</div>
 </sc-if>
 </form>
 </sc-if>
 </div>
-<div style="display:flex;flex-direction:column;gap:1.25rem">
-<div style="background:#14111e;padding:1.75rem 1.75rem 1.875rem">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1rem">Para todo novo lojista</div>
-<h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#ffffff">Conta e cadastro de produtos grátis</h3>
-<p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.66)">A Origenow ajuda na criação da conta e no cadastro dos produtos, sem custo, em qualquer estado.</p>
 </div>
-<div style="border:1px solid #e6e2ec;padding:1.75rem 1.75rem 1.875rem">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1rem">Mais de R$ 250 mil por mês</div>
-<h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">3 meses de consultoria gratuita</h3>
-<p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">São 2 conferências por mês, para quem já fatura esse valor em outros canais e quer entrar na Amazon com um plano.</p>
+</section>
+
+<section class="sec" style="padding-top:0">
+<div class="wrap">
+<div class="sec-head rv">
+<div class="eyebrow"><span class="n">02</span><span class="bar"></span>Por que a Amazon</div>
+<h2 class="d2">As vantagens de começar agora</h2>
 </div>
-<div style="border:1px solid #e6e2ec;padding:1.75rem 1.75rem 1.875rem">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1rem">Até R$ 150 mil por mês</div>
-<h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Consultoria com desconto</h3>
-<p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Para quem está crescendo e quer apoio da Origenow na entrada do canal.</p>
+<div class="bento">
+<article class="tile s5 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="big-n">1<small>ano</small></span><span class="tile-n">01</span></div>
+<div>
+<h3 class="h3">Um ano sem mensalidade</h3>
+<p>O plano Profissional tem mensalidade grátis por 1 ano. Depois, custa R$ 19 por mês.</p>
 </div>
+</article>
+<article class="tile s4 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="big-n">30<small>dias</small></span><span class="tile-n">02</span></div>
+<div>
+<h3 class="h3">30 dias de FBA sem tarifa</h3>
+<p>Isenção de tarifas de logística, coleta e armazenagem no início. Depois, tarifa fixa de R$ 6 por unidade.</p>
 </div>
+</article>
+<article class="tile s3 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="tile-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 4h13v12H1zM14 8h4l3 3v5h-7"></path><circle cx="5.5" cy="18.5" r="2"></circle><circle cx="17.5" cy="18.5" r="2"></circle></svg></span><span class="tile-n">03</span></div>
+<div>
+<h3 class="h3">A Amazon cuida da entrega</h3>
+<p>No FBA, você envia o estoque e a Amazon faz embalagem, envio com rastreamento e atendimento ao cliente.</p>
 </div>
+</article>
+<article class="tile dark s6 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="big-n"><small style="margin:0 .15em 0 0">R$</small>5.300</span><span class="tile-n">04</span></div>
+<div>
+<h3 class="h3">Crédito para anunciar</h3>
+<p>Até R$ 5.300 em crédito publicitário ao anunciar com Produtos Patrocinados.</p>
 </div>
-<div data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Por que a Amazon</div><h2 data-om-fz="d3" style="margin:0 0 2.5rem;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">As vantagens de começar agora</h2>
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem">
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">01</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Um ano sem mensalidade</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">O plano Profissional tem mensalidade grátis por 1 ano. Depois, custa R$ 19 por mês.</p></div>
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">02</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">30 dias de FBA sem tarifa</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Isenção de tarifas de logística, coleta e armazenagem no início. Depois, tarifa fixa de R$ 6 por unidade.</p></div>
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">03</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">A Amazon cuida da entrega</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">No FBA, você envia o estoque e a Amazon faz embalagem, envio com rastreamento e atendimento ao cliente.</p></div>
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">04</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Crédito para anunciar</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Até R$ 5.300 em crédito publicitário ao anunciar com Produtos Patrocinados.</p></div>
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">05</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Um canal a mais</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Seus produtos chegam a quem já compra na Amazon, e você depende menos dos canais em que já vende.</p></div>
-<div style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;padding:2rem 1.875rem 1.875rem"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#e62c7c;margin-bottom:1rem">06</div><h3 style="margin:0;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Espaço para quem é menor</h3><p style="margin:0.625rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">60% das vendas na Amazon são feitas por pequenas e médias empresas, segundo o relatório da Amazon de 2024.</p></div>
+</article>
+<article class="tile s3 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="tile-ic" style="color:#e62c7c"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg></span><span class="tile-n">05</span></div>
+<div>
+<h3 class="h3">Um canal a mais</h3>
+<p>Seus produtos chegam a quem já compra na Amazon, e você depende menos dos canais em que já vende.</p>
 </div>
-<p style="margin:1.25rem 0 0;max-width:47.5rem;font:400 0.8125rem/1.55 Manrope,sans-serif;color:#6b6480">Condições divulgadas pela Amazon em novembro de 2026, sujeitas aos termos dela e a mudanças. As comissões de venda variam por categoria.</p>
+</article>
+<article class="tile s3 rv" onMouseMove="{{ spot }}">
+<div class="tile-top"><span class="big-n">60<small>%</small></span><span class="tile-n">06</span></div>
+<div>
+<h3 class="h3">Espaço para quem é menor</h3>
+<p>60% das vendas na Amazon são feitas por pequenas e médias empresas, segundo o relatório da Amazon de 2024.</p>
+<div class="meter" aria-hidden="true"><i></i></div>
 </div>
-<div data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Como funciona</div><h2 data-om-fz="d3" style="margin:0;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">Do formulário à primeira venda</h2>
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(4,1fr);margin-top:2.5rem;border-top:1px solid #14111e">
-<div style="padding:1.625rem 1.625rem 2rem 0;"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">01</div><div style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Conte sobre a empresa</div><p style="margin:0.75rem 0 0;font:400 0.875rem/1.6 Manrope,sans-serif;color:#56506a">Estado e faturamento mensal, somando os canais em que já vende.</p></div><div style="padding:1.625rem 1.625rem 2rem 1.625rem;border-left:1px solid #e6e2ec;"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">02</div><div style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Veja a sua oferta</div><p style="margin:0.75rem 0 0;font:400 0.875rem/1.6 Manrope,sans-serif;color:#56506a">A resposta aparece logo depois do envio.</p></div><div style="padding:1.625rem 1.625rem 2rem 1.625rem;border-left:1px solid #e6e2ec;"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#6730be;margin-bottom:1rem">03</div><div style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Crie a conta</div><p style="margin:0.75rem 0 0;font:400 0.875rem/1.6 Manrope,sans-serif;color:#56506a">O cadastro é feito no site da Amazon, com a nossa ajuda.</p></div><div style="padding:1.625rem 0 2rem 1.625rem;border-left:1px solid #e6e2ec;"><div style="font:800 0.8125rem/1 Manrope,sans-serif;color:#e62c7c;margin-bottom:1rem">04</div><div style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Cadastre os produtos</div><p style="margin:0.75rem 0 0;font:400 0.875rem/1.6 Manrope,sans-serif;color:#56506a">Ajudamos a colocar os produtos no ar para você começar a vender.</p></div>
+</article>
 </div>
+<p class="foot" style="margin-top:1.5rem">Condições divulgadas pela Amazon em novembro de 2026, sujeitas aos termos dela e a mudanças. As comissões de venda variam por categoria.</p>
 </div>
-<div data-om-pad="1" data-om-pv="6rem-6rem" style="position:relative;overflow:hidden;margin-top:6rem;background:#14111e;padding:6rem 5rem">
-<span style="position:absolute;right:-3%;top:0;width:25rem;height:25rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.55),rgba(103,48,190,0) 70%);filter:blur(3rem);z-index:0;pointer-events:none;display:block"></span>
-<div style="position:relative;z-index:1">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.5rem">Experiência na Amazon</div><h2 data-om-fz="d3" style="margin:0;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">Lojistas lançados, um a um</h2>
-<p style="margin:1.25rem 0 0;max-width:37.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:rgba(255,255,255,.62)">A Origenow foi convidada para um pool selecionado de parceiros da Amazon: abertura de contas, consultoria de onboarding e seleção de prep centers e transportadoras.</p>
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem">
-<div style="padding:1.875rem 1.75rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)"><div style="font:700 2.25rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">+42</div><p style="margin:0.875rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.66)">big sellers lançados no canal, faturando +R$ 75 mil/mês</p></div><div style="padding:1.875rem 1.75rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)"><div style="font:700 2.25rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">MG · SP · ES</div><p style="margin:0.875rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.66)">eixo expandido, com lojistas de MG e ES no FBA</p></div><div style="padding:1.875rem 1.75rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)"><div style="font:700 2.25rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#ffffff">Pool oficial</div><p style="margin:0.875rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.66)">parceiro selecionado pela própria Amazon</p></div>
+</section>
+
+<section class="sec" style="padding-top:0">
+<div class="wrap">
+<div class="sec-head rv">
+<div class="eyebrow"><span class="n">03</span><span class="bar"></span>Como funciona</div>
+<h2 class="d2">Do formulário à primeira venda</h2>
 </div>
-<a href="Origenow%20Case%20Novo.dc.html?c=amazon" style-hover="color:#ffffff" style="display:inline-block;margin-top:2rem;color:#b69ce0;font:600 0.9375rem/1 Manrope,sans-serif;text-decoration:none;transition:color .18s ease">Ver o case completo →</a>
-</div>
-</div>
-<div data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Perguntas diretas</div><h2 data-om-fz="d3" style="margin:0 0 2.5rem;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e">O que perguntam antes de abrir a conta</h2>
-<div data-om-faq="1" style="border-top:1px solid #14111e">
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">A ajuda para criar a conta é mesmo gratuita?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Sim. Para novos lojistas, a Origenow não cobra pela ajuda na criação da conta nem pelo auxílio no cadastro de produtos. As tarifas e comissões de venda são as da Amazon.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Minha empresa precisa estar em algum estado?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Não. A oferta vale para novos lojistas de todo o Brasil.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Como funciona a consultoria gratuita?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">São 3 meses de consultoria, com 2 conferências por mês, para empresas que faturam mais de R$ 250 mil por mês, somando os canais em que já vendem.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Quem tem consultoria com desconto?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Empresas que faturam até R$ 150 mil por mês. O nosso comercial apresenta as condições na conversa.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Quanto custa vender na Amazon?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Segundo a Amazon, o plano Profissional tem mensalidade grátis por 1 ano e depois custa R$ 19 por mês. O plano Individual não tem mensalidade e cobra R$ 2 por item vendido. As comissões variam por categoria.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">O que preciso para abrir a conta?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Segundo a Amazon, CPF ou CNPJ válido, e-mail, conta bancária e cartão de crédito ativos. Também é preciso emitir nota fiscal eletrônica das vendas.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Já vendo na Amazon. Esta oferta serve para mim?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">A oferta é para novos lojistas. Se você já opera no canal e quer crescer, comece pelo diagnóstico da Origenow.</p></div>
-</div>
-<div style="border-bottom:1px solid #e6e2ec">
-<div data-om-faq-q="1" data-om-flex="row" style="display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.625rem 0;cursor:pointer"><span style="font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e;text-wrap:pretty">Esta página é da Amazon?</span><span style="flex:none;position:relative;width:1rem;height:1rem;display:block"><span style="position:absolute;top:0.4375rem;left:0;width:1rem;height:1.5px;background:#6730be;display:block"></span><span data-om-faq-bar="1" style="position:absolute;top:0;left:0.4375rem;width:1.5px;height:1rem;background:#6730be;display:block;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s ease"></span></span></div>
-<div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p style="margin:0 0 1.75rem;max-width:47.5rem;font:400 1rem/1.7 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Não. Esta é uma página da Origenow. O cadastro, a aprovação da conta e as tarifas são da Amazon. A Origenow pode ser remunerada pela Amazon pelas contas abertas pelo nosso link.</p></div>
+<div class="steps-w rv">
+<span class="tl" aria-hidden="true"><span class="tl-fill"></span></span>
+<ol class="steps">
+<li class="step"><span class="step-node" aria-hidden="true"></span><span class="step-n" aria-hidden="true">01</span><h3 class="h3">Conte sobre a empresa</h3><p>Estado e faturamento mensal, somando os canais em que já vende.</p></li>
+<li class="step"><span class="step-node" aria-hidden="true"></span><span class="step-n" aria-hidden="true">02</span><h3 class="h3">Veja a sua oferta</h3><p>A resposta aparece logo depois do envio.</p></li>
+<li class="step"><span class="step-node" aria-hidden="true"></span><span class="step-n" aria-hidden="true">03</span><h3 class="h3">Crie a conta</h3><p>O cadastro é feito no site da Amazon, com a nossa ajuda.</p></li>
+<li class="step"><span class="step-node" aria-hidden="true"></span><span class="step-n" aria-hidden="true">04</span><h3 class="h3">Cadastre os produtos</h3><p>Ajudamos a colocar os produtos no ar para você começar a vender.</p></li>
+</ol>
 </div>
 </div>
+</section>
+
+<section class="dsec">
+<span class="orb p" aria-hidden="true"></span>
+<div class="wrap">
+<div class="tri-grid">
+<div class="sec-head rv">
+<div class="eyebrow lav"><span class="n">04</span><span class="bar"></span>Experiência na Amazon</div>
+<h2 class="d2 on-dark">Lojistas lançados, um a um</h2>
+<p class="body">A Origenow foi convidada para um pool selecionado de parceiros da Amazon: abertura de contas, consultoria de onboarding e seleção de prep centers e transportadoras.</p>
+<div style="margin-top:1rem"><a class="lnk" href="Origenow%20Case%20Novo.dc.html?c=amazon">Ver o case completo →</a></div>
 </div>
-<div data-om-flex="row" style="margin-top:6rem;background:radial-gradient(circle at 94% -34%,rgba(103,48,190,.58),rgba(103,48,190,0) 60%),radial-gradient(circle at 4% 132%,rgba(230,44,124,.32),rgba(230,44,124,0) 58%),#14111e;padding:5rem;display:flex;align-items:center;justify-content:space-between;gap:3.5rem" data-om-pad="1">
-<div><h2 data-om-fz="d2" style="margin:0;max-width:38.75rem;font:700 3.5rem/1.06 Manrope,sans-serif;letter-spacing:-.045em;color:#ffffff">Sua loja na Amazon começa aqui<span style="color:#e62c7c">.</span></h2><p style="margin:1.125rem 0 0;max-width:31.25rem;font:400 1rem/1.7 Manrope,sans-serif;color:rgba(255,255,255,.64)">Conta e cadastro de produtos sem custo, e a sua oferta de consultoria logo depois do envio.</p></div>
-<div style="flex:none;display:flex;flex-direction:column;gap:0.75rem"><a href="/vender-na-amazon#formulario" onClick="{{ irFormulario }}" style-hover="background:#e6e2ec" style="transition:background .18s ease;background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Quero começar</a><a href="Origenow%20Contato.dc.html" style-hover="background:rgba(255,255,255,.1)" style="transition:background .18s ease;border:1px solid rgba(255,255,255,.34);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-align:center;text-decoration:none">Agendar diagnóstico</a></div>
+<div class="map rv">
+<img src="assets/case-novo-amazon.webp" alt="Mapa do Brasil em rede luminosa sobre caixas">
+<span class="chip glass"><span class="live" aria-hidden="true"></span>Eixo MG · SP · ES</span>
+</div>
+</div>
+<div class="stats rv">
+<div class="stat"><b><em>+</em>42</b><p>big sellers lançados no canal, faturando +R$ 75 mil/mês</p></div>
+<div class="stat"><b>MG · SP · ES</b><p>eixo expandido, com lojistas de MG e ES no FBA</p></div>
+<div class="stat"><b>Pool oficial</b><p>parceiro selecionado pela própria Amazon</p></div>
+</div>
+</div>
+</section>
+
+<section class="sec">
+<div class="wrap faq-grid">
+<div class="faq-side rv">
+<div class="eyebrow"><span class="n">05</span><span class="bar"></span>Perguntas diretas</div>
+<h2 class="d2">O que perguntam antes de abrir a conta</h2>
+</div>
+<div class="faq rv" data-om-faq="1">
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">A ajuda para criar a conta é mesmo gratuita?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Sim. Para novos lojistas, a Origenow não cobra pela ajuda na criação da conta nem pelo auxílio no cadastro de produtos. As tarifas e comissões de venda são as da Amazon.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Minha empresa precisa estar em algum estado?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Não. A oferta vale para novos lojistas de todo o Brasil.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Como funciona a consultoria gratuita?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>São 3 meses de consultoria, com 2 conferências por mês, para empresas que faturam mais de R$ 250 mil por mês, somando os canais em que já vendem.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Quem tem consultoria com desconto?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Empresas que faturam até R$ 150 mil por mês. O nosso comercial apresenta as condições na conversa.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Quanto custa vender na Amazon?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Segundo a Amazon, o plano Profissional tem mensalidade grátis por 1 ano e depois custa R$ 19 por mês. O plano Individual não tem mensalidade e cobra R$ 2 por item vendido. As comissões variam por categoria.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">O que preciso para abrir a conta?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Segundo a Amazon, CPF ou CNPJ válido, e-mail, conta bancária e cartão de crédito ativos. Também é preciso emitir nota fiscal eletrônica das vendas.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Já vendo na Amazon. Esta oferta serve para mim?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>A oferta é para novos lojistas. Se você já opera no canal e quer crescer, comece pelo diagnóstico da Origenow.</p></div></div>
+<div class="faq-i"><button data-om-faq-q="1" type="button" class="faq-q"><span class="qt">Esta página é da Amazon?</span><span class="faq-ic" aria-hidden="true"><span class="h"></span><span class="v" data-om-faq-bar="1"></span></span></button><div data-om-faq-a="1" style="overflow:hidden;height:0;transition:height .34s cubic-bezier(.2,.7,.2,1)"><p>Não. Esta é uma página da Origenow. O cadastro, a aprovação da conta e as tarifas são da Amazon. A Origenow pode ser remunerada pela Amazon pelas contas abertas pelo nosso link.</p></div></div>
+</div>
+</div>
+</section>
+
+<section class="cta">
+<span class="orb p" aria-hidden="true"></span>
+<span class="orb m" aria-hidden="true"></span>
+<div class="wrap cta-inner rv">
+<div>
+<h2>Sua loja na Amazon começa aqui<span class="dot">.</span></h2>
+<p class="body">Conta e cadastro de produtos sem custo, e a sua oferta de consultoria logo depois do envio.</p>
+</div>
+<div class="cta-btns">
+<a class="btn btn-light" href="/vender-na-amazon#formulario" onClick="{{ irForm }}">Quero começar</a>
+<a class="btn btn-ghost" href="Origenow%20Contato.dc.html">Agendar diagnóstico</a>
+</div>
+</div>
+</section>
+
 </div>
 <dc-import name="Footer" hint-size="100%,430px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 // Vídeo do hero: cole aqui o endereço de incorporação (ex.: https://www.youtube.com/embed/ID).
-// Enquanto estiver vazio, o espaço mostra o resumo da oferta.
+// Enquanto estiver vazio, o espaço mostra a capa com o botão de play.
 const VIDEO_HERO = '';
 
 // Link de cadastro de parceiro da Origenow: troque aqui se a Amazon emitir outro.
 const LINK_CONTA_AMAZON = 'https://venda.amazon.com.br/?ld=elbrsoa_sanovo_sellerdirect_linkna';
 
+// Mesma régua do servidor (qualificarAmazon), usada só para acender o card na
+// hora da escolha. A oferta que vale é a que o servidor devolve.
+const OFERTA_POR_FATURAMENTO = {
+  'ate-50': 'consultoria-desconto',
+  '50-150': 'consultoria-desconto',
+  '150-250': 'a-definir',
+  'acima-250': 'consultoria-gratuita',
+};
+
 class Component extends DCLogic {
-  state = { sent: false, oferta: '', enviando: false, erro: '' };
+  state = { sent: false, oferta: '', enviando: false, erro: '', errKey: 0, fat: '' };
 
   componentDidMount() {
-    this.reveal();
     // Link direto para o formulário: o corpo é renderizado no cliente, então o
     // navegador não encontra a âncora sozinho ao carregar a página.
     if (location.hash === '#formulario') this._rolagem = setTimeout(() => this.rolarAoFormulario(), 300);
-    // O botão é um <span onClick>, então o submit nativo (tecla Enter) precisa
-    // ser interceptado à parte, senão a página recarrega e o lead se perde.
+    // Clique no botão e Enter num campo disparam o submit nativo do formulário:
+    // é interceptado aqui, senão a página recarrega e o lead se perde.
     this._form = document.getElementById('lead-form');
     if (this._form) {
       this._onSubmit = (e) => { e.preventDefault(); this.enviar(); };
@@ -300,33 +742,67 @@ class Component extends DCLogic {
     }
   }
 
+  componentWillUnmount() {
+    clearTimeout(this._rolagem);
+    if (this._form && this._onSubmit) this._form.removeEventListener('submit', this._onSubmit);
+  }
+
+  // Desce até o painel do formulário (no celular ele fica abaixo dos cards de plano).
+  rolarAoFormulario() {
+    const alvo = document.getElementById('form-painel') || document.getElementById('formulario');
+    if (alvo) alvo.scrollIntoView({ behavior: 'smooth' });
+  }
+
   renderVals() {
-    const { sent, oferta } = this.state;
+    const s = this.state;
+    const ofertaFat = OFERTA_POR_FATURAMENTO[s.fat] || '';
     return {
-      gratuita: sent && oferta === 'consultoria-gratuita',
-      desconto: sent && oferta === 'consultoria-desconto',
-      aDefinir: sent && oferta !== 'consultoria-gratuita' && oferta !== 'consultoria-desconto',
-      notSent: !sent,
       temVideo: !!VIDEO_HERO,
       semVideo: !VIDEO_HERO,
       videoHero: VIDEO_HERO,
-      erro: this.state.erro,
+      notSent: !s.sent,
+      gratuita: s.sent && s.oferta === 'consultoria-gratuita',
+      desconto: s.sent && s.oferta === 'consultoria-desconto',
+      aDefinir: s.sent && s.oferta !== 'consultoria-gratuita' && s.oferta !== 'consultoria-desconto',
+      enviando: s.enviando,
+      ocioso: !s.enviando,
+      erro: s.erro,
+      errCls: 'err ' + (s.errKey % 2 ? 'sh1' : 'sh2'),
       linkAmazon: LINK_CONTA_AMAZON,
-      enviarForm: () => this.enviar(),
+      planConta: 'plan dark' + (s.fat ? ' is-match' : ''),
+      planGratis: 'plan' + (s.fat ? (ofertaFat === 'consultoria-gratuita' ? ' is-match' : ' is-dim') : ''),
+      planDesc: 'plan' + (s.fat ? (ofertaFat === 'consultoria-desconto' ? ' is-match' : ' is-dim') : ''),
+      pickFat: (e) => this.setState({ fat: e.target.value, erro: '' }),
       // Só rola: seguir o link recarregaria a página quando a URL tem UTM ou gclid.
-      irFormulario: (e) => {
+      irForm: (e) => {
         if (e && e.preventDefault) e.preventDefault();
         this.rolarAoFormulario();
       },
       aoAbrirConta: () => {
         if (window.omTrack) window.omTrack('amazon_signup_click', { form_id: 'vender_amazon', oferta: this.state.oferta });
       },
+      spot: (e) => {
+        const el = e.currentTarget;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      },
+      heroMove: (e) => {
+        const el = e.currentTarget;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+        el.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+        el.style.setProperty('--hx', Math.round(e.clientX - r.left) + 'px');
+        el.style.setProperty('--hy', Math.round(e.clientY - r.top) + 'px');
+      },
+      heroLeave: (e) => {
+        const el = e.currentTarget;
+        el.style.setProperty('--px', '0');
+        el.style.setProperty('--py', '0');
+        el.style.setProperty('--hx', '72%');
+        el.style.setProperty('--hy', '28%');
+      },
     };
-  }
-
-  rolarAoFormulario() {
-    const alvo = document.getElementById('formulario');
-    if (alvo) alvo.scrollIntoView({ behavior: 'smooth' });
   }
 
   lerCampos() {
@@ -334,23 +810,26 @@ class Component extends DCLogic {
     return {
       programa: 'amazon',
       nome: ler('nome'), empresa: ler('empresa'), email: ler('email'), whatsapp: ler('whatsapp'),
-      uf: ler('uf'), faturamento: ler('faturamento'), website: ler('website'),
+      uf: ler('uf'), faturamento: this.state.fat, website: ler('website'),
     };
   }
 
+  falhar(msg) {
+    this.setState({ erro: msg, errKey: this.state.errKey + 1 });
+  }
+
   async enviar() {
-    if (this.state.enviando) return;
+    if (this._enviando) return;
 
     const lead = this.lerCampos();
-    if (!lead.nome)  return this.setState({ erro: 'Informe seu nome.' });
-    if (!lead.email) return this.setState({ erro: 'Informe seu e-mail.' });
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
-      return this.setState({ erro: 'E-mail inválido.' });
-    }
-    if (!lead.whatsapp) return this.setState({ erro: 'Informe seu WhatsApp.' });
-    if (!lead.uf) return this.setState({ erro: 'Selecione o estado da empresa.' });
-    if (!lead.faturamento) return this.setState({ erro: 'Selecione o faturamento mensal.' });
+    if (!lead.nome) return this.falhar('Informe seu nome.');
+    if (!lead.email) return this.falhar('Informe seu e-mail.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) return this.falhar('E-mail inválido.');
+    if (!lead.whatsapp) return this.falhar('Informe seu WhatsApp.');
+    if (!lead.uf) return this.falhar('Selecione o estado da empresa.');
+    if (!lead.faturamento) return this.falhar('Selecione o faturamento mensal.');
 
+    this._enviando = true;
     this.setState({ enviando: true, erro: '' });
     try {
       const origem = window.omOrigem ? window.omOrigem() : undefined;
@@ -365,51 +844,12 @@ class Component extends DCLogic {
         if (resposta.corpo.qualificado) window.omTrack('generate_lead', perfil, { email: lead.email, telefone: lead.whatsapp });
         else window.omTrack('lead_unqualified', perfil);
       }
+      this._enviando = false;
       this.setState({ sent: true, oferta, enviando: false });
     } catch (e) {
-      this.setState({ enviando: false, erro: e.message });
+      this._enviando = false;
+      this.setState({ enviando: false, erro: e.message, errKey: this.state.errKey + 1 });
     }
-  }
-
-  reveal() {
-    const root = document.getElementById('om-site');
-    if (!root) return;
-    const ease = 'opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1)';
-    const vh = () => window.innerHeight || document.documentElement.clientHeight || 800;
-    const show = (el) => { el.style.opacity = '1'; el.style.transform = 'none'; };
-    let pending = Array.from(root.children).filter((el) => {
-      if (el.tagName === 'HEADER' || el.tagName === 'DC-IMPORT') return false;
-      if (el.getBoundingClientRect().top < vh() * 0.85) return false;
-      el.style.transition = ease;
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(16px)';
-      return true;
-    });
-    if (!pending.length) return;
-    const check = () => {
-      pending = pending.filter((el) => {
-        if (el.getBoundingClientRect().top >= vh() * 0.92) return true;
-        show(el);
-        return false;
-      });
-      return pending.length === 0;
-    };
-    let last = 0;
-    const tick = (ts) => {
-      if (ts - last > 90) { last = ts; if (check()) return; }
-      this._revealRaf = requestAnimationFrame(tick);
-    };
-    this._revealRaf = requestAnimationFrame(tick);
-    this._onScroll = () => check();
-    window.addEventListener('scroll', this._onScroll, { passive: true, capture: true });
-    setTimeout(() => { if (pending.length) { pending.forEach(show); pending = []; } }, 2600);
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this._rolagem);
-    if (this._form && this._onSubmit) this._form.removeEventListener('submit', this._onSubmit);
-    cancelAnimationFrame(this._revealRaf);
-    if (this._onScroll) window.removeEventListener('scroll', this._onScroll, { capture: true });
   }
 }
 </script>

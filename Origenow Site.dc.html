@@ -105,153 +105,306 @@
 [data-om-fz="d2"]{font-size:1.875rem!important}
 [data-om-fz="d3"]{font-size:1.625rem!important}
 }body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}@keyframes om-flare{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}@keyframes om-streak{0%,100%{opacity:.35;transform:translateX(-12px)}50%{opacity:.9;transform:translateX(14px)}}@keyframes om-grain{0%{transform:translate3d(0,0,0)}33%{transform:translate3d(-6px,4px,0)}66%{transform:translate3d(5px,-5px,0)}100%{transform:translate3d(0,0,0)}}@keyframes om-pores{0%{background-position:0 0}100%{background-position:420px 210px}}@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}@keyframes om-dot{0%,75%,100%{opacity:.28;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}@keyframes om-caret{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes om-ken{0%{transform:scale(1.02) translateX(0)}100%{transform:scale(1.09) translateX(-14px)}}@keyframes om-float{0%,100%{transform:scale(1.06) translateY(0) rotate(0deg)}50%{transform:scale(1.06) translateY(-14px) rotate(-1.2deg)}}@keyframes om-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}@keyframes om-jornada{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes om-veil{from{opacity:0}to{opacity:1}}@keyframes om-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes om-pop{from{opacity:0;transform:scale(.965) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+<style>
+.om,.om *{box-sizing:border-box}
+.om{--ink:#14111e;--purple:#6730be;--purple7:#5527a4;--lav:#b69ce0;--mag:#e62c7c;--mint:#2ecf9a;--g6:#56506a;--gl:#6b6480;--line:#e6e2ec;--wh:#f7f3fc;--e:cubic-bezier(.2,.7,.2,1);--eio:cubic-bezier(.6,.05,.3,1);overflow-x:clip}
+.om img{display:block;max-width:100%}
+.om h1,.om h2,.om h3,.om p{margin:0}
+.wrap{width:100%;max-width:90rem;margin:0 auto;padding-left:5rem;padding-right:5rem}
+
+/* ---------- tipografia ---------- */
+.eyebrow{font:600 .8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--purple)}
+.eyebrow.lav{color:var(--lav)}
+.d2{font:700 clamp(2.125rem,3.4vw,2.75rem)/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:var(--ink);text-wrap:pretty}
+.body{font:400 .9375rem/1.7 Manrope,sans-serif;color:var(--g6);text-wrap:pretty}
+
+/* ---------- botões e links (iguais ao site) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:3.375rem;padding:1.125rem 1.875rem;border:1px solid transparent;border-radius:2px;font:600 .9375rem/1 Manrope,sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .18s ease,border-color .18s ease,transform .18s cubic-bezier(.2,.7,.2,1)}
+.btn:focus-visible{outline:2px solid var(--mag);outline-offset:3px}
+.btn-light{background:#fff;color:var(--ink)}
+.btn-light:hover{background:#e6e2ec;color:var(--ink);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.26);font-weight:500}
+.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.5);color:#fff}
+.lnk{font:600 .875rem/1 Manrope,sans-serif;color:var(--purple);transition:color .18s ease;white-space:nowrap}
+.lnk:hover{color:var(--purple7)}
+
+/* ---------- 1. hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;margin-top:-5.125rem;background:#14111e;color:#fff}
+.h-glow-v{position:absolute;right:-6%;top:-24%;z-index:-1;width:56.25rem;height:56.25rem;pointer-events:none;background:radial-gradient(circle,rgba(103,48,190,.5),rgba(103,48,190,0) 62%);filter:blur(1.25rem)}
+.h-glow-m{position:absolute;right:14%;bottom:-30%;z-index:-1;width:38.75rem;height:38.75rem;pointer-events:none;background:radial-gradient(circle,rgba(230,44,124,.32),rgba(230,44,124,0) 64%);filter:blur(1.5rem);animation:om-flare 15s ease-in-out infinite}
+.h-obj{position:absolute;right:4%;top:50%;z-index:0;width:29.375rem;height:35rem;margin-top:-17.5rem;pointer-events:none;animation:om-float 11s ease-in-out infinite}
+.h-obj-p{position:absolute;inset:0;translate:calc(var(--px,0) * -18px) calc(var(--py,0) * -14px);transition:translate 1.2s var(--e);animation:om-op 1.4s var(--e) .35s both}
+.h-obj img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transform:scale(.965);transition:opacity 1.1s ease,transform 1.6s var(--e);filter:drop-shadow(0 2.5rem 3.75rem rgba(0,0,0,.85))}
+.h-obj img.on{opacity:1;transform:scale(1)}
+.h-obj img.out{opacity:0;transform:scale(1.035)}
+.h-flare{position:absolute;right:22%;top:22%;z-index:1;width:17.5rem;height:17.5rem;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(182,156,224,.12) 34%,rgba(255,255,255,0) 68%);animation:om-flare 15s ease-in-out infinite}
+.h-spot{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(26rem circle at var(--hx,70%) var(--hy,40%),rgba(182,156,224,.07),rgba(182,156,224,0) 62%)}
+.h-grain{position:absolute;inset:-12px;z-index:2;pointer-events:none;opacity:.12;mix-blend-mode:overlay;background-image:url(/_blob/2fd36eb098abf7d65ac5b88c5f34c8ba);background-size:11.25rem 11.25rem;animation:om-grain 1.1s steps(3) infinite}
+.h-c{position:relative;z-index:3;max-width:44rem;padding:10.75rem 0 9rem}
+.h-c .eyebrow{animation:om-fade .8s var(--e) .05s both}
+.h-c h1{margin-top:1.75rem;font:700 clamp(2.75rem,5.6vw,5.25rem)/1.02 Manrope,sans-serif;letter-spacing:-.05em;color:#fff}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .14em 0;margin-bottom:-.14em}
+.w>span{display:inline-block;transform-origin:0 100%;animation:om-word 1.1s var(--e) both}
+.hl{position:relative;display:inline-block;white-space:nowrap}
+.smile{position:absolute;left:-1%;bottom:-.26em;width:96%;height:auto;overflow:visible;fill:none;stroke:var(--mag);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:300;stroke-dashoffset:300;animation:om-draw 1.2s var(--eio) .85s forwards}
+.dot{color:var(--mag)}
+.h-c p{max-width:26rem;margin-top:1.625rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64);animation:om-blur 1s var(--e) .6s both}
+.h-cta{display:flex;flex-wrap:wrap;align-items:center;gap:.875rem;margin-top:2.25rem}
+.h-cta>*{animation:om-fade .9s var(--e) .75s both}
+.h-cta>*+*{animation-delay:.85s}
+.h-dots{position:absolute;right:5rem;bottom:2.5rem;z-index:3;display:flex;gap:.375rem;animation:om-fade .9s var(--e) 1.1s both}
+.h-dot{display:flex;align-items:center;width:2.75rem;height:2.75rem;padding:0;background:none;border:0;cursor:pointer}
+.h-dot span{position:relative;display:block;width:100%;height:2px;overflow:hidden;background:rgba(255,255,255,.22);transition:background .2s ease}
+.h-dot:hover span{background:rgba(255,255,255,.45)}
+.h-dot span i{position:absolute;inset:0;display:block;background:#fff;transform:scaleX(0);transform-origin:0 50%}
+.h-dot.on span i{animation:om-fill 12s linear both}
+.h-dot:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
+
+/* ---------- faixa de parceiros ---------- */
+.band{background:#fff;border-bottom:1px solid var(--line)}
+.band .wrap{display:flex;align-items:center;gap:2.75rem;padding-top:1.625rem;padding-bottom:1.625rem}
+.band-k{flex:none;font:600 .8125rem/1.4 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gl)}
+.band-logos{flex:1;display:flex;align-items:center;justify-content:space-between;gap:1.875rem}
+.band-logos img{width:auto;filter:grayscale(1);opacity:.5;transition:filter .28s var(--e),opacity .28s var(--e)}
+.band-logos img:hover{filter:grayscale(0);opacity:1}
+
+/* ---------- 2. serviços ---------- */
+.svc{padding:6rem 0 0;background:#fff}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:3.75rem;margin-bottom:2.75rem}
+.sec-head .eyebrow{margin-bottom:1.25rem}
+.sec-head .d2{max-width:37.5rem}
+.svc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem}
+.svc-c{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:2.5rem;min-height:15rem;padding:2rem 2rem 2rem;background:#fff;border:1px solid var(--line);border-radius:2px;color:inherit;text-decoration:none;transition:border-color .2s ease,transform .2s var(--e),box-shadow .2s ease}
+.svc-c::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(24rem circle at var(--mx,50%) var(--my,50%),rgba(103,48,190,.1),rgba(103,48,190,0) 45%);opacity:0;transition:opacity .4s}
+.svc-c:hover{border-color:var(--purple);transform:translateY(-2px);box-shadow:0 .5rem 1.5rem -.5rem rgba(103,48,190,.18);color:inherit}
+.svc-c:hover::before{opacity:1}
+.svc-c:focus-visible{outline:2px solid var(--mag);outline-offset:3px}
+.svc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.svc-n{font:800 3rem/1 Manrope,sans-serif;letter-spacing:-.05em;color:#ede6f8;transition:color .35s var(--e)}
+.svc-c:hover .svc-n{color:var(--purple)}
+.svc-ar{display:grid;place-items:center;width:2.5rem;height:2.5rem;border:1px solid var(--line);border-radius:2px;font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e;transition:background .3s ease,border-color .3s ease,color .3s ease}
+.svc-c:hover .svc-ar{background:var(--purple);border-color:var(--purple);color:#fff}
+.svc-c h3{font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.svc-c p{margin-top:.75rem;font:400 .9375rem/1.6 Manrope,sans-serif;color:var(--g6)}
+.svc-c.dark{background:var(--ink);border-color:var(--ink)}
+.svc-c.dark::before{background:radial-gradient(26rem circle at var(--mx,50%) var(--my,50%),rgba(230,44,124,.2),rgba(230,44,124,0) 45%)}
+.svc-c.dark::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.07) 50%,rgba(255,255,255,0) 65%);transform:translateX(-100%);transition:transform 1.2s var(--e);pointer-events:none}
+.svc-c.dark:hover::after{transform:translateX(100%)}
+.svc-c.dark:hover{border-color:var(--ink)}
+.svc-c.dark .svc-n{color:rgba(255,255,255,.12)}
+.svc-c.dark:hover .svc-n{color:var(--mag)}
+.svc-c.dark .svc-ar{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
+.svc-c.dark:hover .svc-ar{background:var(--mag);border-color:var(--mag);color:#fff}
+.svc-c.dark h3{color:#fff}
+.svc-c.dark p{color:rgba(255,255,255,.66)}
+
+/* ---------- 3. como ajudamos ---------- */
+.how{position:relative;isolation:isolate;overflow:hidden;margin-top:6rem;padding:7rem 0 7.5rem;background:var(--ink);color:#fff}
+.how-orb{position:absolute;right:-12rem;top:-14rem;z-index:-1;width:44rem;height:44rem;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.45),rgba(103,48,190,0) 65%);filter:blur(40px);pointer-events:none}
+.how-head{display:flex;align-items:flex-end;justify-content:space-between;gap:3.75rem}
+.how .eyebrow{margin-bottom:1.25rem;color:var(--lav)}
+.how .d2{max-width:34rem;color:#fff}
+.how-lead{max-width:20rem;font:400 .9375rem/1.7 Manrope,sans-serif;color:rgba(255,255,255,.62)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;margin-top:3.5rem}
+.tab{position:relative;display:flex;align-items:baseline;gap:1rem;width:100%;padding:1.5rem 0 0;background:none;border:0;border-top:1px solid rgba(255,255,255,.14);text-align:left;cursor:pointer;color:rgba(255,255,255,.4);transition:color .3s ease}
+.tab:hover{color:rgba(255,255,255,.75)}
+.tab.on{color:#fff}
+.tab:focus-visible{outline:2px solid var(--mag);outline-offset:4px}
+.tab-n{flex:none;font:800 .8125rem/1 Manrope,sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.35);transition:color .3s ease}
+.tab.on .tab-n{color:var(--mag)}
+.tab-l{font:700 clamp(1.375rem,2.2vw,2rem)/1.1 Manrope,sans-serif;letter-spacing:-.035em}
+.tab-bar{position:absolute;left:0;right:0;top:-1px;display:block;height:2px;overflow:hidden;background:transparent}
+.tab.on .tab-bar{background:rgba(182,156,224,.22)}
+.tab-bar i{position:absolute;inset:0;display:block;background:var(--lav);transform:scaleX(0);transform-origin:0 50%}
+.tab.on .tab-bar i{animation:om-fill 4.2s linear both}
+.tabs.locked .tab.on .tab-bar i{animation:om-fill .45s var(--e) both}
+.stairs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem;align-items:end;margin:3.5rem 0 0;padding:0;list-style:none}
+.st{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;min-height:19rem;padding:1.75rem 1.75rem 1.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:2px;transition:border-color .35s var(--e),background .35s ease,transform .5s var(--e);animation:om-up2 .6s var(--e) both}
+.st::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(22rem circle at var(--mx,50%) var(--my,50%),rgba(182,156,224,.14),rgba(182,156,224,0) 45%);opacity:0;transition:opacity .4s}
+.st:hover{transform:translateY(-4px);background:rgba(103,48,190,.14);border-color:rgba(182,156,224,.45)}
+.st:hover::before{opacity:1}
+.st:nth-child(2){margin-bottom:2.5rem;animation-delay:.07s}
+.st:nth-child(3){margin-bottom:5rem;animation-delay:.14s}
+.st:nth-child(4){margin-bottom:7.5rem;animation-delay:.21s}
+.st-top{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.st-k{font:700 .75rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.st-n{font:800 3.25rem/1 Manrope,sans-serif;letter-spacing:-.05em;color:rgba(182,156,224,.28);transition:color .35s ease}
+.st:hover .st-n{color:var(--lav)}
+.st-b{margin-top:auto;padding-top:2rem}
+.st-t{font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#fff}
+.st p{margin-top:.625rem;font:400 .9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.62);text-wrap:pretty}
+.st-part{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.12)}
+.st-part span{display:block;margin-bottom:.4375rem;font:700 .75rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#ef3d88}
+.st-part b{font:600 .875rem/1.4 Manrope,sans-serif;color:#fff}
+.st:last-child{background:var(--purple);border-color:var(--purple)}
+.st:last-child::before{background:radial-gradient(22rem circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),rgba(255,255,255,0) 45%)}
+.st:last-child:hover{background:var(--purple7);border-color:var(--purple7)}
+.st:last-child .st-k{color:rgba(255,255,255,.7)}
+.st:last-child .st-n,.st:last-child:hover .st-n{color:rgba(255,255,255,.32)}
+.st:last-child p{color:rgba(255,255,255,.82)}
+.st:last-child .st-part{border-top-color:rgba(255,255,255,.25)}
+.st:last-child .st-part span{color:rgba(255,255,255,.82)}
+
+/* ---------- movimento ---------- */
+@keyframes om-fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes om-blur{from{opacity:0;filter:blur(14px);transform:translateY(24px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes om-word{from{opacity:0;transform:translateY(108%) rotate(5deg)}to{opacity:1;transform:none}}
+@keyframes om-draw{to{stroke-dashoffset:0}}
+@keyframes om-op{from{opacity:0}to{opacity:1}}
+@keyframes om-up2{from{opacity:0;translate:0 28px}to{opacity:1;translate:0 0}}
+@keyframes om-rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@supports (animation-timeline: view()){
+.rv{animation:om-rv linear both;animation-timeline:view();animation-range:entry 0% cover 30%}
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width:991px){
+.wrap{padding-left:2.5rem;padding-right:2.5rem}
+.h-obj{right:-12%;opacity:.4}
+.h-dots{right:2.5rem}
+.svc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sec-head{flex-direction:column;align-items:flex-start;gap:1.25rem}
+.how-head{flex-direction:column;align-items:flex-start;gap:1.25rem}
+.tabs{margin-top:2.5rem}
+.stairs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.st:nth-child(n){margin-bottom:0}
+.band .wrap{flex-wrap:wrap;gap:1.25rem}
+.band-logos{flex:1 1 100%;flex-wrap:wrap;justify-content:flex-start;gap:1.25rem 1.875rem}
+}
+@media (max-width:640px){
+.wrap{padding-left:1.25rem;padding-right:1.25rem}
+.h-obj{display:none}
+.h-c{padding:7.5rem 0 6.5rem}
+.h-dots{display:none}
+.h-cta>*{width:100%}
+.svc,.how{padding-top:4rem}
+.how{margin-top:4rem;padding-bottom:4rem}
+.svc-grid{grid-template-columns:minmax(0,1fr)}
+.tabs{grid-template-columns:minmax(0,1fr);gap:0}
+.tab{padding:1.125rem 0}
+.tab-l{font-size:1.375rem}
+.stairs{grid-template-columns:minmax(0,1fr)}
+.st{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){
+.om *,.om *::before,.om *::after{animation:none!important;transition:none!important}
+.smile{stroke-dashoffset:0}
+.h-obj-p{opacity:1}
+}
+/* ---------- título do hero: entra por trechos (cada trecho é uma string traduzível) ---------- */
+.ch{animation:om-chunk 1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes om-chunk{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.ch{animation:none}}
+</style>
 <script src="./image-slot.js"></script>
 <script src="./om-motion.js" defer=""></script>
 </helmet>
 <div id="om-site" style="width:100%;max-width:var(--size-container-max);margin:0 auto;background:#ffffff;font-family:Manrope,sans-serif">
 <dc-import name="Header" active="home" style="position:sticky;top:0;z-index:40" hint-size="100%,84px"></dc-import>
-<div id="om-hero" data-screen-label="Hero" data-om-motion="off" data-om-pull="1" style="position:relative;overflow:hidden;background:#14111e;padding:0;margin-top:-5.125rem">
+<div class="om" data-om-motion="off">
+<section class="hero" onMouseMove="{{ heroMove }}" onMouseLeave="{{ heroLeave }}">
+<span class="h-glow-v" aria-hidden="true"></span>
+<span class="h-glow-m" aria-hidden="true"></span>
+<div class="h-obj" aria-hidden="true">
+<div class="h-obj-p">
+<img class="{{ o0 }}" src="assets/hero-caixas-alpha-crop.png" alt="">
+<img class="{{ o1 }}" src="assets/hero-bussola-alpha-crop.png" alt="">
+<img class="{{ o2 }}" src="assets/hero-lampada.png" alt="">
+</div>
+</div>
+<span class="h-flare" aria-hidden="true"></span>
+<span class="h-spot" aria-hidden="true"></span>
+<span class="h-grain" aria-hidden="true"></span>
+<div class="wrap">
+<div class="h-c">
+<div class="eyebrow lav">Consultoria data driven para marketplaces</div>
+<h1><span class="ch" style="animation-delay:.2s">Decisões que</span> <span class="hl ch" style="animation-delay:.36s">convertem<svg class="smile" viewBox="0 0 240 24" aria-hidden="true"><path d="M3 5 C 60 21, 180 21, 237 3"></path></svg></span><span class="dot ch" style="animation-delay:.5s">.</span></h1>
+<p>Dados, operação e tecnologia somados a sua operação de vendas on-line.</p>
+<div class="h-cta">
+<a class="btn btn-light" href="Origenow%20Contato.dc.html">Agendar diagnóstico</a>
+<a class="btn btn-ghost" href="Origenow%20Cases.dc.html">Ver cases →</a>
+</div>
+</div>
+</div>
+<div class="h-dots" role="group" aria-label="Imagem do destaque">
+<button class="{{ d0 }}" type="button" aria-label="Mostrar imagem 1" aria-pressed="{{ p0 }}" onClick="{{ pickObj0 }}"><span><i></i></span></button>
+<button class="{{ d1 }}" type="button" aria-label="Mostrar imagem 2" aria-pressed="{{ p1 }}" onClick="{{ pickObj1 }}"><span><i></i></span></button>
+<button class="{{ d2 }}" type="button" aria-label="Mostrar imagem 3" aria-pressed="{{ p2 }}" onClick="{{ pickObj2 }}"><span><i></i></span></button>
+</div>
+</section>
 
-<span data-layer="fundo" style="position:absolute;inset:0;z-index:0;display:block;pointer-events:none;background:#14111e"></span>
-
-<span data-layer="glow-violeta" style="position:absolute;right:-6%;top:-24%;width:56.25rem;height:56.25rem;z-index:1;display:block;pointer-events:none;background:radial-gradient(circle,rgba(103,48,190,.5),rgba(103,48,190,0) 62%);filter:blur(1.25rem)"></span>
-<span data-layer="glow-magenta" style="position:absolute;right:14%;bottom:-30%;width:38.75rem;height:38.75rem;z-index:1;display:block;pointer-events:none;background:radial-gradient(circle,rgba(230,44,124,.32),rgba(230,44,124,0) 64%);filter:blur(1.5rem);animation:om-flare 15s ease-in-out infinite"></span>
-
-<span data-layer="objeto" data-om-pull="1" style="position:absolute;right:4%;top:50%;width:29.375rem;height:35rem;margin-top:-17.5rem;z-index:2;display:block;pointer-events:none;animation:om-float 11s ease-in-out infinite">
-<img data-hero-obj="" src="assets/hero-caixas-alpha-crop.png" alt="Caixas de papelão empilhadas, tons violeta e magenta" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;opacity:1;transform:scale(1);transition:opacity 1.1s ease,transform 1.6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 2.5rem 3.75rem rgba(0,0,0,.85))">
-<img data-hero-obj="" src="assets/hero-bussola-alpha-crop.png" alt="" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;opacity:0;transform:scale(.965);transition:opacity 1.1s ease,transform 1.6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 2.5rem 3.75rem rgba(0,0,0,.85))">
-<img data-hero-obj="" src="assets/hero-lampada.png" alt="Lâmpada LED vintage com base de latão, símbolo de decisão" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;opacity:0;transform:scale(.965);transition:opacity 1.1s ease,transform 1.6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 2.5rem 3.75rem rgba(0,0,0,.85))">
-</span>
-
-
-<span data-layer="flare-bloom" style="position:absolute;right:22%;top:22%;width:17.5rem;height:17.5rem;z-index:3;display:block;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(182,156,224,.12) 34%,rgba(255,255,255,0) 68%);animation:om-flare 15s ease-in-out infinite"></span>
-
-<span data-layer="poros" style="position:absolute;inset:-20%;z-index:4;display:block;pointer-events:none;opacity:.1;mix-blend-mode:soft-light;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22420%22 height=%22420%22%3E%3Cfilter id=%22p%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.16%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22420%22 height=%22420%22 filter=%22url(%23p)%22/%3E%3C/svg%3E');background-size:26.25rem 26.25rem;animation:om-pores 24s linear infinite"></span>
-<span data-layer="grao" style="position:absolute;inset:0;z-index:5;display:block;pointer-events:none;opacity:.2;mix-blend-mode:overlay;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22180%22 height=%22180%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22180%22 height=%22180%22 filter=%22url(%23g)%22/%3E%3C/svg%3E');background-size:11.25rem 11.25rem;animation:om-grain 1.1s steps(3) infinite"></span>
-
-<div data-layer="conteudo" data-om-pad="1" data-om-pv="10.75rem-9rem" style="position:relative;z-index:6;max-width:41.25rem;padding:10.75rem 5rem 9rem">
-<div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b69ce0;margin-bottom:1.75rem">CONSULTORIA DATA DRIVEN PARA MARKETPLACES</div>
-<h1 data-om-fz="d1" style="margin:0;font:700 4.5rem/1.02 Manrope,sans-serif;letter-spacing:-.05em;color:#ffffff;text-wrap:pretty">Decisões que convertem<span style="color:#e62c7c">.</span></h1>
-<p style="margin:1.625rem 0 0;max-width:23.75rem;font:400 1.125rem/1.65 Manrope,sans-serif;color:rgba(255,255,255,.64)">Dados, operação e tecnologia somados a sua operação de vendas on-line.</p>
-<div data-om-flex="row" data-om-cta="1" style="display:flex;align-items:center;gap:0.875rem;margin-top:2.25rem">
-<a href="Origenow%20Contato.dc.html" style-hover="background:#e6e2ec;transform:translateY(-1px)" style="transition:background .18s ease,transform .18s cubic-bezier(.2,.7,.2,1);background:#ffffff;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none;cursor:pointer">Agendar diagnóstico</a>
-<a href="Origenow%20Cases.dc.html" style-hover="background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.5)" style="transition:background .18s ease,border-color .18s ease;border:1px solid rgba(255,255,255,.26);color:#ffffff;font:500 0.9375rem/1 Manrope,sans-serif;padding:1.125rem 1.875rem;text-decoration:none;cursor:pointer">Ver cases →</a>
+<div class="band">
+<div class="wrap rv">
+<span class="band-k">Parceiros oficiais</span>
+<div class="band-logos">
+<img src="assets/logo-mercadolivre-t.png" alt="Mercado Livre" style="height:1.5719rem">
+<img src="assets/logo-amazon-t.png" alt="Amazon" style="height:1.7178rem">
+<img src="assets/logo-shopee.png" alt="Shopee" style="height:1.7706rem">
+<img src="assets/logo-tiktokshop.svg" alt="TikTok Shop" style="height:1.3143rem">
+<img src="assets/logo-magalu-wordmark.png" alt="Magalu" style="height:1.1875rem">
+<img src="assets/logo-temu.png" alt="Temu" style="height:1.3125rem">
+</div>
 </div>
 </div>
 
+<section class="svc" id="servicos-sec">
+<div class="wrap">
+<div class="sec-head rv">
+<div><div class="eyebrow">O que fazemos</div><h2 class="d2" id="servicos">Serviços personalizados caso a caso</h2></div>
+<a class="lnk" href="Origenow%20Servicos.dc.html">Todos os serviços →</a>
 </div>
-<div data-om-band="1" data-om-pad="1" data-om-flex="row" style="display:flex;align-items:center;gap:2.75rem;margin:0;padding:1.625rem 5rem;background:#ffffff;border-bottom:1px solid #e6e2ec">
-<span style="flex:none;font:600 0.8125rem/1.4 Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6b6480">Parceiros oficiais</span>
-<div data-om-flex="row" data-om-logos="1" style="flex:1;display:flex;align-items:center;justify-content:space-between;gap:1.875rem"><img data-om-norm-done="1" src="assets/logo-mercadolivre-t.png" alt="Mercado Livre" style="height:1.5719rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"><img data-om-norm-done="1" src="assets/logo-amazon-t.png" alt="Amazon" style="height:1.7178rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"><img data-om-norm-done="1" src="assets/logo-shopee.png" alt="Shopee" style="height:1.7706rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"><img data-om-norm-done="1" src="assets/logo-tiktokshop.svg" alt="TikTok Shop" style="height:1.3143rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"><img data-om-norm-done="1" src="assets/logo-magalu-wordmark.png" alt="Magalu" style="height:1.1875rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"><img data-om-norm-done="1" src="assets/logo-temu.png" alt="Temu" style="height:1.3125rem;width:auto;display:block;filter:grayscale(1);opacity:.5;transition:filter .28s cubic-bezier(.2,.7,.2,1),opacity .28s cubic-bezier(.2,.7,.2,1)" style-hover="filter:grayscale(0);opacity:1"></div>
-</div>
-<div id="servicos-sec" data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0"><div data-om-flex="row" style="display:flex;align-items:end;justify-content:space-between;gap:3.75rem;margin-bottom:2.75rem"><div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">O que fazemos</div><h2 data-om-fz="d3" id="servicos" style="margin: 0; max-width: 35rem; font: 700 2.75rem/1.1 Manrope,sans-serif; letter-spacing: -.04em; text-wrap: pretty">Serviços personalizados caso a caso</h2></div><a href="Origenow%20Servicos.dc.html" style-hover="color:#5527a4" style="color:#6730be;text-decoration:none;font:600 0.875rem/1 Manrope,sans-serif;transition:color .18s ease">Todos os serviços →</a></div><div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem"><a href="Origenow%20Servico%20Consultoria.dc.html" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#6730be">01</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Consultoria para Marketplaces</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Direção e plano de negócios para o seu time executar.</p></div></a><a href="Origenow%20Servico%20Assessoria.dc.html" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#6730be">02</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Assessoria para Marketplaces</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Execução a quatro mãos, junto com a sua equipe.</p></div></a><a href="Origenow%20Servico%20Full%20Service.dc.html" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#6730be">03</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Full Service Omnichannel</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Ponta a ponta, com BPO financeiro e atendimento.</p></div></a><a href="Origenow%20Servico%20Inteligencia%20Comercial.dc.html" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#6730be">04</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Inteligência Comercial</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Portfólio e pesquisa para decidir o que vender.</p></div></a><a href="Origenow%20Servico%20Representacao.dc.html" style-hover="background:#241f3a;transform:translateY(-2px)" style="text-decoration:none;color:inherit;transition:background .2s ease,transform .2s cubic-bezier(.2,.7,.2,1);background:#14111e;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#e62c7c">05</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:rgba(255,255,255,.45)">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#ffffff">Representação Comercial Digital</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:rgba(255,255,255,.62)">Serviço por convite: marcas limitadas por categoria.</p></div></a><a href="Origenow%20Servico%20Logistica.dc.html" style-hover="border-color:#6730be;transform:translateY(-2px);box-shadow:0 0.5rem 1.5rem -0.5rem rgba(103,48,190,.18)" style="text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease;border:1px solid #e6e2ec;border-radius:2px;padding:2.125rem 2rem 2rem;min-height:11.625rem;display:flex;flex-direction:column;justify-content:space-between"><div data-om-flex="row" style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:800 0.9375rem/1 Manrope,sans-serif;color:#6730be">06</span><span style="font:500 1.125rem/1 Manrope,sans-serif;color:#8b839e">↗</span></div><div><h3 style="margin:0;font:700 1.5rem/1.24 Manrope,sans-serif;letter-spacing:-.03em;color:#14111e">Logística e fulfillment</h3><p style="margin:0.75rem 0 0;font:400 0.9375rem/1.6 Manrope,sans-serif;color:#56506a">Armazenagem, prep center e entregas pela LOGT.</p></div></a></div></div>
-<div id="como-ajudamos" data-om-pad="1" data-om-pv="6rem-6rem" style="background:#faf9fb;border-top:1px solid #e6e2ec;border-bottom:1px solid #e6e2ec;padding:6rem 5rem;margin-top:6rem">
-<div data-om-flex="row" style="display:flex;align-items:end;justify-content:space-between;gap:3.75rem;margin-bottom:2.25rem">
-<div><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">Como ajudamos</div><h2 data-om-fz="d3" style="margin:0;max-width:37.5rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e;text-wrap:pretty">Cada operação começa em um ponto diferente</h2></div>
-<p style="margin:0;max-width:18.75rem;font:400 0.9375rem/1.7 Manrope,sans-serif;color:#56506a">Encontre o seu abaixo: cada um resolve um problema diferente primeiro.</p>
-</div>
-<div data-om-flex="row" style="position:relative;display:flex;width:max-content;border-bottom:1px solid #e6e2ec;margin-bottom:2.75rem">
-<span id="om-tab-ind" style="position:absolute;left:0;bottom:-1px;height:0.1875rem;width:0;z-index:1;display:block;pointer-events:none;background:#6730be;transition:transform .26s cubic-bezier(.2,.7,.2,1),width .26s cubic-bezier(.2,.7,.2,1)"></span>
-<button type="button" id="om-tab-0" onClick="{{ pick0 }}" style-hover="color:#6730be" style="position:relative;z-index:2;appearance:none;cursor:pointer;border:0;background:transparent;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:0 1.875rem 1.125rem 0;transition:color .18s ease">Indústrias</button>
-<button type="button" id="om-tab-1" onClick="{{ pick1 }}" style-hover="color:#6730be" style="position:relative;z-index:2;appearance:none;cursor:pointer;border:0;background:transparent;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:0 1.875rem 1.125rem 0;transition:color .18s ease">Varejistas</button>
-<button type="button" id="om-tab-2" onClick="{{ pick2 }}" style-hover="color:#6730be" style="position:relative;z-index:2;appearance:none;cursor:pointer;border:0;background:transparent;color:#14111e;font:600 0.9375rem/1 Manrope,sans-serif;padding:0 1.875rem 1.125rem 0;transition:color .18s ease">Distribuidores</button>
-</div>
-<div id="om-jornada-0">
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #14111e">
-<div style="position: relative; padding: 2.125rem 1.875rem 2.625rem 0; border-right: 1px solid #e6e2ec; padding-bottom: 5.9375rem">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#6730be;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 01</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Decisão de canal</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Vender direto, por distribuidor ou os dois. A conta decide, não a intuição.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Pesquisa e viabilidade</span></div>
-</div>
-<div style="position: relative; padding: 2.125rem 1.875rem 2.625rem 1.875rem; border-right: 1px solid #e6e2ec; padding-bottom: 5.9375rem">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 02</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Política comercial</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Preço, MAP e proteção do canal físico definidos antes do primeiro anúncio.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Consultoria e assessoria</span></div>
-</div>
-<div style="position: relative; padding: 2.125rem 1.875rem 2.625rem 1.875rem; border-right: 1px solid #e6e2ec; padding-bottom: 5.9375rem">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 03</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Estreia assistida</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Catálogo, conteúdo e cadastro no padrão exigido por cada marketplace.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Operação e conteúdo</span></div>
-</div>
-<div style="position: relative; padding: 2.125rem 0 2.625rem 1.875rem; padding-bottom: 5.9375rem">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 04</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Defesa da marca</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Buy box, Ads e controle permanente de anúncios irregulares.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Ads e monitoramento</span></div>
+<div class="svc-grid rv">
+<a class="svc-c" href="Origenow%20Servico%20Consultoria.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">01</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Consultoria para Marketplaces</h3><p>Direção e plano de negócios para o seu time executar.</p></div></a>
+<a class="svc-c" href="Origenow%20Servico%20Assessoria.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">02</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Assessoria para Marketplaces</h3><p>Execução a quatro mãos, junto com a sua equipe.</p></div></a>
+<a class="svc-c" href="Origenow%20Servico%20Full%20Service.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">03</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Full Service Omnichannel</h3><p>Ponta a ponta, com BPO financeiro e atendimento.</p></div></a>
+<a class="svc-c" href="Origenow%20Servico%20Inteligencia%20Comercial.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">04</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Inteligência Comercial</h3><p>Portfólio e pesquisa para decidir o que vender.</p></div></a>
+<a class="svc-c dark" href="Origenow%20Servico%20Representacao.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">05</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Representação Comercial Digital</h3><p>Serviço por convite: marcas limitadas por categoria.</p></div></a>
+<a class="svc-c" href="Origenow%20Servico%20Logistica.dc.html" onMouseMove="{{ spot }}"><div class="svc-top"><span class="svc-n">06</span><span class="svc-ar" aria-hidden="true">↗</span></div><div><h3>Logística e fulfillment</h3><p>Armazenagem, prep center e entregas pela LOGT.</p></div></a>
 </div>
 </div>
+</section>
+
+<section class="how" id="como-ajudamos">
+<span class="how-orb" aria-hidden="true"></span>
+<div class="wrap">
+<div class="how-head rv">
+<div><div class="eyebrow">Como ajudamos</div><h2 class="d2">Cada operação começa em um ponto diferente</h2></div>
+<p class="how-lead">Encontre o seu abaixo: cada um resolve um problema diferente primeiro.</p>
 </div>
-<div id="om-jornada-1" style="display:none">
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #14111e">
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 0;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#6730be;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 01</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Diagnóstico</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Onde a margem vaza hoje: mix, frete, Ads e reputação na conta.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Diagnóstico de operação</span></div>
+<div class="{{ tabsCls }}" role="tablist" aria-label="Tipo de operação">
+<button class="{{ t0 }}" type="button" role="tab" aria-selected="{{ s0 }}" aria-controls="jr-panel" onClick="{{ pickTab0 }}"><span class="tab-n">01</span><span class="tab-l">Indústrias</span><span class="tab-bar" aria-hidden="true"><i></i></span></button>
+<button class="{{ t1 }}" type="button" role="tab" aria-selected="{{ s1 }}" aria-controls="jr-panel" onClick="{{ pickTab1 }}"><span class="tab-n">02</span><span class="tab-l">Varejistas</span><span class="tab-bar" aria-hidden="true"><i></i></span></button>
+<button class="{{ t2 }}" type="button" role="tab" aria-selected="{{ s2 }}" aria-controls="jr-panel" onClick="{{ pickTab2 }}"><span class="tab-n">03</span><span class="tab-l">Distribuidores</span><span class="tab-bar" aria-hidden="true"><i></i></span></button>
 </div>
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 1.875rem;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 02</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Mix enxuto</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">A curva ABC corta o que não gira e devolve capital para o que vende.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Inteligência de portfólio</span></div>
-</div>
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 1.875rem;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 03</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Multicanal</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Um canal novo por vez, com meta e operação ajustadas antes de abrir.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Consultoria e assessoria</span></div>
-</div>
-<div style="position:relative;padding:2.125rem 0 2.625rem 1.875rem;">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 04</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Margem por SKU</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Preço, custo, taxa e frete no mesmo painel de decisão.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Dados e decisão</span></div>
-</div>
-</div>
-</div>
-<div id="om-jornada-2" style="display:none">
-<div data-om-grid="multi" style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #14111e">
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 0;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#6730be;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 01</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Mapa de portfólio</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">O que é seu, o que é da indústria e onde existe conflito de canal.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Sourcing e mix</span></div>
-</div>
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 1.875rem;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 02</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Sourcing</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Marcas e itens novos escolhidos por demanda real, não por catálogo.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Inteligência de portfólio</span></div>
-</div>
-<div style="position:relative;padding:2.125rem 1.875rem 2.625rem 1.875rem;border-right:1px solid #e6e2ec">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 03</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Operação</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Armazenagem, prep center e entregas operados pela LOGT.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Logística LOGT</span></div>
-</div>
-<div style="position:relative;padding:2.125rem 0 2.625rem 1.875rem;">
-<span style="position:absolute;left:0;top:-0.3125rem;width:0.5625rem;height:0.5625rem;background:#cfc6e2;display:block"></span>
-<div style="font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6b6480">Etapa 04</div>
-<div style="margin-top:1rem;font:700 1.3125rem/1.3 Manrope,sans-serif;letter-spacing:-.025em;color:#14111e">Governança</div>
-<p style="margin:0.75rem 0 0;font:400 0.875rem/1.62 Manrope,sans-serif;color:#56506a;text-wrap:pretty">Ruptura, giro e reposição sob leitura semanal.</p>
-<div style="margin-top:1.375rem;padding-top:1rem;border-top:1px solid #e6e2ec"><span style="display:block;font:700 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e62c7c;margin-bottom:0.5rem">Nossa parte</span><span style="font:600 0.875rem/1.4 Manrope,sans-serif;color:#14111e">Dados e decisão</span></div>
+
+<div id="jr-panel" role="tabpanel">
+<sc-if value="{{ isT0 }}" hint-placeholder-val="{{ true }}">
+<ol class="stairs">
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">01</span></div><div class="st-b"><div class="st-t">Decisão de canal</div><p>Vender direto, por distribuidor ou os dois. A conta decide, não a intuição.</p></div><div class="st-part"><span>Nossa parte</span><b>Pesquisa e viabilidade</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">02</span></div><div class="st-b"><div class="st-t">Política comercial</div><p>Preço, MAP e proteção do canal físico definidos antes do primeiro anúncio.</p></div><div class="st-part"><span>Nossa parte</span><b>Consultoria e assessoria</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">03</span></div><div class="st-b"><div class="st-t">Estreia assistida</div><p>Catálogo, conteúdo e cadastro no padrão exigido por cada marketplace.</p></div><div class="st-part"><span>Nossa parte</span><b>Operação e conteúdo</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">04</span></div><div class="st-b"><div class="st-t">Defesa da marca</div><p>Buy box, Ads e controle permanente de anúncios irregulares.</p></div><div class="st-part"><span>Nossa parte</span><b>Ads e monitoramento</b></div></li>
+</ol>
+</sc-if>
+<sc-if value="{{ isT1 }}" hint-placeholder-val="{{ false }}">
+<ol class="stairs">
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">01</span></div><div class="st-b"><div class="st-t">Diagnóstico</div><p>Onde a margem vaza hoje: mix, frete, Ads e reputação na conta.</p></div><div class="st-part"><span>Nossa parte</span><b>Diagnóstico de operação</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">02</span></div><div class="st-b"><div class="st-t">Mix enxuto</div><p>A curva ABC corta o que não gira e devolve capital para o que vende.</p></div><div class="st-part"><span>Nossa parte</span><b>Inteligência de portfólio</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">03</span></div><div class="st-b"><div class="st-t">Multicanal</div><p>Um canal novo por vez, com meta e operação ajustadas antes de abrir.</p></div><div class="st-part"><span>Nossa parte</span><b>Consultoria e assessoria</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">04</span></div><div class="st-b"><div class="st-t">Margem por SKU</div><p>Preço, custo, taxa e frete no mesmo painel de decisão.</p></div><div class="st-part"><span>Nossa parte</span><b>Dados e decisão</b></div></li>
+</ol>
+</sc-if>
+<sc-if value="{{ isT2 }}" hint-placeholder-val="{{ false }}">
+<ol class="stairs">
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">01</span></div><div class="st-b"><div class="st-t">Mapa de portfólio</div><p>O que é seu, o que é da indústria e onde existe conflito de canal.</p></div><div class="st-part"><span>Nossa parte</span><b>Sourcing e mix</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">02</span></div><div class="st-b"><div class="st-t">Sourcing</div><p>Marcas e itens novos escolhidos por demanda real, não por catálogo.</p></div><div class="st-part"><span>Nossa parte</span><b>Inteligência de portfólio</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">03</span></div><div class="st-b"><div class="st-t">Operação</div><p>Armazenagem, prep center e entregas operados pela LOGT.</p></div><div class="st-part"><span>Nossa parte</span><b>Logística LOGT</b></div></li>
+<li class="st" onMouseMove="{{ spot }}"><div class="st-top"><span class="st-k">Etapa</span><span class="st-n">04</span></div><div class="st-b"><div class="st-t">Governança</div><p>Ruptura, giro e reposição sob leitura semanal.</p></div><div class="st-part"><span>Nossa parte</span><b>Dados e decisão</b></div></li>
+</ol>
+</sc-if>
 </div>
 </div>
-</div>
+</section>
 </div>
 <div data-om-pad="1" data-om-pv="6rem-0" style="padding:6rem 5rem 0">
 <div style="margin-bottom:2.75rem"><div style="font:600 0.8125rem/1 Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#6730be;margin-bottom:1.25rem">O que muda</div><h2 data-om-fz="d3" style="margin:0;max-width:38.75rem;font:700 2.75rem/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#14111e;text-wrap:pretty">Nossa metodologia de trabalho, em sua operação</h2></div>
@@ -444,12 +597,11 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { modal: false, sent: false, enviando: false, erro: '' };
+  state = { modal: false, sent: false, enviando: false, erro: '', obj: 0, prevObj: -1, tab: 0, tabLocked: false };
 
   componentDidMount() {
-    this.pick(0);
-    this.autoplay();
-    this.heroCycle();
+    this.iniciarObjetos();
+    this.iniciarAbas();
     this._esc = (e) => { if (e.key === 'Escape' && this.state.modal) this.close(); };
     window.addEventListener('keydown', this._esc);
   }
@@ -496,9 +648,7 @@ class Component extends DCLogic {
       q0: () => this.pickQ(0, true),
       q1: () => this.pickQ(1, true),
       q2: () => this.pickQ(2, true),
-      pick0: () => this.pick(0, true),
-      pick1: () => this.pick(1, true),
-      pick2: () => this.pick(2, true),
+      ...this.valsTopo(),
       modalOpen: this.state.modal,
       sent: this.state.sent,
       notSent: !this.state.sent,
@@ -523,35 +673,7 @@ class Component extends DCLogic {
     };
   }
 
-  // troca o objeto do hero a cada 12s com crossfade
-  heroCycle() {
-    const list = Array.from(document.querySelectorAll('[data-hero-obj]'));
-    if (list.length < 2) return;
-    let i = 0;
-    this._hero = setInterval(() => {
-      const prev = list[i];
-      i = (i + 1) % list.length;
-      const next = list[i];
-      prev.style.opacity = '0';
-      prev.style.transform = 'scale(1.035)';
-      next.style.opacity = '1';
-      next.style.transform = 'scale(1)';
-      setTimeout(() => { prev.style.transition = 'none'; prev.style.transform = 'scale(.965)'; void prev.offsetWidth; prev.style.transition = 'opacity 1.1s ease,transform 1.6s cubic-bezier(.2,.7,.2,1)'; }, 1700);
-    }, 12000);
-  }
 
-  // avança sozinho enquanto a seção está visível; para de vez no primeiro clique
-  autoplay() {
-    const sec = document.getElementById('como-ajudamos');
-    if (!sec) return;
-    this._auto = setInterval(() => {
-      if (this._locked) return clearInterval(this._auto);
-      const r = sec.getBoundingClientRect();
-      const vh = window.innerHeight || 800;
-      if (r.top > vh * 0.75 || r.bottom < vh * 0.25) return;
-      this.pick(((this._n || 0) + 1) % 3);
-    }, 4200);
-  }
 
   // "A Origenow": avança sozinho enquanto visível, para no primeiro clique
   autoplayQ() {
@@ -591,29 +713,81 @@ class Component extends DCLogic {
     }
   }
 
-  pick(n, byUser) {
-    if (byUser) { this._locked = true; clearInterval(this._auto); }
-    this._n = n;
-    const ind = document.getElementById('om-tab-ind');
-    for (let i = 0; i < 3; i++) {
-      const panel = document.getElementById('om-jornada-' + i);
-      const tab = document.getElementById('om-tab-' + i);
-      if (panel) {
-        panel.style.display = i === n ? 'block' : 'none';
-        if (i === n) {
-          panel.style.animation = 'none';
-          void panel.offsetWidth;
-          panel.style.animation = 'om-jornada .42s cubic-bezier(.2,.7,.2,1) both';
-        }
-      }
-      if (tab) tab.style.color = i === n ? '#6730be' : '#14111e';
-      if (!tab || i !== n || !ind) continue;
-      ind.style.width = (tab.offsetWidth - 30 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16)) + 'px';
-      ind.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
-    }
+
+  // ---------- hero, serviços e "Como ajudamos" ----------
+  // O objeto do hero troca a cada 12s (crossfade); as barrinhas do canto deixam escolher.
+  iniciarObjetos() {
+    clearInterval(this._objetos);
+    this._objetos = setInterval(() => this.mostrarObjeto((this.state.obj + 1) % 3), 12000);
+  }
+
+  mostrarObjeto(i) {
+    if (i === this.state.obj) return;
+    this.setState({ prevObj: this.state.obj, obj: i });
+  }
+
+  // As abas avançam sozinhas a cada 4,2s enquanto a seção está na tela e param de vez no primeiro clique.
+  iniciarAbas() {
+    clearInterval(this._abas);
+    this._abas = setInterval(() => {
+      if (this.state.tabLocked) return clearInterval(this._abas);
+      const sec = document.getElementById('como-ajudamos');
+      if (!sec) return;
+      const r = sec.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      if (r.top > vh * 0.75 || r.bottom < vh * 0.25) return;
+      this.setState({ tab: (this.state.tab + 1) % 3 });
+    }, 4200);
+  }
+
+  valsTopo() {
+    const s = this.state;
+    const obj = (i) => (i === s.obj ? 'on' : (i === s.prevObj ? 'out' : ''));
+    const dot = (i) => 'h-dot' + (i === s.obj ? ' on' : '');
+    const tab = (i) => 'tab' + (i === s.tab ? ' on' : '');
+    const escolherObjeto = (i) => { this.mostrarObjeto(i); this.iniciarObjetos(); };
+    const escolherAba = (i) => { clearInterval(this._abas); this.setState({ tab: i, tabLocked: true }); };
+    return {
+      o0: obj(0), o1: obj(1), o2: obj(2),
+      d0: dot(0), d1: dot(1), d2: dot(2),
+      p0: s.obj === 0 ? 'true' : 'false', p1: s.obj === 1 ? 'true' : 'false', p2: s.obj === 2 ? 'true' : 'false',
+      pickObj0: () => escolherObjeto(0),
+      pickObj1: () => escolherObjeto(1),
+      pickObj2: () => escolherObjeto(2),
+      tabsCls: 'tabs' + (s.tabLocked ? ' locked' : ''),
+      t0: tab(0), t1: tab(1), t2: tab(2),
+      s0: s.tab === 0 ? 'true' : 'false', s1: s.tab === 1 ? 'true' : 'false', s2: s.tab === 2 ? 'true' : 'false',
+      isT0: s.tab === 0, isT1: s.tab === 1, isT2: s.tab === 2,
+      pickTab0: () => escolherAba(0),
+      pickTab1: () => escolherAba(1),
+      pickTab2: () => escolherAba(2),
+      spot: (e) => {
+        const el = e.currentTarget;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      },
+      heroMove: (e) => {
+        const el = e.currentTarget;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+        el.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+        el.style.setProperty('--hx', Math.round(e.clientX - r.left) + 'px');
+        el.style.setProperty('--hy', Math.round(e.clientY - r.top) + 'px');
+      },
+      heroLeave: (e) => {
+        const el = e.currentTarget;
+        el.style.setProperty('--px', '0');
+        el.style.setProperty('--py', '0');
+        el.style.setProperty('--hx', '70%');
+        el.style.setProperty('--hy', '40%');
+      },
+    };
   }
 
   componentWillUnmount() {
+    clearInterval(this._objetos);
+    clearInterval(this._abas);
     clearInterval(this._auto);
     clearInterval(this._autoQ);
     clearInterval(this._hero);
