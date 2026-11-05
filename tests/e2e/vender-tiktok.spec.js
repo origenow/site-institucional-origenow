@@ -21,6 +21,7 @@ function responderLead(page, corpo, capturar = () => {}) {
 
 async function preencher(page, faturamento) {
   await page.fill('#tts-nome', 'Maria Souza');
+  await page.fill('#tts-empresa', 'Loja da Maria');
   await page.fill('#tts-email', 'maria@empresa.com.br');
   await page.fill('#tts-whatsapp', '(31) 99999-0000');
   await page.selectOption('#tts-faturamento', faturamento);
@@ -28,8 +29,15 @@ async function preencher(page, faturamento) {
 
 const enviar = (page) => page.locator('#lead-form').getByText('Ver meu plano').click();
 
+test('exige a empresa antes de enviar', async ({ page }) => {
+  await page.fill('#tts-nome', 'Maria Souza');
+  await enviar(page);
+  await expect(page.getByText('Informe sua empresa.')).toBeVisible();
+});
+
 test('exige WhatsApp e faturamento antes de enviar', async ({ page }) => {
   await page.fill('#tts-nome', 'Maria Souza');
+  await page.fill('#tts-empresa', 'Loja da Maria');
   await page.fill('#tts-email', 'maria@empresa.com.br');
   await enviar(page);
   await expect(page.getByText('Informe seu WhatsApp.')).toBeVisible();
