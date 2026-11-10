@@ -100,7 +100,10 @@
 [data-om-fz="d1"]{font-size:2rem!important}
 [data-om-fz="d2"]{font-size:1.875rem!important}
 [data-om-fz="d3"]{font-size:1.625rem!important}
-}body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}@keyframes om-dot{0%,75%,100%{opacity:.28;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}@keyframes om-caret{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes om-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style>
+}body{margin:0;background:#ffffff;font-family:Manrope,sans-serif;-webkit-font-smoothing:antialiased}a{color:#6730be;text-decoration:none}a:hover{color:#5527a4}@keyframes om-pulse{0%{box-shadow:0 0 0 0 rgba(46,207,154,.55)}70%{box-shadow:0 0 0 7px rgba(46,207,154,0)}100%{box-shadow:0 0 0 0 rgba(46,207,154,0)}}@keyframes om-dot{0%,75%,100%{opacity:.28;transform:translateY(0)}38%{opacity:1;transform:translateY(-3px)}}@keyframes om-caret{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes om-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}@keyframes om-blob-a{0%,100%{translate:-1rem -1.5rem;rotate:0deg;scale:1;border-radius:42% 58% 63% 37% / 45% 40% 60% 55%}25%{translate:2.5rem 1rem;rotate:50deg;scale:1.08;border-radius:60% 40% 45% 55% / 55% 62% 38% 45%}50%{translate:1rem 2.5rem;rotate:120deg;scale:.94;border-radius:38% 62% 55% 45% / 62% 38% 62% 38%}75%{translate:-2.5rem .5rem;rotate:200deg;scale:1.05;border-radius:55% 45% 38% 62% / 40% 58% 42% 60%}}
+@keyframes om-blob-b{0%,100%{translate:1.5rem 2rem;rotate:0deg;scale:1;border-radius:58% 42% 37% 63% / 55% 60% 40% 45%}30%{translate:-3rem -1.5rem;rotate:-70deg;scale:1.1;border-radius:40% 60% 58% 42% / 62% 38% 62% 38%}60%{translate:-1rem -3rem;rotate:-150deg;scale:.92;border-radius:62% 38% 42% 58% / 45% 55% 45% 55%}80%{translate:2.5rem -.5rem;rotate:-240deg;scale:1.04;border-radius:45% 55% 60% 40% / 58% 42% 58% 42%}}
+@media (prefers-reduced-motion:reduce){.orb,.stage-glow{animation:none!important}}
+</style>
 <style>
 .om,.om *{box-sizing:border-box}
 .om{--ink:#14111e;--purple:#6730be;--purple7:#5527a4;--lav:#b69ce0;--mag:#e62c7c;--mint:#2ecf9a;--g6:#56506a;--gl:#6b6480;--line:#e6e2ec;--wh:#f7f3fc;--e:cubic-bezier(.2,.7,.2,1);--eio:cubic-bezier(.6,.05,.3,1);overflow-x:clip}
@@ -142,8 +145,8 @@
 /* ---------- hero ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;margin-top:-5.125rem;padding:10rem 0 5rem;background:#14111e;color:#fff}
 .orb{position:absolute;border-radius:50%;pointer-events:none;z-index:-1;filter:blur(90px)}
-.orb.p{width:46rem;height:46rem;right:-12rem;top:-16rem;background:rgba(103,48,190,.55);animation:om-drift 16s ease-in-out infinite alternate}
-.orb.m{width:22rem;height:22rem;left:-8rem;bottom:-10rem;background:rgba(230,44,124,.24);animation:om-drift 20s ease-in-out infinite alternate-reverse}
+.orb.p{width:46rem;height:46rem;right:-12rem;top:-16rem;background:rgba(103,48,190,.55);animation:om-blob-a 17s ease-in-out infinite}
+.orb.m{width:22rem;height:22rem;left:-8rem;bottom:-10rem;background:rgba(230,44,124,.24);animation:om-blob-b 21s ease-in-out infinite}
 .hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:4rem;align-items:center}
 .live{position:relative;width:.5rem;height:.5rem;border-radius:50%;background:var(--mint);animation:om-pulse 2s ease-out infinite;flex:none}
 .hero .eyebrow{animation:om-fade .8s var(--e) .05s both}
@@ -161,7 +164,7 @@
 .checks li{display:flex;align-items:center;gap:.5rem;font:500 .875rem/1.3 Manrope,sans-serif;color:rgba(255,255,255,.74)}
 .checks .ic{width:1rem;height:1rem;stroke:var(--mint);stroke-width:2.2}
 .stage{position:relative}
-.stage-glow{position:absolute;left:10%;top:0;width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.55),rgba(103,48,190,0) 65%);filter:blur(30px);pointer-events:none}
+.stage-glow{position:absolute;left:10%;top:0;width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(103,48,190,.55),rgba(103,48,190,0) 65%);filter:blur(30px);pointer-events:none;animation:om-blob-a 19s ease-in-out infinite}
 .vid{position:relative;z-index:2;aspect-ratio:16/9;overflow:hidden;border-radius:2px;background:#1c1430;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 80px -30px rgba(0,0,0,.75);animation:om-rise 1s var(--e) .45s both;transition:transform .6s var(--e),border-color .4s}
 .vid:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.3)}
 .vid video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
@@ -447,7 +450,7 @@
 <div class="wrap hero-grid">
 <div>
 <div class="eyebrow lav"><span class="live" aria-hidden="true"></span>Vender na Amazon · Novos lojistas de todo o Brasil</div>
-<h1 class="d1"><span class="ch" style="animation-delay:.2s">Entre na Amazon com</span> <span class="mag ch" style="animation-delay:.38s">3 meses de consultoria</span> <span class="hl ch" style="animation-delay:.54s">gratuita<svg class="smile" viewBox="0 0 240 24" aria-hidden="true"><path d="M3 5 C 60 21, 180 21, 237 3"></path></svg></span></h1>
+<h1 class="d1"><span class="ch" style="animation-delay:.2s">Entre na Amazon com</span> <span class="mag ch" style="animation-delay:.38s">3 meses de consultoria</span> <span class="hl ch" style="animation-delay:.54s">gratuita</span></h1>
 <p class="lead">São 2 conferências por mês com a Origenow, para empresas que faturam mais de R$ 250 mil por mês em outros canais. Para todo novo lojista, a criação da conta e o auxílio no cadastro de produtos também saem sem custo, em qualquer estado.</p>
 <div class="cta-row">
 <a class="btn btn-light" href="/vender-na-amazon#formulario" onClick="{{ irForm }}">Quero começar</a>
